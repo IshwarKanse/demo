@@ -1,0 +1,22 @@
+apiVersion: observability.openshift.io/v1alpha1
+kind: ObservabilityInstaller
+metadata:
+  name: tracing-system
+  namespace: openshift-cluster-observability-operator
+spec:
+  capabilities:
+    tracing:
+      enabled: true
+      operators:
+        install: true
+      storage:
+        objectStorage:
+          s3:
+            accessKeyID: "tempo"
+            accessKeySecret:
+              name: "minio"
+              key: "access_key_secret"
+            bucket: "tempo"
+            endpoint: "http://minio:9000"
+            region: "us-east-1"
+
