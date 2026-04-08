@@ -1,0 +1,189 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - https://raw.githubusercontent.com/GoogleCloudPlatform/microservices-demo/main/release/kubernetes-manifests.yaml
+
+  # Remove hardcoded securityContext (runAsUser: 1000, fsGroup: 1000) from all
+  # deployments so OpenShift can assign UIDs from the namespace range.
+patches:
+  - target:
+      kind: Deployment
+    patch: |-
+      - op: remove
+        path: /spec/template/spec/securityContext
+      - op: remove
+        path: /spec/template/spec/containers/0/securityContext
+  # checkoutservice
+  - target:
+      kind: Deployment
+      name: checkoutservice
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: checkoutservice
+      spec:
+        template:
+          spec:
+            containers:
+              - name: server
+                env:
+                  - name: COLLECTOR_SERVICE_ADDR
+                    value: "tracing-system-collector.openshift-cluster-observability-operator.svc.cluster.local:4317"
+                  - name: OTEL_SERVICE_NAME
+                    value: "checkoutservice"
+                  - name: ENABLE_TRACING
+                    value: "1"
+
+  # currencyservice
+  - target:
+      kind: Deployment
+      name: currencyservice
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: currencyservice
+      spec:
+        template:
+          spec:
+            containers:
+              - name: server
+                env:
+                  - name: COLLECTOR_SERVICE_ADDR
+                    value: "tracing-system-collector.openshift-cluster-observability-operator.svc.cluster.local:4317"
+                  - name: OTEL_SERVICE_NAME
+                    value: "currencyservice"
+                  - name: ENABLE_TRACING
+                    value: "1"
+
+  # emailservice
+  - target:
+      kind: Deployment
+      name: emailservice
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: emailservice
+      spec:
+        template:
+          spec:
+            containers:
+              - name: server
+                env:
+                  - name: COLLECTOR_SERVICE_ADDR
+                    value: "tracing-system-collector.openshift-cluster-observability-operator.svc.cluster.local:4317"
+                  - name: OTEL_SERVICE_NAME
+                    value: "emailservice"
+                  - name: ENABLE_TRACING
+                    value: "1"
+
+  # frontend
+  - target:
+      kind: Deployment
+      name: frontend
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: frontend
+      spec:
+        template:
+          spec:
+            containers:
+              - name: server
+                env:
+                  - name: COLLECTOR_SERVICE_ADDR
+                    value: "tracing-system-collector.openshift-cluster-observability-operator.svc.cluster.local:4317"
+                  - name: OTEL_SERVICE_NAME
+                    value: "frontend"
+                  - name: ENABLE_TRACING
+                    value: "1"
+
+  # paymentservice
+  - target:
+      kind: Deployment
+      name: paymentservice
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: paymentservice
+      spec:
+        template:
+          spec:
+            containers:
+              - name: server
+                env:
+                  - name: COLLECTOR_SERVICE_ADDR
+                    value: "tracing-system-collector.openshift-cluster-observability-operator.svc.cluster.local:4317"
+                  - name: OTEL_SERVICE_NAME
+                    value: "paymentservice"
+                  - name: ENABLE_TRACING
+                    value: "1"
+
+  # productcatalogservice
+  - target:
+      kind: Deployment
+      name: productcatalogservice
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: productcatalogservice
+      spec:
+        template:
+          spec:
+            containers:
+              - name: server
+                env:
+                  - name: COLLECTOR_SERVICE_ADDR
+                    value: "tracing-system-collector.openshift-cluster-observability-operator.svc.cluster.local:4317"
+                  - name: OTEL_SERVICE_NAME
+                    value: "productcatalogservice"
+                  - name: ENABLE_TRACING
+                    value: "1"
+
+  # recommendationservice
+  - target:
+      kind: Deployment
+      name: recommendationservice
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: recommendationservice
+      spec:
+        template:
+          spec:
+            containers:
+              - name: server
+                env:
+                  - name: COLLECTOR_SERVICE_ADDR
+                    value: "tracing-system-collector.openshift-cluster-observability-operator.svc.cluster.local:4317"
+                  - name: OTEL_SERVICE_NAME
+                    value: "recommendationservice"
+                  - name: ENABLE_TRACING
+                    value: "1"
+
+  # cartservice (.NET - uses standard OTel env var)
+  - target:
+      kind: Deployment
+      name: cartservice
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: cartservice
+      spec:
+        template:
+          spec:
+            containers:
+              - name: server
+                env:
+                  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+                    value: "http://tracing-system-collector.openshift-cluster-observability-operator.svc.cluster.local:4317"
+                  - name: OTEL_SERVICE_NAME
+                    value: "cartservice"
