@@ -16,7 +16,20 @@ Demo resources and Chainsaw end-to-end tests for OpenShift observability and AI 
 | `lightspeed/` | Chainsaw test for deploying OpenShift Lightspeed (OLSConfig + API credentials) |
 | `tempo/` | Chainsaw test for Tempo multitenancy RBAC (storage, TempoStack, OTel collector, trace generation, RBAC verification) |
 | `observabilityinstaller/` | Manifests for ObservabilityInstaller CR, MinIO object storage, and HotROD trace-generating app |
+| `online-boutique/` | Kustomize overlay for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) — 11-microservice demo app for trace generation |
 | `apm-dashboard/` | UIPlugin manifest enabling Perses-based monitoring dashboards |
+
+## Online Boutique Demo App
+
+Deploy the [Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) microservices app, configured to export traces to the tracing stack's OTel collector:
+```bash
+oc apply -k online-boutique/
+```
+
+Delete:
+```bash
+oc delete -k online-boutique/
+```
 
 ## Running Tests
 

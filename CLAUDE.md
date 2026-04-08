@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This repository contains [Chainsaw](https://kyverno.github.io/chainsaw/) end-to-end tests for OpenShift observability and AI components. Chainsaw is a Kubernetes testing tool that applies manifests and asserts expected cluster state. Tests run against a live OpenShift cluster (requires `oc` CLI authenticated).
+This repository contains demo resources and [Chainsaw](https://kyverno.github.io/chainsaw/) end-to-end tests for OpenShift observability and AI components, used for presentations. Chainsaw is a Kubernetes testing tool that applies manifests and asserts expected cluster state. Tests run against a live OpenShift cluster (requires `oc` CLI authenticated).
 
 ## Prerequisites
 
@@ -40,6 +40,7 @@ chainsaw test --skip-delete tempo
 - **`lightspeed/`** - Chainsaw test that deploys OpenShift Lightspeed OLSConfig and its API credential secret. Has its own `.chainsaw.yaml` config with custom timeouts/parallelism.
 - **`tempo/multitenancy-rbac/`** - Multi-step Chainsaw test for Tempo multitenancy RBAC: installs MinIO storage, TempoStack, OpenTelemetry collector, generates traces via HotROD app, creates non-admin ServiceAccounts with namespace-scoped access, and verifies trace visibility and span metrics.
 - **`observabilityinstaller/`** - Manifests for the ObservabilityInstaller CR (tracing capability), MinIO object storage, and a HotROD trace-generating app. Used with Cluster Observability Operator.
+- **`online-boutique/`** - Kustomize overlay that deploys [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) (11 microservices) as a trace-generating demo app. Pulls upstream manifests directly via remote resource; patches configure OTel tracing to the local collector and strip `securityContext` for OpenShift SCC compatibility. Deploy/delete with `oc apply -k online-boutique/` / `oc delete -k online-boutique/`.
 - **`apm-dashboard/`** - UIPlugin manifest enabling Perses-based monitoring dashboards.
 - **`.chainsaw.yaml`** (root) - Default Chainsaw configuration with 5-minute timeouts for assert/cleanup/delete/error/exec.
 
