@@ -8,9 +8,15 @@ set -uo pipefail
 label=$1; win=${2:-15}; end=${3:-$(date +%s)}; results=${4:-}
 ns=${NAMESPACE:-otel-metrics-export}; col=${COLLECTOR:-otel}
 start=$((end - win*60)); step=30
-TOKEN=$(oc create token prometheus-k8s -n openshift-monitoring)
+# Thanos Querier access: a token that expires with the run, and the cluster's ingress CA to verify
+# the route certificate (no -k).
+TOKEN=$(oc create token prometheus-k8s -n openshift-monitoring --duration=30m)
 HOST=$(oc get route thanos-querier -n openshift-monitoring -o jsonpath='{.spec.host}')
-q() { curl -sk -H "Authorization: Bearer $TOKEN" "https://$HOST/api/v1/query_range" --data-urlencode "query=$1" --data-urlencode "start=$start" --data-urlencode "end=$end" --data-urlencode "step=$step"; }
+CA=$(mktemp)
+trap 'rm -f "$CA"' EXIT
+oc get configmap default-ingress-cert -n openshift-config-managed -o jsonpath='{.data.ca-bundle\.crt}' > "$CA"
+[ -s "$CA" ] || { echo "could not read the ingress CA bundle (openshift-config-managed/default-ingress-cert)"; exit 1; }
+q() { curl -s --cacert "$CA" -H "Authorization: Bearer $TOKEN" "https://$HOST/api/v1/query_range" --data-urlencode "query=$1" --data-urlencode "start=$start" --data-urlencode "end=$end" --data-urlencode "step=$step"; }
 # prints "avg p95 max" of a range query, scaled
 stat() {
   python3 -c '
