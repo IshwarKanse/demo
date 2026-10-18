@@ -1,0 +1,67 @@
+# The collector under test: receives the OpenShift monitoring metrics with Prometheus remote
+# write v2 and exports them over OTLP. This is the configuration recommended in the product
+# documentation: no batch processor, memory_limiter, unlimited retries, a bounded item-sized
+# sending queue that blocks the receiver when full, and batching inside the exporter, so that
+# back pressure reaches the Prometheus instances (which retry from their WAL) and the collector
+# stays a stateless pass-through during a backend outage.
+#
+# With the Red Hat build of OpenTelemetry operator the default collector image already contains
+# the prometheus_remote_write receiver. With the upstream operator set spec.image to a contrib
+# image (the upstream default image is the core distribution, which does not have the receiver);
+# scripts/run-benchmark.sh does that when COLLECTOR_IMAGE is set.
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel
+  namespace: otel-metrics-export
+spec:
+  mode: deployment
+  replicas: 1
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+  observability:
+    metrics:
+      enableMetrics: true   # the collector's own metrics are scraped by user workload monitoring
+  ports:
+    - name: prw
+      port: 9090
+      targetPort: 9090
+      protocol: TCP
+  config:
+    receivers:
+      prometheus_remote_write:
+        endpoint: 0.0.0.0:9090
+    processors:
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 80
+        spike_limit_percentage: 20
+    exporters:
+      otlp_http:
+        # the third-party backend; here the OTLP sink of the benchmark
+        endpoint: http://sink-collector.otel-metrics-export.svc.cluster.local:4318
+        tls:
+          insecure: true
+        retry_on_failure:
+          enabled: true
+          max_elapsed_time: 0
+        sending_queue:
+          enabled: true
+          sizer: items
+          queue_size: 100000
+          block_on_overflow: true
+          batch:
+            flush_timeout: 1s
+            min_size: 4000
+            max_size: 8000
+    service:
+      pipelines:
+        metrics:
+          receivers: [prometheus_remote_write]
+          processors: [memory_limiter]
+          exporters: [otlp_http]

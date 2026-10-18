@@ -1,0 +1,76 @@
+# Load generator: every avalanche pod exposes 25,000 gauge series (250 metrics x 100 series)
+# that user workload monitoring scrapes every 30 seconds and both UWM replicas forward to the
+# collector, i.e. about 1,670 samples/s per pod. Scale the deployment to set the load:
+# 4 pods = +100,000 series, 10 pods = +250,000 series, 20 pods = +500,000 series.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: otel-metrics-load
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: avalanche-load
+  namespace: otel-metrics-load
+  labels:
+    app: avalanche-load
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: avalanche-load
+  template:
+    metadata:
+      labels:
+        app: avalanche-load
+    spec:
+      containers:
+        - name: avalanche
+          image: quay.io/prometheuscommunity/avalanche:v0.7.0
+          args:
+            - --gauge-metric-count=250
+            - --counter-metric-count=0
+            - --series-count=100
+            - --label-count=5
+            - --value-interval=30
+            - --series-interval=0
+            - --metric-interval=0
+            - --port=9001
+          ports:
+            - name: metrics
+              containerPort: 9001
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: avalanche-load
+  namespace: otel-metrics-load
+  labels:
+    app: avalanche-load
+spec:
+  selector:
+    app: avalanche-load
+  ports:
+    - name: metrics
+      port: 9001
+      targetPort: 9001
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: avalanche-load
+  namespace: otel-metrics-load
+spec:
+  selector:
+    matchLabels:
+      app: avalanche-load
+  endpoints:
+    - port: metrics
+      interval: 30s

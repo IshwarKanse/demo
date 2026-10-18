@@ -18,6 +18,7 @@ Demo resources and Chainsaw end-to-end tests for OpenShift observability and AI 
 | `observabilityinstaller/` | Manifests for ObservabilityInstaller CR, MinIO object storage, and HotROD trace-generating app |
 | `online-boutique/` | Kustomize overlay for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) — 11-microservice demo app for trace generation |
 | `apm-dashboard/` | UIPlugin manifest enabling Perses-based monitoring dashboards |
+| `otel-ocp-metrics-export/` | Manifests and scripts of the sizing benchmark for exporting the OpenShift monitoring metrics through the OpenTelemetry Collector with Prometheus remote write v2, with the measured results and the resource recommendation |
 
 ## Online Boutique Demo App
 

@@ -1,0 +1,37 @@
+# Stand-in for the third-party OTLP backend used during the benchmark: a collector that accepts
+# OTLP over HTTP and discards the data (nop exporter), so that the backend never becomes the
+# bottleneck and only the collector under test is measured. The contrib image is used because
+# the nop exporter is not part of the Red Hat build of OpenTelemetry; this component is not
+# part of the product and not needed by customers.
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: sink
+  namespace: otel-metrics-export
+spec:
+  image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.158.0
+  mode: deployment
+  replicas: 1
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+  observability:
+    metrics:
+      enableMetrics: true
+  config:
+    receivers:
+      otlp:
+        protocols:
+          http:
+            endpoint: 0.0.0.0:4318
+    exporters:
+      nop: {}
+    service:
+      pipelines:
+        metrics:
+          receivers: [otlp]
+          exporters: [nop]

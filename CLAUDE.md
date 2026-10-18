@@ -42,6 +42,7 @@ chainsaw test --skip-delete tempo
 - **`observabilityinstaller/`** - Manifests for the ObservabilityInstaller CR (tracing capability), MinIO object storage, and a HotROD trace-generating app. Used with Cluster Observability Operator.
 - **`online-boutique/`** - Kustomize overlay that deploys [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) (11 microservices) as a trace-generating demo app. Pulls upstream manifests directly via remote resource; patches configure OTel tracing to the local collector and strip `securityContext` for OpenShift SCC compatibility. Deploy/delete with `oc apply -k online-boutique/` / `oc delete -k online-boutique/`.
 - **`apm-dashboard/`** - UIPlugin manifest enabling Perses-based monitoring dashboards.
+- **`otel-ocp-metrics-export/`** - Sizing benchmark for exporting the OpenShift monitoring metrics through the OpenTelemetry Collector with Prometheus remote write v2: manifests (OTLP sink, collector under test, monitoring config maps, avalanche load generator) and scripts (`run-benchmark.sh`, `collect.sh`, `outage-test.sh`, `pq.sh`) that query Thanos Querier; results and the resource recommendation in its README. Needs OpenShift 5.0+ and the OpenTelemetry operator, no credentials.
 - **`.chainsaw.yaml`** (root) - Default Chainsaw configuration with 5-minute timeouts for assert/cleanup/delete/error/exec.
 
 ## Test Pattern
