@@ -1,0 +1,57 @@
+openshift-apiserver	api	https	/metrics	token	api.openshift-apiserver.svc
+openshift-apiserver	check-endpoints	check-endpoints	/metrics	token	
+openshift-apiserver-operator	metrics	https	/metrics	token	metrics.openshift-apiserver-operator.svc
+openshift-authentication	oauth-openshift	https	/metrics	token	oauth-openshift.openshift-authentication.svc
+openshift-authentication-operator	metrics	https	/metrics	token	metrics.openshift-authentication-operator.svc
+openshift-catalogd	catalogd-service	metrics	/metrics	token	catalogd-service.openshift-catalogd.svc
+openshift-cloud-credential-operator	cco-metrics	metrics	/metrics	token	cco-metrics.openshift-cloud-credential-operator.svc
+openshift-cluster-csi-drivers	aws-ebs-csi-driver-controller-metrics	attacher-m	/metrics	token	aws-ebs-csi-driver-controller-metrics.openshift-cluster-csi-drivers.svc
+openshift-cluster-csi-drivers	aws-ebs-csi-driver-controller-metrics	driver-m	/metrics	token	aws-ebs-csi-driver-controller-metrics.openshift-cluster-csi-drivers.svc
+openshift-cluster-csi-drivers	aws-ebs-csi-driver-controller-metrics	provisioner-m	/metrics	token	aws-ebs-csi-driver-controller-metrics.openshift-cluster-csi-drivers.svc
+openshift-cluster-csi-drivers	aws-ebs-csi-driver-controller-metrics	resizer-m	/metrics	token	aws-ebs-csi-driver-controller-metrics.openshift-cluster-csi-drivers.svc
+openshift-cluster-csi-drivers	aws-ebs-csi-driver-controller-metrics	snapshotter-m	/metrics	token	aws-ebs-csi-driver-controller-metrics.openshift-cluster-csi-drivers.svc
+openshift-cluster-machine-approver	machine-approver	https	/metrics	token	machine-approver.openshift-cluster-machine-approver.svc
+openshift-cluster-node-tuning-operator	node-tuning-operator		/metrics	https	node-tuning-operator.openshift-cluster-node-tuning-operator.svc
+openshift-cluster-samples-operator	metrics		/metrics	https	metrics.openshift-cluster-samples-operator.svc
+openshift-cluster-storage-operator	cluster-storage-operator-metrics	https	/metrics	https	cluster-storage-operator-metrics.openshift-cluster-storage-operator.svc
+openshift-config-operator	metrics	https	/metrics	token	metrics.openshift-config-operator.svc
+openshift-console	console	https	/metrics	token	console.openshift-console.svc
+openshift-console-operator	metrics	https	/metrics	token	metrics.openshift-console-operator.svc
+openshift-controller-manager	controller-manager	https	/metrics	token	controller-manager.openshift-controller-manager.svc
+openshift-controller-manager-operator	metrics	https	/metrics	token	metrics.openshift-controller-manager-operator.svc
+openshift-dns	dns-default	metrics	/metrics	token	dns-default.openshift-dns.svc
+openshift-dns-operator	metrics	metrics	/metrics	token	metrics.openshift-dns-operator.svc
+openshift-etcd-operator	metrics	https	/metrics	client-cert	metrics.openshift-etcd-operator.svc
+openshift-image-registry	image-registry	5000-tcp	/extensions/v2/metrics	token	image-registry.openshift-image-registry.svc
+openshift-image-registry	image-registry-operator		/metrics	https	image-registry-operator.openshift-image-registry.svc
+openshift-ingress	router-internal-default	metrics	/metrics	token	router-internal-default.openshift-ingress.svc
+openshift-ingress-operator	metrics	metrics	/metrics	token	metrics.openshift-ingress-operator.svc
+openshift-insights	metrics	https	/metrics	token	metrics.openshift-insights.svc
+openshift-kube-apiserver-operator	metrics	https	/metrics	client-cert	metrics.openshift-kube-apiserver-operator.svc
+openshift-kube-controller-manager	kube-controller-manager	https	/metrics	client-cert	kube-controller-manager.openshift-kube-controller-manager.svc
+openshift-kube-controller-manager-operator	metrics	https	/metrics	client-cert	metrics.openshift-kube-controller-manager-operator.svc
+openshift-kube-scheduler	scheduler	https	/metrics	client-cert	scheduler.openshift-kube-scheduler.svc
+openshift-kube-scheduler	scheduler	https	/metrics/resources	client-cert	scheduler.openshift-kube-scheduler.svc
+openshift-kube-scheduler-operator	metrics	https	/metrics	client-cert	metrics.openshift-kube-scheduler-operator.svc
+openshift-machine-api	cluster-autoscaler-operator	metrics	/metrics	token	cluster-autoscaler-operator.openshift-machine-api.svc
+openshift-machine-api	machine-api-controllers	machine-mtrc	/metrics	token	machine-api-controllers.openshift-machine-api.svc
+openshift-machine-api	machine-api-controllers	machineset-mtrc	/metrics	token	machine-api-controllers.openshift-machine-api.svc
+openshift-machine-api	machine-api-controllers	mhc-mtrc	/metrics	token	machine-api-controllers.openshift-machine-api.svc
+openshift-machine-api	machine-api-operator	https	/metrics	token	machine-api-operator.openshift-machine-api.svc
+openshift-machine-config-operator	machine-config-controller	metrics	/metrics	token	machine-config-controller.openshift-machine-config-operator.svc
+openshift-machine-config-operator	machine-config-daemon	metrics	/metrics	token	machine-config-daemon.openshift-machine-config-operator.svc
+openshift-marketplace	marketplace-operator-metrics	https-metrics	/metrics	token	marketplace-operator-metrics.openshift-marketplace.svc
+openshift-multus	multus-admission-controller	metrics	/metrics	token	multus-admission-controller.openshift-multus.svc
+openshift-multus	network-metrics-service	metrics	/metrics	token	network-metrics-service.openshift-multus.svc
+openshift-network-diagnostics	network-check-source	check-endpoints	/metrics	token	network-check-source.openshift-network-diagnostics.svc
+openshift-network-operator	metrics	metrics	/metrics	token	metrics.openshift-network-operator.svc
+openshift-oauth-apiserver	api	https	/metrics	token	api.openshift-oauth-apiserver.svc
+openshift-operator-controller	operator-controller-service	metrics	/metrics	token	operator-controller-service.openshift-operator-controller.svc
+openshift-operator-lifecycle-manager	catalog-operator-metrics	https-metrics	/metrics	token	catalog-operator-metrics.openshift-operator-lifecycle-manager.svc
+openshift-operator-lifecycle-manager	olm-operator-metrics	https-metrics	/metrics	token	olm-operator-metrics.openshift-operator-lifecycle-manager.svc
+openshift-operator-lifecycle-manager	package-server-manager-metrics	metrics	/metrics	token	package-server-manager-metrics.openshift-operator-lifecycle-manager.svc
+openshift-ovn-kubernetes	ovn-kubernetes-control-plane	metrics	/metrics	token	ovn-kubernetes-control-plane.openshift-ovn-kubernetes.svc
+openshift-ovn-kubernetes	ovn-kubernetes-node	metrics	/metrics	token	ovn-kubernetes-node.openshift-ovn-kubernetes.svc
+openshift-ovn-kubernetes	ovn-kubernetes-node	ovn-metrics	/metrics	token	ovn-kubernetes-node.openshift-ovn-kubernetes.svc
+openshift-route-controller-manager	route-controller-manager	https	/metrics	token	route-controller-manager.openshift-route-controller-manager.svc
+openshift-service-ca-operator	metrics	https	/metrics	token	metrics.openshift-service-ca-operator.svc

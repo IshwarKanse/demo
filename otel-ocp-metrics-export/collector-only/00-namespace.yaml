@@ -1,0 +1,6 @@
+# Namespace of the proof of concept. Nothing in it reads or modifies the openshift-monitoring
+# namespace; the OpenShift monitoring stack is only used afterwards as a measurement instrument.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: otel-platform-metrics

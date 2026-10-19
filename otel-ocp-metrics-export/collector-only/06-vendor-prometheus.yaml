@@ -1,0 +1,78 @@
+# Stand-in for a third-party OTLP backend (Dynatrace, Google Cloud Monitoring, ...):
+# an upstream Prometheus with the OTLP receiver enabled. Not part of the product.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vendor-prometheus-config
+  namespace: otel-platform-metrics
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 30s
+    otlp:
+      # keep every OTLP resource attribute as a label so the received data can be inspected
+      promote_all_resource_attributes: true
+    storage:
+      tsdb:
+        out_of_order_time_window: 30m
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vendor-prometheus
+  namespace: otel-platform-metrics
+  labels:
+    app: vendor-prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vendor-prometheus
+  template:
+    metadata:
+      labels:
+        app: vendor-prometheus
+    spec:
+      containers:
+        - name: prometheus
+          image: quay.io/prometheus/prometheus:v3.13.2
+          args:
+            - --config.file=/etc/prometheus/prometheus.yml
+            - --storage.tsdb.path=/prometheus
+            - --storage.tsdb.retention.time=6h
+            - --web.enable-otlp-receiver
+            - --web.enable-lifecycle
+          ports:
+            - name: web
+              containerPort: 9090
+          resources:
+            requests:
+              cpu: "1"
+              memory: 2Gi
+            limits:
+              cpu: "3"
+              memory: 8Gi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/prometheus
+            - name: data
+              mountPath: /prometheus
+      volumes:
+        - name: config
+          configMap:
+            name: vendor-prometheus-config
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vendor-prometheus
+  namespace: otel-platform-metrics
+spec:
+  selector:
+    app: vendor-prometheus
+  ports:
+    - name: web
+      port: 9090
+      targetPort: 9090

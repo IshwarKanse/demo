@@ -1,0 +1,124 @@
+# Node collector: one pod per node (DaemonSet) with the host_metrics receiver (node CPU, memory,
+# load, filesystem, disk, network, paging, process counts from the host filesystem mounted
+# read-only at /hostfs) and the kubelet_stats receiver (node, pod, container and volume metrics
+# from the kubelet /stats/summary endpoint). The kubelet is reached through the API server node
+# proxy (auth_type: kubeConfig falls back to the in-cluster configuration), so the TLS connection
+# is verified with the service account CA and no kubelet CA copy or insecure_skip_verify is
+# needed. With the Red Hat build of OpenTelemetry operator spec.image is not needed; the digest
+# here is the product collector 0.158 used with the upstream operator for the PoC.
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-node
+  namespace: otel-platform-metrics
+spec:
+  image: registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:359726016f0f6b9a408cc47f03be66b095f8b4e725f482442f1a02c0ce8b9128
+  mode: daemonset
+  serviceAccount: otel-node
+  securityContext:
+    runAsUser: 0
+    seLinuxOptions:
+      type: spc_t
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+      - ALL
+  tolerations:
+  - operator: Exists
+  resources:
+    requests:
+      cpu: 50m
+      memory: 192Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  env:
+  - name: K8S_NODE_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: spec.nodeName
+  volumeMounts:
+  - name: hostfs
+    mountPath: /hostfs
+    readOnly: true
+    mountPropagation: HostToContainer
+  volumes:
+  - name: hostfs
+    hostPath:
+      path: /
+  config:
+    receivers:
+      host_metrics:
+        collection_interval: 30s
+        root_path: /hostfs
+        scrapers:
+          cpu: {}
+          memory: {}
+          load: {}
+          filesystem:
+            exclude_mount_points:
+              match_type: regexp
+              mount_points:
+              - ^/(dev|proc|sys|run|var/lib/kubelet/pods|var/lib/containers/storage/overlay)(/|$)
+            exclude_fs_types:
+              match_type: strict
+              fs_types: [tmpfs, devtmpfs, overlay, squashfs, autofs, nsfs, cgroup, cgroup2, rpc_pipefs]
+          disk: {}
+          network:
+            exclude:
+              match_type: regexp
+              interfaces:
+              - ^(veth.*|[a-f0-9]{15}|enP.*|ovn-k8s-mp[0-9]*|br-ex|br-int|br-ext|br[0-9]*|tun[0-9]*|cali[a-f0-9]*|bond.*|genev_sys_.*|ovs-system)$
+          paging: {}
+          processes: {}
+      kubelet_stats:
+        collection_interval: 30s
+        auth_type: kubeConfig
+        endpoint: ${env:K8S_NODE_NAME}
+        metric_groups: [node, pod, container, volume]
+    processors:
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 80
+        spike_limit_percentage: 20
+      resource_detection:
+        detectors: [openshift, k8s_api]
+        override: false
+        timeout: 5s
+    exporters:
+      otlp_http:
+        # the third-party backend; here the vendor stand-in Prometheus with the OTLP receiver
+        endpoint: http://vendor-prometheus.otel-platform-metrics.svc.cluster.local:9090/api/v1/otlp
+        tls:
+          insecure: true
+        retry_on_failure:
+          enabled: true
+          max_elapsed_time: 0
+        # the queue must hold the largest single scrape (a kubelet_stats scrape of a node with 300 pods is about
+        # 10,000 data points); a request larger than the queue is rejected outright
+        sending_queue:
+          enabled: true
+          sizer: items
+          queue_size: 50000
+          block_on_overflow: true
+          batch:
+            flush_timeout: 5s
+            min_size: 1000
+            max_size: 4000
+    service:
+      telemetry:
+        metrics:
+          readers:
+          - pull:
+              exporter:
+                prometheus:
+                  host: 0.0.0.0
+                  port: 8888
+      pipelines:
+        metrics:
+          receivers: [host_metrics, kubelet_stats]
+          processors: [memory_limiter, resource_detection]
+          exporters: [otlp_http]

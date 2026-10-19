@@ -1,0 +1,176 @@
+# Service accounts, RBAC and the security context constraints for the two collectors.
+# The OpenTelemetry Operator does not create RBAC for the collector service accounts unless the
+# cluster administrator grants it clusterrole/clusterrolebinding permissions, and it never covers
+# the prometheus receiver, so everything is created here by hand.
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: otel-node
+  namespace: otel-platform-metrics
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: otel-cluster
+  namespace: otel-platform-metrics
+---
+# Node collector: read-only access to the host filesystem for the host_metrics receiver.
+# Unprivileged: no privileged container, no host PID/network, all capabilities dropped. The
+# collector runs as root with the spc_t SELinux type so that it can read /proc and /sys of the
+# host through the hostPath mount.
+apiVersion: security.openshift.io/v1
+kind: SecurityContextConstraints
+metadata:
+  name: otel-platform-metrics-node
+allowPrivilegedContainer: false
+allowPrivilegeEscalation: false
+defaultAllowPrivilegeEscalation: false
+requiredDropCapabilities:
+- ALL
+allowHostDirVolumePlugin: true
+allowHostNetwork: false
+allowHostPID: false
+allowHostIPC: false
+allowHostPorts: false
+readOnlyRootFilesystem: true
+runAsUser:
+  type: RunAsAny
+seLinuxContext:
+  type: RunAsAny
+fsGroup:
+  type: RunAsAny
+supplementalGroups:
+  type: RunAsAny
+seccompProfiles:
+- runtime/default
+volumes:
+- configMap
+- downwardAPI
+- emptyDir
+- hostPath
+- projected
+- secret
+users:
+- system:serviceaccount:otel-platform-metrics:otel-node
+---
+# Node collector: the kubelet is reached through the API server node proxy (nodes/proxy), the
+# resource_detection processor reads the Infrastructure object (openshift detector) and the Node
+# object (k8s_api detector).
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: otel-platform-metrics-node
+rules:
+- apiGroups: [""]
+  resources: ["nodes/stats", "nodes/proxy"]
+  verbs: ["get"]
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["namespaces"]
+  resourceNames: ["kube-system"]
+  verbs: ["get"]
+- apiGroups: ["config.openshift.io"]
+  resources: ["infrastructures", "infrastructures/status"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: otel-platform-metrics-node
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: otel-platform-metrics-node
+subjects:
+- kind: ServiceAccount
+  name: otel-node
+  namespace: otel-platform-metrics
+---
+# Cluster collector: the k8s_cluster receiver (distribution: openshift) lists and watches the
+# cluster objects; the prometheus receiver discovers the scrape targets (kubernetes_sd) and
+# authenticates to the platform /metrics endpoints with the service account token, which the
+# kube-apiserver, kube-scheduler, kube-controller-manager and kube-rbac-proxy authorize through
+# the /metrics non-resource URL; the kubelet endpoints are reached through the API server node
+# proxy (nodes/metrics, nodes/proxy).
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: otel-platform-metrics-cluster
+rules:
+# /metrics: kube-apiserver, kube-scheduler, kube-controller-manager and most kube-rbac-proxy endpoints;
+# /metrics/resources: the scheduler resource metrics; /metrics/slis: the API server SLI metrics
+- nonResourceURLs: ["/metrics", "/metrics/resources", "/metrics/slis"]
+  verbs: ["get"]
+# kubelet endpoints through the API server node proxy
+- apiGroups: [""]
+  resources: ["nodes/metrics", "nodes/proxy", "nodes/stats"]
+  verbs: ["get"]
+# kube-rbac-proxy instances that authorize on a namespace metrics subresource instead of the URL
+# (machine-config-operator, machine-api); the resource name is singular in their configuration
+- apiGroups: [""]
+  resources: ["namespace/metrics", "namespaces/metrics"]
+  verbs: ["get"]
+# the ingress router, the image registry and the DNS pods authorize on their own resources
+- apiGroups: ["route.openshift.io"]
+  resources: ["routers/metrics"]
+  verbs: ["get"]
+- apiGroups: ["image.openshift.io"]
+  resources: ["registry/metrics"]
+  verbs: ["get"]
+- apiGroups: ["operator.openshift.io"]
+  resources: ["dnses"]
+  verbs: ["get"]
+- apiGroups: [""]
+  resources:
+  - events
+  - namespaces
+  - namespaces/status
+  - nodes
+  - nodes/spec
+  - persistentvolumeclaims
+  - persistentvolumes
+  - pods
+  - pods/status
+  - replicationcontrollers
+  - replicationcontrollers/status
+  - resourcequotas
+  - services
+  - endpoints
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["discovery.k8s.io"]
+  resources: ["endpointslices"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["daemonsets", "deployments", "replicasets", "statefulsets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["extensions"]
+  resources: ["daemonsets", "deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["batch"]
+  resources: ["jobs", "cronjobs"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["autoscaling"]
+  resources: ["horizontalpodautoscalers"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["quota.openshift.io"]
+  resources: ["clusterresourcequotas"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["config.openshift.io"]
+  resources: ["infrastructures", "infrastructures/status"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: otel-platform-metrics-cluster
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: otel-platform-metrics-cluster
+subjects:
+- kind: ServiceAccount
+  name: otel-cluster
+  namespace: otel-platform-metrics

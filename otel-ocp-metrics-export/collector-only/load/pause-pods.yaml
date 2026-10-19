@@ -1,0 +1,37 @@
+# Load generator for the sizing runs: idle pods that only exist to grow the number of pods and containers
+# the kubelet_stats, k8s_cluster and cAdvisor scrapes have to report. Scale with
+#   oc scale deploy/load-pods -n otel-platform-metrics --replicas=<N>
+# 3 worker nodes with the default 250 pods per node leave room for about 600 extra pods.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load-pods
+  namespace: otel-platform-metrics
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: load-pods
+  template:
+    metadata:
+      labels:
+        app: load-pods
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: pause
+        image: registry.access.redhat.com/ubi9/ubi-minimal:latest
+        command: ["sleep", "infinity"]
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+        resources:
+          requests:
+            cpu: 1m
+            memory: 8Mi
+          limits:
+            memory: 32Mi
