@@ -13,7 +13,8 @@
 #     outage       scripts/outage-test.sh followed by an export of the outage window
 # prerequisites: manifests 00, 01, 02, 05 and 06 applied, KUBECONFIG set, the operator installed.
 # env: SETTLE_MIN (5), WINDOW_MIN (20), COMPACTION_MIN (180), CHURN_MIN (40), OUTAGE_MIN (5),
-#      COLLECTOR_IMAGE (patched into the collector CR when set)
+#      COLLECTOR_IMAGE (patched into the collector CR when set), SERIES_TIERS (load pod counts of the
+#      series phase, default "0 4 10 20"; one pod = 25,000 series)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 dir=$1; shift
@@ -59,7 +60,7 @@ for phase in "${phases[@]}"; do
       [ "$(rw_active)" -gt 0 ] || { echo "no remote write samples after 15 min"; exit 1; } ;;
     series)
       collector_replicas 1; set_interval 30s
-      for pods in 0 4 10 20; do set_load "$pods"; measure "series: $pods load pods, 30 s interval, 1 replica" steady "$window" $((pods*25000)); done ;;
+      for pods in ${SERIES_TIERS:-0 4 10 20}; do set_load "$pods"; measure "series: $pods load pods, 30 s interval, 1 replica" steady "$window" $((pods*25000)); done ;;
     rate)
       collector_replicas 1; set_load 10
       for iv in 60s 15s; do set_interval "$iv"; measure "rate: 10 load pods, $iv interval, 1 replica" steady "$window" 250000; done
