@@ -1,0 +1,46 @@
+# Churn load for the series-turnover tier: every pod exposes 5,000 gauge series whose label
+# values rotate every 10 minutes (--series-interval), so the series set keeps changing at a
+# constant sample rate. scripts/run-matrix.sh scales it up for the churn phase only and also
+# restarts the main avalanche-load deployment during that phase (new pods = new instance labels).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: avalanche-churn
+  namespace: otel-metrics-load
+  labels:
+    app: avalanche-load
+    role: churn
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: avalanche-load
+      role: churn
+  template:
+    metadata:
+      labels:
+        app: avalanche-load
+        role: churn
+    spec:
+      containers:
+        - name: avalanche
+          image: quay.io/prometheuscommunity/avalanche:v0.7.0
+          args:
+            - --gauge-metric-count=50
+            - --counter-metric-count=0
+            - --series-count=100
+            - --label-count=5
+            - --value-interval=30
+            - --series-interval=600
+            - --metric-interval=0
+            - --port=9001
+          ports:
+            - name: metrics
+              containerPort: 9001
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi

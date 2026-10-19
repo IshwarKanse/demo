@@ -100,3 +100,14 @@ Beyond that, or for high availability, add replicas: the collector service sprea
 remote write shards evenly and the cost per sample does not change. With a 1 GiB memory limit,
 reduce `sending_queue.queue_size` to 50000.
 
+
+## Extended matrix with graphs
+
+`scripts/run-matrix.sh <results dir> [phases...]` runs the extended matrix (baseline without
+remote write, series-count tiers, sample-rate tiers through the scrape interval, two replicas,
+series churn with `manifests/06-churn-load.yaml` and rollouts, a 3 hour window across TSDB
+compactions, and the outage test). Every run is exported by `scripts/export-series.sh` as raw
+CSV files under `<results dir>/raw/<run>/` plus `runs.json` (cluster shape, pod counts,
+replicas), and `scripts/render-charts.py <results dir>` draws the PNGs into
+`<results dir>/charts/` and writes `summary.md`. The renderer needs matplotlib:
+`python3 -m venv .venv && .venv/bin/pip install matplotlib`.
