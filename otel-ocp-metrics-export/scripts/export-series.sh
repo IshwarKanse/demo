@@ -6,7 +6,8 @@
 #   kind: steady | outage | compaction | churn | baseline
 #   results dir default: results/$(date -u +%F)
 # env: NAMESPACE (default otel-metrics-export), COLLECTOR (default otel), KUBECONFIG,
-#      STEP (query step seconds, default 30), EXTRA_SERIES (series added by the load generator, informational)
+#      STEP (query step seconds, default 30), EXTRA_SERIES (series added by the load generator, informational),
+#      ONLY_MISSING=1 (backfill: write only the CSV files that do not exist yet, do not touch runs.json)
 set -uo pipefail
 cd "$(dirname "$0")/.."
 label=$1; kind=$2; win=$3; end=${4:-$(date +%s)}; dir=${5:-results/$(date -u +%F)}
@@ -47,10 +48,17 @@ prometheus_series_created_s|sum(rate(prometheus_tsdb_head_series_created_total{n
 prometheus_compactions_total|sum by (pod) (prometheus_tsdb_compactions_total{namespace="openshift-monitoring",pod=~"prometheus-k8s-.*"})
 prometheus_compaction_running|max by (pod) (prometheus_tsdb_compaction_running{namespace="openshift-monitoring",pod=~"prometheus-k8s-.*"})
 uwm_samples_appended_s|sum(rate(prometheus_tsdb_head_samples_appended_total{namespace="openshift-user-workload-monitoring"}[2m]))
+uwm_cpu_cores|sum by (pod) (rate(container_cpu_usage_seconds_total{namespace="openshift-user-workload-monitoring",container="prometheus",pod=~"prometheus-user-workload-.*"}[2m]))
+uwm_wss_bytes|sum by (pod) (container_memory_working_set_bytes{namespace="openshift-user-workload-monitoring",container="prometheus",pod=~"prometheus-user-workload-.*"})
+uwm_head_series|sum by (pod) (prometheus_tsdb_head_series{namespace="openshift-user-workload-monitoring",pod=~"prometheus-user-workload-.*"})
+uwm_head_chunks|sum by (pod) (prometheus_tsdb_head_chunks{namespace="openshift-user-workload-monitoring",pod=~"prometheus-user-workload-.*"})
+uwm_series_created_s|sum(rate(prometheus_tsdb_head_series_created_total{namespace="openshift-user-workload-monitoring",pod=~"prometheus-user-workload-.*"}[2m]))
+uwm_compactions_total|sum by (pod) (prometheus_tsdb_compactions_total{namespace="openshift-user-workload-monitoring",pod=~"prometheus-user-workload-.*"})
 EOQ
 )
 while IFS="|" read -r name query; do
   [ -n "$name" ] || continue
+  if [ -n "${ONLY_MISSING:-}" ] && [ -s "$out/$name.csv" ]; then continue; fi
   curl -s --cacert "$CA" -H @"$AUTH" "https://$HOST/api/v1/query_range" \
     --data-urlencode "query=$query" --data-urlencode "start=$start" --data-urlencode "end=$end" --data-urlencode "step=$step" \
   | python3 -c '
@@ -63,6 +71,7 @@ for s in d.get("data", {}).get("result", []):
         if v not in ("NaN", "+Inf", "-Inf"): w.writerow([int(float(ts)), lab, v])
 ' > "$out/$name.csv" || echo "query $name failed"
 done <<< "$QUERIES"
+if [ -n "${ONLY_MISSING:-}" ]; then echo "backfilled missing series in $out"; exit 0; fi
 # cluster shape at the end of the window
 nodes=$(oc get nodes --no-headers | wc -l | tr -d ' ')
 workers=$(oc get nodes -l node-role.kubernetes.io/worker --no-headers | wc -l | tr -d ' ')

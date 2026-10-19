@@ -64,7 +64,8 @@ def steady_rows(dirpath, runs):
             continue
         s = r["slug"]
         samples = stats(total(dirpath, s, "receiver_accepted_points_s"))[0]
-        series = stats(total(dirpath, s, "prometheus_head_series"))[0] / 2 if total(dirpath, s, "prometheus_head_series") else 0
+        # series per replica of each instance: platform (2 replicas) plus user workload (2 replicas)
+        series = sum(stats(total(dirpath, s, m))[0] / 2 for m in ("prometheus_head_series", "uwm_head_series") if total(dirpath, s, m))
         rows.append({
             "run": r, "samples_s": samples, "head_series_per_replica": series,
             "cpu": stats(total(dirpath, s, "collector_cpu_cores")),
@@ -72,6 +73,8 @@ def steady_rows(dirpath, runs):
             "rss": tuple(x * MiB for x in stats(total(dirpath, s, "collector_rss_bytes"))),
             "pcpu": stats(total(dirpath, s, "prometheus_cpu_cores")),
             "pwss": tuple(x * MiB for x in stats(total(dirpath, s, "prometheus_wss_bytes"))),
+            "ucpu": stats(total(dirpath, s, "uwm_cpu_cores")),
+            "uwss": tuple(x * MiB for x in stats(total(dirpath, s, "uwm_wss_bytes"))),
             "pending": stats(total(dirpath, s, "rw_pending_samples"))[2],
             "failed": stats(total(dirpath, s, "rw_failed_samples_s"))[2],
             "retried": stats(total(dirpath, s, "rw_retried_samples_s"))[2],
@@ -115,13 +118,14 @@ def chart_memory(dirpath, rows, outdir):
     rows.sort(key=lambda r: r["samples_s"])
     fig, axes = plt.subplots(1, 2, figsize=(10, 4), sharey=True)
     for ax, key, xlabel in ((axes[0], "samples_s", "samples per second (thousands)"),
-                            (axes[1], "head_series_per_replica", "active series per Prometheus replica (thousands)")):
+                            (axes[1], "head_series_per_replica", "active series per replica (thousands)")):
         xs = [r[key] / 1000 for r in rows]
         ax.plot(xs, [r["wss"][0] for r in rows], marker="o", markersize=5, color=SERIES[0], label="working set, average")
         ax.plot(xs, [r["wss"][2] for r in rows], marker="o", markersize=5, color=SERIES[1], label="working set, max")
         ax.plot(xs, [r["rss"][2] for r in rows], marker="o", markersize=5, color=SERIES[2], label="RSS, max")
         ax.set_xlabel(xlabel); ax.set_ylim(bottom=0)
     axes[0].set_ylabel("MiB, one collector replica"); axes[0].legend(loc="upper left")
+    axes[1].set_xlabel("active series per replica, platform plus user workload (thousands)")
     fig.suptitle("Collector memory against the remote write rate and the series count", color=TEXT)
     fig.tight_layout(); fig.savefig(os.path.join(outdir, "collector_memory.png")); plt.close(fig)
 
@@ -222,11 +226,11 @@ def chart_churn(dirpath, runs, outdir):
 
 
 def summary(dirpath, rows, runs):
-    lines = ["| run | kind | collector replicas | samples/s | series per replica | collector CPU avg / p95 | working set MiB avg / max | RSS MiB max | Prometheus CPU avg | Prometheus WSS MiB avg | pending max | failed/s max | retried/s max | restarts | pods | load pods |",
-             "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    lines = ["| run | kind | collector replicas | samples/s | series per replica | collector CPU avg / p95 | working set MiB avg / max | RSS MiB max | platform Prometheus CPU avg | platform Prometheus WSS MiB avg | UWM Prometheus CPU avg | UWM Prometheus WSS MiB avg | pending max | failed/s max | retried/s max | restarts | pods | load pods |",
+             "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for r in rows:
         run = r["run"]
-        lines.append(f"| {run['label']} | {run['kind']} | {run['collector_replicas']} | {r['samples_s']:,.0f} | {r['head_series_per_replica']:,.0f} | {r['cpu'][0]:.2f} / {r['cpu'][1]:.2f} | {r['wss'][0]:.0f} / {r['wss'][2]:.0f} | {r['rss'][2]:.0f} | {r['pcpu'][0]:.2f} | {r['pwss'][0]:.0f} | {r['pending']:,.0f} | {r['failed']:.0f} | {r['retried']:.0f} | {run['collector_restarts']} | {run['cluster']['pods_running']} | {run['load_pods']} |")
+        lines.append(f"| {run['label']} | {run['kind']} | {run['collector_replicas']} | {r['samples_s']:,.0f} | {r['head_series_per_replica']:,.0f} | {r['cpu'][0]:.2f} / {r['cpu'][1]:.2f} | {r['wss'][0]:.0f} / {r['wss'][2]:.0f} | {r['rss'][2]:.0f} | {r['pcpu'][0]:.2f} | {r['pwss'][0]:.0f} | {r['ucpu'][0]:.2f} | {r['uwss'][0]:.0f} | {r['pending']:,.0f} | {r['failed']:.0f} | {r['retried']:.0f} | {run['collector_restarts']} | {run['cluster']['pods_running']} | {run['load_pods']} |")
     cl = runs[0]["cluster"] if runs else {}
     head = [f"Cluster: OpenShift {cl.get('version')} on {cl.get('platform')}, {cl.get('nodes')} nodes ({cl.get('workers')} workers, allocatable {cl.get('worker_allocatable')} each).", ""]
     with open(os.path.join(dirpath, "summary.md"), "w") as f:
