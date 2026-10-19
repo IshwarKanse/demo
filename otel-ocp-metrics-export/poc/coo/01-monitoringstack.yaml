@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: otel-metrics-coo
+---
+# A COO-managed Prometheus that scrapes the ServiceMonitors labelled app=coo-sample in its own
+# namespace and remote-writes them with the v2 message to the collector of the benchmark harness.
+apiVersion: monitoring.rhobs/v1alpha1
+kind: MonitoringStack
+metadata:
+  name: coo-remote-write
+  namespace: otel-metrics-coo
+  labels:
+    app: coo-sample
+spec:
+  logLevel: info
+  retention: 1h
+  resourceSelector:
+    matchLabels:
+      app: coo-sample
+  prometheusConfig:
+    replicas: 1
+    remoteWrite:
+      - name: otel-collector
+        url: http://otel-collector.otel-metrics-export.svc.cluster.local:9090/api/v1/write
+        messageVersion: V2.0
+  alertmanagerConfig:
+    disabled: true

@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: avalanche-coo
+  namespace: otel-metrics-coo
+  labels:
+    app: coo-sample
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: coo-sample
+  template:
+    metadata:
+      labels:
+        app: coo-sample
+    spec:
+      containers:
+        - name: avalanche
+          image: quay.io/prometheuscommunity/avalanche:v0.7.0
+          args:
+            - --gauge-metric-count=3
+            - --counter-metric-count=3
+            - --histogram-metric-count=2
+            - --native-histogram-metric-count=1
+            - --summary-metric-count=1
+            - --series-count=5
+            - --label-count=3
+            - --value-interval=30
+            - --series-interval=0
+            - --metric-interval=0
+            - --port=9001
+          ports:
+            - name: metrics
+              containerPort: 9001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: avalanche-coo
+  namespace: otel-metrics-coo
+  labels:
+    app: coo-sample
+spec:
+  selector:
+    app: coo-sample
+  ports:
+    - name: metrics
+      port: 9001
+      targetPort: 9001
+---
+apiVersion: monitoring.rhobs/v1
+kind: ServiceMonitor
+metadata:
+  name: avalanche-coo
+  namespace: otel-metrics-coo
+  labels:
+    app: coo-sample
+spec:
+  selector:
+    matchLabels:
+      app: coo-sample
+  endpoints:
+    - port: metrics
+      interval: 30s
