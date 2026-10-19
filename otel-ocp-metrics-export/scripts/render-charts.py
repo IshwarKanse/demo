@@ -116,13 +116,16 @@ def chart_memory(dirpath, rows, outdir):
     if not rows:
         return
     rows.sort(key=lambda r: r["samples_s"])
+    # the series panel uses the series tiers only: after a tier the stale series stay in the Prometheus
+    # head until the next truncation, so the head series count of a later rate tier is not its own
+    series_rows = sorted([r for r in rows if r["run"]["label"].startswith("series:")], key=lambda r: r["head_series_per_replica"]) or rows
     fig, axes = plt.subplots(1, 2, figsize=(10, 4), sharey=True)
-    for ax, key, xlabel in ((axes[0], "samples_s", "samples per second (thousands)"),
-                            (axes[1], "head_series_per_replica", "active series per replica (thousands)")):
-        xs = [r[key] / 1000 for r in rows]
-        ax.plot(xs, [r["wss"][0] for r in rows], marker="o", markersize=5, color=SERIES[0], label="working set, average")
-        ax.plot(xs, [r["wss"][2] for r in rows], marker="o", markersize=5, color=SERIES[1], label="working set, max")
-        ax.plot(xs, [r["rss"][2] for r in rows], marker="o", markersize=5, color=SERIES[2], label="RSS, max")
+    for ax, key, xlabel, rs in ((axes[0], "samples_s", "samples per second (thousands)", rows),
+                                (axes[1], "head_series_per_replica", "active series per replica (thousands)", series_rows)):
+        xs = [r[key] / 1000 for r in rs]
+        ax.plot(xs, [r["wss"][0] for r in rs], marker="o", markersize=5, color=SERIES[0], label="working set, average")
+        ax.plot(xs, [r["wss"][2] for r in rs], marker="o", markersize=5, color=SERIES[1], label="working set, max")
+        ax.plot(xs, [r["rss"][2] for r in rs], marker="o", markersize=5, color=SERIES[2], label="RSS, max")
         ax.set_xlabel(xlabel); ax.set_ylim(bottom=0)
     axes[0].set_ylabel("MiB, one collector replica"); axes[0].legend(loc="upper left")
     axes[1].set_xlabel("active series per replica, platform plus user workload (thousands)")
