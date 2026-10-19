@@ -1,0 +1,17 @@
+# Cluster Monitoring Operator configuration: remote write v2 from the platform Prometheus
+# (prometheusK8s) to the collector, and enable user workload monitoring.
+# messageVersion requires OpenShift 5.0 or later.
+# NOTE: merge into an existing cluster-monitoring-config, do not overwrite it.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-monitoring-config
+  namespace: openshift-monitoring
+data:
+  config.yaml: |
+    enableUserWorkload: true
+    prometheusK8s:
+      remoteWrite:
+        - name: otel-collector
+          url: http://otel-collector.observability.svc.cluster.local:9090/api/v1/write
+          messageVersion: V2.0

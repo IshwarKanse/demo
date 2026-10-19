@@ -1,0 +1,37 @@
+# Second collector used to inspect how the metrics arrive (metric type, unit, attributes):
+# it receives the user workload monitoring stream and prints the sample application metrics with
+# the debug exporter at detailed verbosity. Point a second remoteWrite entry of
+# user-workload-monitoring-config at http://otel-debug-collector.observability.svc.cluster.local:9090/api/v1/write
+# and read the pod log:
+#   oc logs -n observability deploy/otel-debug-collector | grep -A12 'Metric #' | grep -E 'Name:|Data type|prometheus.type'
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-debug
+  namespace: observability
+spec:
+  image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.161.0
+  mode: deployment
+  ports:
+    - name: prw
+      port: 9090
+      targetPort: 9090
+  config:
+    receivers:
+      prometheus_remote_write:
+        endpoint: 0.0.0.0:9090
+    processors:
+      filter/sample:
+        metrics:
+          include:
+            match_type: regexp
+            metric_names: ["avalanche_.*"]
+    exporters:
+      debug:
+        verbosity: detailed
+    service:
+      pipelines:
+        metrics:
+          receivers: [prometheus_remote_write]
+          processors: [filter/sample]
+          exporters: [debug]

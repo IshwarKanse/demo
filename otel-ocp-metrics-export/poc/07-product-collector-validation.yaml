@@ -1,0 +1,60 @@
+# Collector used to validate the Red Hat build of OpenTelemetry 3.11 collector image (0.158.0)
+# with the recommended configuration on the user workload monitoring stream. The image is the one
+# the opentelemetry-product catalog ships (relatedImages of the CSV); with the product operator the
+# default collector image is this one and spec.image is not needed.
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-product
+  namespace: observability
+spec:
+  image: registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:359726016f0f6b9a408cc47f03be66b095f8b4e725f482442f1a02c0ce8b9128
+  mode: deployment
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  observability:
+    metrics:
+      enableMetrics: true
+  ports:
+    - name: prw
+      port: 9090
+      targetPort: 9090
+  config:
+    receivers:
+      prometheus_remote_write:
+        endpoint: 0.0.0.0:9090
+    processors:
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 80
+        spike_limit_percentage: 20
+    exporters:
+      otlphttp:
+        endpoint: http://vendor-prometheus.observability.svc.cluster.local:9090/api/v1/otlp
+        tls:
+          insecure: true
+        retry_on_failure:
+          enabled: true
+          max_elapsed_time: 0
+        sending_queue:
+          enabled: true
+          sizer: items
+          queue_size: 100000
+          block_on_overflow: true
+          batch:
+            flush_timeout: 1s
+            min_size: 4000
+            max_size: 8000
+      debug:
+        verbosity: basic
+    service:
+      pipelines:
+        metrics:
+          receivers: [prometheus_remote_write]
+          processors: [memory_limiter]
+          exporters: [otlphttp, debug]

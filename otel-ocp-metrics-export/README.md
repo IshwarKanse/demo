@@ -13,6 +13,8 @@ prometheus-user-workload (2 replicas)  ─┘    messageVersion: V2.0    prometh
 avalanche-load (N pods x 25,000 series) ──▶ scraped by UWM
 ```
 
+The resource files of the preceding proof of concept (vendor stand-in Prometheus, debug collector for the metric types, product image validation) are in [`poc/`](./poc/).
+
 Nothing in this directory contains credentials: the backend is an in-cluster OTLP sink and the
 scripts use the `oc` login of the current `KUBECONFIG`.
 

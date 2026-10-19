@@ -1,0 +1,67 @@
+# OpenTelemetry collector receiving Prometheus remote write v2 from the in-cluster
+# and user workload monitoring Prometheus instances and exporting via OTLP.
+# The receiver (prometheus_remote_write) and all other components below are shipped
+# in the Red Hat build of OpenTelemetry collector distribution.
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel
+  namespace: observability
+spec:
+  # The operator default image is the core distribution, which does not contain the receiver.
+  image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.161.0
+  mode: deployment
+  replicas: 1
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+  observability:
+    metrics:
+      enableMetrics: true   # ServiceMonitor for the collector's own metrics (needs UWM)
+  ports:
+    - name: prw
+      port: 9090
+      targetPort: 9090
+      protocol: TCP
+  config:
+    receivers:
+      prometheus_remote_write:
+        endpoint: 0.0.0.0:9090
+    processors:
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 80
+        spike_limit_percentage: 20
+    exporters:
+      otlphttp:
+        # third-party backend; here the vendor stand-in Prometheus OTLP endpoint
+        endpoint: http://vendor-prometheus.observability.svc.cluster.local:9090/api/v1/otlp
+        tls:
+          insecure: true
+        # Resilience: never give up on a batch (Prometheus keeps the samples in its WAL and
+        # retries when the receiver refuses or blocks), keep the queue bounded in items, and
+        # batch inside the exporter instead of with the batch processor so that back-pressure
+        # reaches the receiver. With the defaults (queue of 5000 requests, 5 min retry limit,
+        # batch processor) a 5 min backend outage caused OOM kills and dropped batches.
+        retry_on_failure:
+          enabled: true
+          max_elapsed_time: 0
+        sending_queue:
+          enabled: true
+          sizer: items
+          queue_size: 100000
+          block_on_overflow: true
+          batch:
+            flush_timeout: 1s
+            min_size: 4000
+            max_size: 8000
+    service:
+      pipelines:
+        metrics:
+          receivers: [prometheus_remote_write]
+          processors: [memory_limiter]
+          exporters: [otlphttp]
