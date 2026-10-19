@@ -98,8 +98,12 @@ def chart_cpu_vs_samples(dirpath, rows, outdir):
         rs.sort(key=lambda r: r["samples_s"])
         xs = [r["samples_s"] / 1000 for r in rs]; ys = [r["cpu"][0] for r in rs]
         ax.plot(xs, ys, marker="o", markersize=5, color=SERIES[i], label=f"{rep} collector replica{'s' if rep > 1 else ''} (all pods)")
+        prev_x, flip = None, False
         for x, y in zip(xs, ys):
-            label_point(ax, x, y, f"{y:.2f}")
+            # alternate the label side when two points sit within 5 % of each other on the x axis
+            flip = (prev_x is not None and abs(x - prev_x) < 0.05 * max(xs)) and not flip
+            label_point(ax, x, y, f"{y:.2f}", dy=-14 if flip else 6)
+            prev_x = x
     ax.set_xlabel("samples per second into the collector (thousands)")
     ax.set_ylabel("CPU cores, average over the window")
     ax.set_ylim(bottom=0)
@@ -138,15 +142,18 @@ def chart_prometheus(dirpath, rows, outdir):
     if not rows:
         return
     rows.sort(key=lambda r: (r["run"]["kind"] != "baseline", r["samples_s"]))
-    names = [("no remote write" if r["run"]["kind"] == "baseline" else f"{r['samples_s']/1000:.0f}k samples/s") for r in rows]
-    fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+    def short(run):
+        lab = run["label"].split(": ", 1)[-1].replace(", 1 replica", "").replace(" load pods", " pods").replace(" interval", "")
+        return lab
+    names = [("no remote write" if r["run"]["kind"] == "baseline" else f"{r['samples_s']/1000:.0f}k/s, {short(r['run'])}") for r in rows]
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4.6))
     for ax, key, ylabel in ((axes[0], "pcpu", "CPU cores, both replicas, average"), (axes[1], "pwss", "working set MiB, both replicas, average")):
         ys = [r[key][0] for r in rows]
         colors = [SERIES[2] if r["run"]["kind"] == "baseline" else SERIES[0] for r in rows]
         bars = ax.bar(names, ys, color=colors, width=0.6)
         for b, y in zip(bars, ys):
             label_point(ax, b.get_x() + b.get_width() / 2, y, f"{y:.2f}" if key == "pcpu" else f"{y:.0f}")
-        ax.set_ylabel(ylabel); ax.set_ylim(0, max(ys) * 1.2 if ys else 1); ax.tick_params(axis="x", labelrotation=20)
+        ax.set_ylabel(ylabel); ax.set_ylim(0, max(ys) * 1.2 if ys else 1); ax.tick_params(axis="x", labelrotation=35, labelsize=8)
     fig.suptitle("Platform Prometheus cost with remote write v2 (green: baseline without remote write)", color=TEXT)
     fig.tight_layout(); fig.savefig(os.path.join(outdir, "prometheus_cost.png")); plt.close(fig)
 
@@ -220,11 +227,12 @@ def chart_compaction(dirpath, runs, outdir):
 def chart_churn(dirpath, runs, outdir):
     for r in [r for r in runs if r["kind"] == "churn"]:
         timeline(dirpath, r, outdir, [
-            ("thousand series", [("prometheus_head_series", "active head series, both replicas", 0.001)]),
-            ("thousand chunks", [("prometheus_head_chunks", "head chunks, both replicas", 0.001)]),
-            ("series/s", [("prometheus_series_created_s", "series created", 1)]),
-            ("Prometheus MiB", [("prometheus_wss_bytes", "working set, both replicas", MiB)]),
-            ("remote write samples/s", [("rw_samples_s", "samples/s", 1)]),
+            ("thousand series", [("uwm_head_series", "user workload Prometheus, both replicas", 0.001), ("prometheus_head_series", "platform Prometheus, both replicas", 0.001)]),
+            ("thousand chunks", [("uwm_head_chunks", "user workload Prometheus", 0.001), ("prometheus_head_chunks", "platform Prometheus", 0.001)]),
+            ("series created/s", [("uwm_series_created_s", "user workload Prometheus", 1), ("prometheus_series_created_s", "platform Prometheus", 1)]),
+            ("Prometheus MiB", [("uwm_wss_bytes", "user workload, both replicas", MiB), ("prometheus_wss_bytes", "platform, both replicas", MiB)]),
+            ("Prometheus CPU cores", [("uwm_cpu_cores", "user workload, both replicas", 1), ("prometheus_cpu_cores", "platform, both replicas", 1)]),
+            ("remote write samples/s", [("rw_samples_s", "all instances", 1)]),
         ], f"churn_{r['slug']}.png", f"Series churn: {r['label']}")
 
 
