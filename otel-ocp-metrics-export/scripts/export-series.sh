@@ -14,9 +14,10 @@ ns=${NAMESPACE:-otel-metrics-export}; col=${COLLECTOR:-otel}; step=${STEP:-30}
 start=$((end - win*60))
 slug=$(echo "$label" | tr -c 'A-Za-z0-9\n' '-' | sed 's/-\+/-/g; s/^-//; s/-$//' | tr 'A-Z' 'a-z')
 out="$dir/raw/$slug"; mkdir -p "$out"
-TOKEN=$(oc create token prometheus-k8s -n openshift-monitoring --duration=30m)
+AUTH=$(mktemp); chmod 600 "$AUTH"
+printf 'Authorization: Bearer %s\n' "$(oc create token prometheus-k8s -n openshift-monitoring --duration=30m)" > "$AUTH"
 HOST=$(oc get route thanos-querier -n openshift-monitoring -o jsonpath='{.spec.host}')
-CA=$(mktemp); trap 'rm -f "$CA"' EXIT
+CA=$(mktemp); trap 'rm -f "$CA" "$AUTH"' EXIT
 oc get configmap default-ingress-cert -n openshift-config-managed -o jsonpath='{.data.ca-bundle\.crt}' > "$CA"
 [ -s "$CA" ] || { echo "could not read the ingress CA bundle"; exit 1; }
 pods="pod=~\"${col}-collector-.*\""; mon="job=\"${col}-collector-monitoring\""
@@ -47,7 +48,7 @@ declare -A Q=(
   [uwm_samples_appended_s]="sum(rate(prometheus_tsdb_head_samples_appended_total{namespace=\"openshift-user-workload-monitoring\"}[2m]))"
 )
 for name in "${!Q[@]}"; do
-  curl -s --cacert "$CA" -H "Authorization: Bearer $TOKEN" "https://$HOST/api/v1/query_range" \
+  curl -s --cacert "$CA" -H @"$AUTH" "https://$HOST/api/v1/query_range" \
     --data-urlencode "query=${Q[$name]}" --data-urlencode "start=$start" --data-urlencode "end=$end" --data-urlencode "step=$step" \
   | python3 -c '
 import json, sys, csv
