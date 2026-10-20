@@ -609,11 +609,13 @@ def ksm_summary(dirpath, rows, runs):
     if os.path.exists(f):
         for line in open(f):
             if "=" in line:
-                k, v = line.strip().split("=", 1); env[k] = v
+                k, v = line.strip().split("=", 1); env[k] = v.strip('"')
     cl = runs[0]["cluster"] if runs else {}
     head = [f"Cluster: OpenShift {cl.get('version')} on {cl.get('platform')}, {cl.get('nodes')} nodes. Collector image: {runs[0].get('collector_image', '')}.", ""]
     if env:
-        head += [f"Inventory applied in {int(env.get('CREATE_END', 0)) - int(env.get('CREATE_START', 0))} s; full inventory seen by the collector {env.get('CREATE_SEEN_COLLECTOR')} s and by kube-state-metrics {env.get('CREATE_SEEN_KSM')} s after the apply ended (30 s scrape and collection intervals, 10 s polling); after a collector restart the full inventory was back after {env.get('RESTART_SEEN_COLLECTOR')} s.", ""]
+        seen_c = env.get('CREATE_SEEN_COLLECTOR')
+        seen_c = f"{seen_c} s" if seen_c not in (None, "none") else f"before the apply ended ({env.get('CREATE_SEEN_COLLECTOR_NOTE', 'not measured')})"
+        head += [f"Inventory applied in {int(env.get('CREATE_END', 0)) - int(env.get('CREATE_START', 0))} s; full inventory seen by the collector {seen_c} and by kube-state-metrics {env.get('CREATE_SEEN_KSM')} s after the apply ended (30 s scrape and collection intervals, 10 s polling); after a collector restart the full inventory was back after {env.get('RESTART_SEEN_COLLECTOR')} s.", ""]
     lines = ["| phase | pods | deployments / replicasets / configmaps / services stored | collector CPU avg / p95 | collector WSS MiB avg / max | collector RSS MiB max | collector points/s | kube-state-metrics CPU avg / p95 | kube-state-metrics WSS MiB avg / max | kube-state-metrics RSS MiB max | kube-state-metrics samples per scrape | API server LIST/s | WATCH starts/s | open watches | kube-apiserver CPU | kube-controller-manager CPU | audit: collector list / watch | audit: kube-state-metrics list / watch |",
              "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for r in rows:
