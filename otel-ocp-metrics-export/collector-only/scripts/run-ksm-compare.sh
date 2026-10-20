@@ -18,7 +18,7 @@ dir=$1; phase=$2; mkdir -p "$dir/raw"; dir=$(cd "$dir" && pwd)
 ns=${NAMESPACE:-otel-platform-metrics}; lns=${LOAD_NS:-otel-load-objects}; settle=${SETTLE_MIN:-3}
 state="$dir/raw/phases.env"; touch "$state"; . "$state"
 log() { echo "== $(date -u +%FT%TZ) $*"; }
-save() { echo "$1=$2" >> "$state"; }
+save() { echo "$1=\"$2\"" >> "$state"; }
 vq() {  # instant query against the vendor Prometheus
   curl -s "http://localhost:19090/api/v1/query" --data-urlencode "query=$1" | python3 -c 'import sys,json; r=json.load(sys.stdin)["data"]["result"]; print(r[0]["value"][1] if r else 0)'
 }
@@ -115,6 +115,12 @@ case $phase in
       [ -n "$prev" ] && oc adm node-logs "$n" --path="kube-apiserver/$prev" > "$tmp/audit-$i-prev.log" 2>/dev/null
     done
     "$here/audit-requests.py" "$dir" "$tmp"/audit-*.log; rm -rf "$tmp" ;;
+  steady-finish)  # finish an interrupted steady phase from the saved STEADY_START
+    start=$STEADY_START; remaining=$(( start + ${WINDOW_MIN:-20} * 60 - $(date +%s) )); [ "$remaining" -gt 0 ] && sleep "$remaining"
+    end=$(date +%s); save STEADY_END "$end"
+    export_run "steady: full inventory" steady "$start" "$end" ;;
+  export-steady)  # export the steady window from STEADY_START to the start of the restart phase (the resumed chain restarted early)
+    export_run "steady: full inventory" steady "$STEADY_START" "$RESTART_START" ;;
   export-baseline)  # re-export the baseline window from the saved timestamps (the first run failed on an unset variable)
     export_run "baseline: empty inventory" steady "$BASELINE_START" "$BASELINE_END" ;;
   cleanup)
