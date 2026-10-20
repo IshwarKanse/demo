@@ -352,7 +352,9 @@ def co_chart_memory(dirpath, rows, outdir):
     co_scatter(ax, tiers, lambda r: r["pods"], lambda r: r["cluster"]["wss"][0], SERIES[0], "working set, average", annotate=lambda r, y: f"{y:.0f}")
     co_scatter(ax, tiers, lambda r: r["pods"], lambda r: r["cluster"]["wss"][2], SERIES[1], "working set, max")
     co_scatter(ax, tiers, lambda r: r["pods"], lambda r: r["cluster"]["rss"][2], SERIES[2], "RSS, max")
-    for i, r in enumerate(others):
+    # the interval tiers barely move the memory and are in the CPU-against-points chart; the three colours left
+    # after the tier lines go to the shape variants
+    for i, r in enumerate([r for r in others if r["run"]["kind"] != "rate"]):
         co_scatter(ax, [r], lambda r: r["pods"], lambda r: r["cluster"]["wss"][0], SERIES[3 + i % 3], co_point_label(r) + ", working set avg", marker="D", annotate=lambda r, y: f"{y:.0f}")
     ax.set_xlabel("pods running in the cluster"); ax.set_ylabel("MiB, all replicas together"); ax.set_ylim(bottom=0)
     ax.set_title("Cluster collector"); ax.legend(fontsize=8, loc="upper left")

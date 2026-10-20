@@ -229,3 +229,45 @@ window: 20 min ending 2026-10-20T06:24:54Z, nodes: 7, pods in the cluster: 1506
 | | exporter failed points/s | - | - | - |
 | | exporter queue size (items) | 121434.51 | 147342.00 | 147542.00 |
 | | memory_limiter refused points/s | - | - | - |
+
+### long: 1190 idle pods, 150 min
+window: 150 min ending 2026-10-20T09:01:25Z, nodes: 7, pods in the cluster: 1506
+| collector | metric | avg | p95 | max |
+|---|---|---|---|---|
+| node collector (DaemonSet) (7 pods, 0 restarts) | CPU all pods (cores) | 0.03 | 0.03 | 0.03 |
+| | CPU busiest pod (cores) | 0.01 | 0.01 | 0.01 |
+| | RSS busiest pod (MiB) | 147.06 | 152.23 | 153.26 |
+| | receiver accepted points/s | 1710.33 | 1710.35 | 1710.56 |
+| | receiver refused points/s | 0.00 | 0.00 | 0.00 |
+| | exporter failed points/s | - | - | - |
+| | exporter queue size (items) | 8571.50 | 8596.00 | 8718.00 |
+| | memory_limiter refused points/s | - | - | - |
+| cluster collector (1 pods, 0 restarts) | CPU all pods (cores) | 0.25 | 0.25 | 0.26 |
+| | CPU busiest pod (cores) | 0.25 | 0.25 | 0.26 |
+| | RSS busiest pod (MiB) | 2406.68 | 2507.85 | 2557.52 |
+| | receiver accepted points/s | 19342.03 | 19342.52 | 19343.28 |
+| | receiver refused points/s | 0.00 | 0.00 | 0.00 |
+| | exporter failed points/s | - | - | - |
+| | exporter queue size (items) | 663.00 | 663.00 | 663.00 |
+| | memory_limiter refused points/s | - | - | - |
+
+### documented shape: 0 idle pods, without kubelet proxy jobs
+window: 20 min ending 2026-10-20T09:29:21Z, nodes: 7, pods in the cluster: 316
+| collector | metric | avg | p95 | max |
+|---|---|---|---|---|
+| node collector (DaemonSet) (7 pods, 0 restarts) | CPU all pods (cores) | 0.01 | 0.01 | 0.01 |
+| | CPU busiest pod (cores) | 0.00 | 0.00 | 0.00 |
+| | RSS busiest pod (MiB) | 136.67 | 137.67 | 137.73 |
+| | receiver accepted points/s | 480.67 | 480.67 | 480.67 |
+| | receiver refused points/s | 0.00 | 0.00 | 0.00 |
+| | exporter failed points/s | - | - | - |
+| | exporter queue size (items) | 29.76 | 122.00 | 122.00 |
+| | memory_limiter refused points/s | - | - | - |
+| cluster collector (1 pods, 0 restarts) | CPU all pods (cores) | 0.05 | 0.05 | 0.05 |
+| | CPU busiest pod (cores) | 0.05 | 0.05 | 0.05 |
+| | RSS busiest pod (MiB) | 649.26 | 669.16 | 673.08 |
+| | receiver accepted points/s | 2049.00 | 2049.00 | 2049.00 |
+| | receiver refused points/s | 0.00 | 0.00 | 0.00 |
+| | exporter failed points/s | - | - | - |
+| | exporter queue size (items) | 0.00 | 0.00 | 0.00 |
+| | memory_limiter refused points/s | - | - | - |
