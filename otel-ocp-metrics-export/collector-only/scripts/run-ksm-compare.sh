@@ -57,9 +57,9 @@ log "phase $phase"
 case $phase in
   baseline)
     pod_start=$(oc get pods -n "$ns" -l app.kubernetes.io/instance=$ns.otel-k8scluster -o jsonpath='{.items[0].status.startTime}')
-    save BASELINE_START "$(date +%s)"
+    start=$(date +%s); save BASELINE_START "$start"
     sleep $(( ${BASE_MIN:-10} * 60 )); end=$(date +%s); save BASELINE_END "$end"
-    export_run "baseline: empty inventory" steady "$BASELINE_START" "$end"
+    export_run "baseline: empty inventory" steady "$start" "$end"
     log "collector pod started $pod_start; baseline exported" ;;
   create)
     start=$(date +%s); save CREATE_START "$start"
@@ -115,6 +115,8 @@ case $phase in
       [ -n "$prev" ] && oc adm node-logs "$n" --path="kube-apiserver/$prev" > "$tmp/audit-$i-prev.log" 2>/dev/null
     done
     "$here/audit-requests.py" "$dir" "$tmp"/audit-*.log; rm -rf "$tmp" ;;
+  export-baseline)  # re-export the baseline window from the saved timestamps (the first run failed on an unset variable)
+    export_run "baseline: empty inventory" steady "$BASELINE_START" "$BASELINE_END" ;;
   cleanup)
     oc delete clusterresourcequota -l app.kubernetes.io/part-of=otel-load-objects --wait=false >/dev/null 2>&1
     oc delete namespace "$lns" --wait=false >/dev/null 2>&1
