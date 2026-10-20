@@ -206,7 +206,7 @@ def compaction_markers(dirpath, run):
     raw.sort()
     marks = []
     for t, pod in raw:
-        if marks and (t - marks[-1][0]).total_seconds() < 120:
+        if marks and (t - marks[-1][0]).total_seconds() < 300:
             marks[-1] = (marks[-1][0], marks[-1][1] + ", " + pod)
         else:
             marks.append((t, "compaction " + pod))

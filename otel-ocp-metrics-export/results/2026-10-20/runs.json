@@ -1,0 +1,242 @@
+[
+ {
+  "label": "baseline: no remote write, 0 load pods",
+  "slug": "baseline-no-remote-write-0-load-pods",
+  "kind": "baseline",
+  "start": 1792432015,
+  "end": 1792433215,
+  "step": 30,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 254
+  }
+ },
+ {
+  "label": "series: 0 load pods, 30 s interval, 1 replica",
+  "slug": "series-0-load-pods-30-s-interval-1-replica",
+  "kind": "steady",
+  "start": 1792433618,
+  "end": 1792434818,
+  "step": 30,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 254
+  }
+ },
+ {
+  "label": "series: 4 load pods, 30 s interval, 1 replica",
+  "slug": "series-4-load-pods-30-s-interval-1-replica",
+  "kind": "steady",
+  "start": 1792435171,
+  "end": 1792436371,
+  "step": 30,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 4,
+  "extra_series": 100000,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 258
+  }
+ },
+ {
+  "label": "series: 10 load pods, 30 s interval, 1 replica",
+  "slug": "series-10-load-pods-30-s-interval-1-replica",
+  "kind": "steady",
+  "start": 1792436722,
+  "end": 1792437922,
+  "step": 30,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 10,
+  "extra_series": 250000,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 264
+  }
+ },
+ {
+  "label": "series: 20 load pods, 30 s interval, 1 replica",
+  "slug": "series-20-load-pods-30-s-interval-1-replica",
+  "kind": "steady",
+  "start": 1792438274,
+  "end": 1792439474,
+  "step": 30,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 20,
+  "extra_series": 500000,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 274
+  }
+ },
+ {
+  "label": "series: 40 load pods, 30 s interval, 1 replica",
+  "slug": "series-40-load-pods-30-s-interval-1-replica",
+  "kind": "steady",
+  "start": 1792439830,
+  "end": 1792441030,
+  "step": 30,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 40,
+  "extra_series": 1000000,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 294
+  }
+ },
+ {
+  "label": "rate: 10 load pods, 60s interval, 1 replica",
+  "slug": "rate-10-load-pods-60s-interval-1-replica",
+  "kind": "steady",
+  "start": 1792441388,
+  "end": 1792442588,
+  "step": 30,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 10,
+  "extra_series": 250000,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 264
+  }
+ },
+ {
+  "label": "rate: 10 load pods, 15s interval, 1 replica",
+  "slug": "rate-10-load-pods-15s-interval-1-replica",
+  "kind": "steady",
+  "start": 1792442943,
+  "end": 1792444143,
+  "step": 30,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 10,
+  "extra_series": 250000,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 263
+  }
+ },
+ {
+  "label": "replicas: 20 load pods, 30 s interval, 2 replicas",
+  "slug": "replicas-20-load-pods-30-s-interval-2-replicas",
+  "kind": "steady",
+  "start": 1792444508,
+  "end": 1792445708,
+  "step": 30,
+  "collector_replicas": 2,
+  "collector_restarts": 0,
+  "load_pods": 20,
+  "extra_series": 500000,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 274
+  }
+ },
+ {
+  "label": "churn: 4 load pods restarted every 10 min + 4 churn pods",
+  "slug": "churn-4-load-pods-restarted-every-10-min-4-churn-pods",
+  "kind": "churn",
+  "start": 1792446076,
+  "end": 1792448476,
+  "step": 30,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 4,
+  "extra_series": 120000,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 261
+  }
+ },
+ {
+  "label": "compaction: 10 load pods, 30 s interval, 150 min",
+  "slug": "compaction-10-load-pods-30-s-interval-150-min",
+  "kind": "compaction",
+  "start": 1792448835,
+  "end": 1792457835,
+  "step": 60,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 10,
+  "extra_series": 250000,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 264
+  }
+ },
+ {
+  "label": "outage: 5 min sink outage, 8 load pods",
+  "slug": "outage-5-min-sink-outage-8-load-pods",
+  "kind": "outage",
+  "start": 1792457745,
+  "end": 1792458765,
+  "step": 30,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 8,
+  "extra_series": 200000,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 262
+  }
+ }
+]

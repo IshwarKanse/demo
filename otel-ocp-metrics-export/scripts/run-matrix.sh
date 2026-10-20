@@ -43,7 +43,7 @@ measure() {  # label kind window_min extra_series
   NAMESPACE=$ns COLLECTOR=otel scripts/collect.sh "$1" "$3" "$end" "$table" >/dev/null
   NAMESPACE=$ns COLLECTOR=otel EXTRA_SERIES=$4 scripts/export-series.sh "$1" "$2" "$3" "$end" "$dir"
 }
-rw_active() { scripts/pq.sh 'sum(rate(prometheus_remote_storage_samples_total{remote_name="otel-collector"}[2m]))' | awk -F'=> ' '{print int($2)}'; }
+rw_active() { v=$(scripts/pq.sh 'sum(rate(prometheus_remote_storage_samples_total{remote_name="otel-collector"}[2m]))' | awk -F'=> ' '{print int($2)}'); echo "${v:-0}"; }
 for phase in "${phases[@]}"; do
   log "phase $phase"
   case $phase in
