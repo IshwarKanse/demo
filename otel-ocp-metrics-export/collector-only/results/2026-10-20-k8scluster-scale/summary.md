@@ -4,8 +4,8 @@ Objects: stored = sum over the resources of apiserver_storage_objects; watched =
 
 | step | objects stored / watched by collector / by kube-state-metrics | loader s | collector CPU avg / churn p95 | collector WSS MiB avg / max | collector RSS MiB max | collector points/s | points per cycle measured / expected | refused pts/s | collector restarts (OOM) | kube-state-metrics CPU avg / churn p95 | kube-state-metrics WSS MiB avg / max | kube-state-metrics RSS MiB max | samples per scrape / scrape s max | inventory after create: collector / ksm | inventory after restart: collector / ksm | collector LISTs (count, sum s, longest) | kube-state-metrics LISTs (count, sum s, longest) | kube-apiserver CPU steady / peak at restarts | kube-apiserver WSS GiB max | etcd db MiB / fsync p99 s | LIST/s all clients |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 0k | 22,076 / 1,337 / 3,504 | 0 | 0.001 / 0.000 | 68 / 68 | 157 | 119 | 3,577 / 3,577 (100 %) | 0 | 0 (no) | 0.002 / 0.000 | 164 / 168 | 152 | 23,583 / 0.1 | - / - | - / - | - | - | 0.87 / 0.00 | 2.7 | 70 / 0.004 | 0.4 |
-| 10k | 21,260 / 5,992 / 15,103 | 21 | 0.003 / 0.005 | 124 / 131 | 210 | 470 | 14,100 / 12,699 (111 %) | 0 | 0 (no) | 0.002 / 0.004 | 174 / 211 | 240 | 86,189 / 0.2 | 5 / 0 | 35 / 45 | 14 (watch+initial), 0.0 s, clusterresourcequotas 0.00 s | 59 (watch+initial), 3.8 s, configmaps 0.29 s | 0.82 / 1.33 | 3.2 | 109 / 0.004 | 0.2 |
+| 0k | 8,114 / 1,337 / 3,504 | 0 | 0.001 / 0.000 | 68 / 68 | 157 | 119 | 3,577 / 3,577 (100 %) | 0 | 0 (no) | 0.002 / 0.000 | 164 / 168 | 152 | 23,583 / 0.1 | - / - | - / - | - | - | 0.87 / 0.00 | 2.7 | 70 / 0.004 | 0.4 |
+| 10k | 21,260 / 5,992 / 15,103 | 21 | 0.003 / 0.005 | 124 / 131 | 210 | 470 | 14,100 / 12,699 (111 %) | 0 | 0 (no) | 0.002 / 0.004 | 174 / 211 | 240 | 86,189 / 0.2 | 5 / 0 | 35 / 45 | 14 (watch+initial), 0.2 s, services 0.11 s | 59 (watch+initial), 3.8 s, configmaps 0.29 s | 0.82 / 1.33 | 3.2 | 109 / 0.004 | 0.2 |
 | 50k | 78,257 / 25,480 / 65,311 | 57 | 0.010 / 0.017 | 308 / 317 | 367 | 1,719 | 51,575 / 48,438 (106 %) | 0 | 0 (no) | 0.006 / 0.013 | 249 / 568 | 498 | 320,947 / 0.8 | 0 / 25 | 35 / 35 | 14 (watch+initial), 0.5 s, services 0.37 s | 59 (watch+initial), 13.9 s, configmaps 1.19 s | 0.82 / 1.28 | 3.8 | 267 / 0.004 | 0.2 |
 | 100k | 147,283 / 49,834 / 128,065 | 157 | 0.020 / 0.030 | 572 / 594 | 566 | 3,278 | 98,345 / 93,098 (106 %) | 0 | 0 (no) | 0.012 / 0.022 | 517 / 963 | 782 | 614,339 / 1.7 | 10 / 0 | 36 / 35 | 14 (watch+initial), 3.5 s, replicasets 1.01 s | 59 (watch+initial), 19.2 s, configmaps 1.83 s | 1.18 / 2.12 | 5.3 | 419 / 0.004 | 0.2 |
 
@@ -19,14 +19,14 @@ Start-up requests per resource in the restart windows (audit log; a LIST has its
 
 | step | client | resource | requests | kind | longest s | mean bytes per LIST of any client in the window (apiserver_response_sizes; a watch-list stream has no size metric) |
 |---|---|---|---|---|---|---|
-| 10k | collector | clusterresourcequotas | 1 | watch+initial | 0.00 | 0 |
-| 10k | collector | cronjobs | 1 | watch+initial | 0.00 | 0 |
-| 10k | collector | daemonsets | 1 | watch+initial | 0.00 | 0 |
+| 10k | collector | services | 1 | watch+initial | 0.11 | 900,968 |
+| 10k | collector | pods | 1 | watch+initial | 0.08 | 76,220 |
+| 10k | collector | namespaces | 1 | watch+initial | 0.01 | 0 |
+| 10k | collector | clusterresourcequotas | 1 | watch+initial | 0.01 | 0 |
+| 10k | collector | nodes | 1 | watch+initial | 0.01 | 102,453 |
+| 10k | collector | resourcequotas | 1 | watch+initial | 0.01 | 0 |
 | 10k | collector | deployments | 1 | watch+initial | 0.00 | 4,731 |
-| 10k | collector | horizontalpodautoscalers | 1 | watch+initial | 0.00 | 0 |
-| 10k | collector | jobs | 1 | watch+initial | 0.00 | 0 |
-| 10k | collector | namespaces | 1 | watch+initial | 0.00 | 0 |
-| 10k | collector | nodes | 1 | watch+initial | 0.00 | 102,453 |
+| 10k | collector | cronjobs | 1 | watch+initial | 0.00 | 0 |
 | 10k | kube-state-metrics | configmaps | 2 | watch+initial | 0.29 | 29,264 |
 | 10k | kube-state-metrics | secrets | 2 | watch+initial | 0.28 | 19,682 |
 | 10k | kube-state-metrics | services | 2 | watch+initial | 0.25 | 900,968 |

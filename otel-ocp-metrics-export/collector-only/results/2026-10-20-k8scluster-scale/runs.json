@@ -1,5 +1,108 @@
 [
  {
+  "label": "timeline: whole ladder",
+  "slug": "timeline-whole-ladder",
+  "kind": "timeline",
+  "start": 1792512177,
+  "end": 1792531437,
+  "step": 60,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 272,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 23,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 45,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 49
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit ",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 0,
+  "markers": [
+   {
+    "name": "churn 100k",
+    "ts": 1792523319
+   },
+   {
+    "name": "churn 10k",
+    "ts": 1792515327
+   },
+   {
+    "name": "churn 50k",
+    "ts": 1792519415
+   },
+   {
+    "name": "loader end 100k",
+    "ts": 1792520932
+   },
+   {
+    "name": "loader end 10k",
+    "ts": 1792512678
+   },
+   {
+    "name": "loader end 50k",
+    "ts": 1792516911
+   },
+   {
+    "name": "loader start 100k",
+    "ts": 1792520775
+   },
+   {
+    "name": "loader start 10k",
+    "ts": 1792512657
+   },
+   {
+    "name": "loader start 200k",
+    "ts": 1792524900
+   },
+   {
+    "name": "loader start 50k",
+    "ts": 1792516854
+   },
+   {
+    "name": "ksm restart 100k",
+    "ts": 1792522987
+   },
+   {
+    "name": "ksm restart 10k",
+    "ts": 1792514792
+   },
+   {
+    "name": "ksm restart 50k",
+    "ts": 1792519088
+   },
+   {
+    "name": "restart 100k",
+    "ts": 1792522669
+   },
+   {
+    "name": "restart 10k",
+    "ts": 1792514473
+   },
+   {
+    "name": "restart 50k",
+    "ts": 1792518746
+   }
+  ]
+ },
+ {
   "label": "0k steady: empty inventory",
   "slug": "0k-steady-empty-inventory",
   "kind": "steady",

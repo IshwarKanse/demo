@@ -761,7 +761,7 @@ def scale_chart_memory(rows, outdir):
 def scale_chart_cpu(rows, outdir):
     fig, axes = plt.subplots(1, 3, figsize=(14, 4.2))
     xs = [r["stored"] / 1000 for r in rows]
-    panels = (("ccpu", "kcpu", 0, "CPU cores, steady average"), ("ccpu_churn", "kcpu_churn", None, "CPU cores, p95 during the churn"), ("cpoints", "ksamples", 0, "data: collector points/s, kube-state-metrics samples per scrape (thousands)"))
+    panels = (("ccpu", "kcpu", 0, "CPU cores, steady average"), ("ccpu_churn", "kcpu_churn", None, "CPU cores, p95 during the churn"), ("cpoints", "ksamples", 0, "data volume: collector points/s, kube-state-metrics thousand samples per scrape"))
     for ax, (ckey, kkey, idx, title) in zip(axes, panels):
         cv = [r[ckey][idx] if idx is not None else r[ckey] for r in rows]; kv = [r[kkey][idx] if idx is not None else r[kkey] for r in rows]
         if ckey == "cpoints":
@@ -796,7 +796,7 @@ def scale_chart_inventory(rows, outdir):
         if r["longest_c"]: label_point(ax, x, dur(r["longest_c"]), r["longest_c"]["resource"])
         if r["longest_k"]: label_point(ax, x, dur(r["longest_k"]), r["longest_k"]["resource"], dy=-12)
     ax.set_xlabel("objects stored in etcd (thousands)"); ax.set_ylabel("seconds"); ax.set_title("start-up lists: LIST requests (audit log) or watch-list streams (apiserver_watch_list_duration_seconds)", fontsize=8); ax.set_ylim(bottom=0); ax.legend(fontsize=7, loc="upper left")
-    fig.suptitle("Start-up: time to the full inventory and the LIST requests behind it", color=TEXT)
+    fig.suptitle("Start-up: time to the full inventory and the initial list streams behind it", color=TEXT)
     fig.tight_layout(); fig.savefig(os.path.join(outdir, "scale_inventory_time.png")); plt.close(fig)
 
 
@@ -810,10 +810,10 @@ def scale_chart_control_plane(rows, outdir):
     ax.plot(xs, [r["etcd_cpu"][0] for r in rows], marker="^", color=SERIES[2], label="etcd (3), steady"); ax.plot(xs, [r["kcm_cpu"][0] for r in rows], marker="v", color=SERIES[3], label="kube-controller-manager, steady")
     ax.set_title("control plane CPU cores", fontsize=9); ax.set_ylim(bottom=0); ax.legend(fontsize=7, loc="upper left")
     ax = axes[1]
-    ax.plot(xs, [r["api_wss_max"] / 1024 for r in rows], marker="o", color=SERIES[0], label="kube-apiserver, busiest instance (GiB)"); ax.plot(xs, [r["etcd_db"] for r in rows], marker="^", color=SERIES[2], label="etcd database size (MiB)")
+    ax.plot(xs, [r["api_wss_max"] / 1024 for r in rows], marker="o", color=SERIES[0], label="kube-apiserver, busiest instance"); ax.plot(xs, [r["etcd_db"] / 1024 for r in rows], marker="^", color=SERIES[2], label="etcd database size")
     for x, r in zip(xs, rows):
-        label_point(ax, x, r["api_wss_max"] / 1024, f"{r['api_wss_max'] / 1024:.1f} GiB"); label_point(ax, x, r["etcd_db"], f"{r['etcd_db']:.0f} MiB", dy=-12)
-    ax.set_title("API server working set and etcd database", fontsize=9); ax.set_ylim(bottom=0); ax.legend(fontsize=7, loc="upper left")
+        label_point(ax, x, r["api_wss_max"] / 1024, f"{r['api_wss_max'] / 1024:.1f} GiB"); label_point(ax, x, r["etcd_db"] / 1024, f"{r['etcd_db']:.0f} MiB", dy=-12)
+    ax.set_ylabel("GiB"); ax.set_title("API server working set and etcd database", fontsize=9); ax.set_ylim(bottom=0); ax.legend(fontsize=7, loc="upper left")
     ax = axes[2]
     ax.plot(xs, [r["list_s"][0] for r in rows], marker="o", color=SERIES[0], label="LIST/s, all clients, steady"); ax.plot(xs, [r["watch_s"][0] for r in rows], marker="s", color=SERIES[1], label="WATCH starts/s, all clients, steady")
     ax.plot(xs, [r["kscrape"][2] for r in rows], marker="^", color=SERIES[2], label="kube-state-metrics scrape duration, max (s)")
@@ -837,7 +837,7 @@ def scale_chart_timeline(dirpath, runs, outdir):
             ("kube-state-metrics: thousand samples per scrape, scrape seconds", [("samples (thousands)", total(dirpath, s, "ksm_samples_per_scrape"), 0.001), ("scrape duration s", total(dirpath, s, "ksm_scrape_duration_s"), 1)]),
             ("API server requests/s, all clients", [("LIST", total(dirpath, s, "apiserver_list_s"), 1), ("WATCH starts", total(dirpath, s, "apiserver_watch_s"), 1), ("429", total(dirpath, s, "apiserver_429_s"), 1)]),
             ("control plane CPU cores", [("kube-apiserver (3)", total(dirpath, s, "apiserver_cpu_cores"), 1), ("kube-controller-manager", total(dirpath, s, "kcm_cpu_cores"), 1), ("etcd (3)", total(dirpath, s, "etcd_cpu_cores"), 1)]),
-            ("control plane memory GiB, etcd database MiB", [("kube-apiserver busiest instance (GiB)", total(dirpath, s, "apiserver_wss_bytes_max_pod"), MiB / 1024), ("etcd database (MiB)", total(dirpath, s, "etcd_db_bytes"), MiB), ("kube-controller-manager (GiB)", total(dirpath, s, "kcm_wss_bytes"), MiB / 1024)]),
+            ("control plane memory and etcd database, GiB", [("kube-apiserver busiest instance", total(dirpath, s, "apiserver_wss_bytes_max_pod"), MiB / 1024), ("etcd database", total(dirpath, s, "etcd_db_bytes"), MiB / 1024), ("kube-controller-manager", total(dirpath, s, "kcm_wss_bytes"), MiB / 1024)]),
             ("monitoring memory GiB", [("prometheus-k8s busiest", total(dirpath, s, "prometheus_k8s_wss_bytes"), MiB / 1024), ("vendor Prometheus", total(dirpath, s, "vendor_prometheus_wss_bytes"), MiB / 1024)]),
         ]
         fig, axes = plt.subplots(len(panels), 1, figsize=(10, 2.1 * len(panels)), sharex=True)
@@ -855,7 +855,7 @@ def scale_chart_timeline(dirpath, runs, outdir):
             axes[0].annotate(text, (t, axes[0].get_ylim()[1]), textcoords="offset points", xytext=(2, -9), fontsize=6, color=MUTED, rotation=90, va="top")
         axes[-1].xaxis.set_major_formatter(mdates.DateFormatter("%H:%M", tz=timezone.utc)); axes[-1].set_xlabel("time (UTC)")
         fig.suptitle("Scale ladder: the k8s_cluster receiver against kube-state-metrics while the inventory grows", color=TEXT)
-        fig.tight_layout(); fig.savefig(os.path.join(outdir, "scale_timeline.png")); plt.close(fig)
+        fig.tight_layout(rect=(0, 0, 1, 0.985)); fig.savefig(os.path.join(outdir, "scale_timeline.png")); plt.close(fig)
 
 
 def scale_summary(dirpath, rows, runs):

@@ -88,11 +88,24 @@ What the phases showed:
   to 110 creates/s with 500 and 504 retries; at about 186 units (250k stored objects) the three control plane nodes
   were at 89 to 99 % memory and CPU, the kube-apiserver on one node had restarted four times (probe timeouts under
   CPU starvation), the replica set controller was 7,000 objects behind, and the API became unreachable, so the
-  loader was stopped and the inventory deleted in batches. Every kube-apiserver restart makes every informer in the
-  cluster (operators, controllers, kube-state-metrics, the collector) re-stream the whole inventory, which keeps the
-  nodes saturated: on 16 GiB control plane nodes the practical ceiling is about 150,000 stored objects, and beyond
-  that the question is the control plane's, not the receiver's. Both clients cost the API server the same memory
-  (one shared watch cache) and the same CPU per restart (one stream per informer).
+  loader was stopped. The recovery took 80 minutes (19:50 to 21:11 UTC): one control plane node had its memory
+  exhausted (the kube-apiserver watch cache plus the active kube-controller-manager with its own caches of the
+  inventory), its disk thrashed at 1,400 reads/s re-reading evicted pages, its etcd member's fsync p99 rose to 2 s
+  and its kube-apiserver kept failing the etcd health check, so a third of the requests through the load balancer
+  failed and the namespace controller, which ran on that node, deleted almost nothing for 40 minutes. The three
+  kube-apiservers restarted 29, 24 and 13 times in total; every restart makes every informer in the cluster
+  (operators, controllers, kube-state-metrics, the collector) re-stream the whole inventory, which keeps the nodes
+  saturated. What ended it was deleting the heavy kinds directly with the in-cluster loader (1,400 deletecollection
+  requests, 24 minutes, p99 136 s per request), after which the namespace controller finished the namespaces in
+  3 minutes and the control plane was healthy again (`raw/relief.log`, `raw/loader/recovery-cleanup-kinds.log`).
+  On 16 GiB control plane nodes the practical ceiling is therefore about 150,000 stored objects, and beyond that the
+  question is the control plane's, not the receiver's. Both clients cost the API server the same memory (one shared
+  watch cache) and the same CPU per restart (one stream per informer).
+- **Both clients survived the incident** (`charts/scale_timeline.png`, 19:45 to 21:10 UTC, up to 277,000 stored
+  objects, about 95,000 watched by the receiver): the collector reached 1.2 GiB working set (1.0 GiB RSS) and 0.11
+  cores, kept delivering 5,800 points/s with no refused point and no restart, and still had the 4Gi limit far away;
+  kube-state-metrics reached 2.1 GiB and 0.34 cores with scrapes of 1.07 million samples taking up to 6 s, and the
+  platform Prometheus 9 GiB. Neither container restarted during the whole ladder.
 
 ## Limit found and recommendation
 

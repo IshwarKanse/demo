@@ -3,3 +3,45 @@
 20:06:10 API not ready
 20:06:31 API not ready
 20:06:58 deletion requested for units 0-24
+20:10:33 delete failed for units 25-49, retrying
+20:11:03 API not ready
+20:11:24 API not ready
+20:11:54 API not ready
+20:12:15 API not ready
+20:12:45 API not ready
+20:13:06 API not ready
+20:13:36 API not ready
+20:13:57 API not ready
+20:14:18 API not ready
+20:14:39 API not ready
+20:15:09 deletion requested for units 25-49
+20:21:13 delete failed for units 50-74, retrying
+20:22:08 deletion requested for units 50-74
+20:25:08 delete failed for units 75-99, retrying
+20:25:30 API not ready
+20:25:50 API not ready
+20:26:18 deletion requested for units 75-99
+20:30:56 delete failed for units 100-124, retrying
+20:32:33 delete failed for units 100-124, retrying
+20:33:27 deletion requested for units 100-124
+20:35:41 delete failed for units 125-149, retrying
+20:36:11 API not ready
+20:42:05 delete failed for units 125-149, retrying
+20:43:41 deletion requested for units 125-149
+20:44:47 delete failed for units 150-174, retrying
+20:49:00 delete failed for units 150-174, retrying
+20:51:13 delete failed for units 150-174, retrying
+20:51:40 deletion requested for units 150-174
+20:52:05 deletion requested for units 175-199
+20:52:25 all deletions requested
+20:52:26 load namespaces remaining: 200
+20:52:57 load namespaces remaining: 200
+20:53:28 load namespaces remaining: 200
+20:53:59 load namespaces remaining: 200
+20:54:33 load namespaces remaining: 200
+20:55:05 load namespaces remaining: 200
+20:55:36 load namespaces remaining: 200
+20:56:07 load namespaces remaining: 200
+20:56:38 load namespaces remaining: 200
+20:57:39 load namespaces remaining: 0
+20:57:39 relief done

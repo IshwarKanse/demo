@@ -173,3 +173,5 @@ BrokenPipeError: [Errno 32] Broken pipe
 == 2026-10-20T19:35:00Z growing the inventory from 100 to 200 units
 == 2026-10-20T19:50:51Z ladder stopped during the 200k create: the control plane is the limit (masters at 89-99 % memory and CPU, kube-apiserver on ip-10-0-40-41 restarted 4 times, 500/504 responses, loader throttled to 110 creates/s); the loader job was deleted at about 74,000 of 100,000 objects
 == 2026-10-20T20:08:26Z k8s_cluster-only collector deleted during the recovery (its measurements are complete)
+== 2026-10-20T20:33:40Z recovery: loader job loader-cleanup-kinds-1792528420 deletes the heavy kinds in all 200 namespaces (deletecollection, 8 workers) alongside the namespace controller
+== 2026-10-20T21:12:02Z cleanup: inventory namespaces and cluster resource quotas gone (bulk delete job + namespace controller), loader driver namespace deleted, vendor Prometheus limit back to 8Gi; kube-apiserver restarts during the incident: 29 / 24 / 13
