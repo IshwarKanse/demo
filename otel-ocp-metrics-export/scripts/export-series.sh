@@ -124,11 +124,11 @@ workers=$(oc get nodes -l node-role.kubernetes.io/worker --no-headers | wc -l | 
 pods_running=$(oc get pods -A --field-selector=status.phase=Running --no-headers | wc -l | tr -d ' ')
 if [ "$profile" = collector-only ]; then
   load_pods=$(oc get deploy load-pods -n "$ns" -o jsonpath='{.status.readyReplicas}' 2>/dev/null); load_pods=${load_pods:-0}
-  replicas=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.otel-cluster" --no-headers 2>/dev/null | wc -l | tr -d ' ')
+  replicas=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.otel-cluster,app.kubernetes.io/component=opentelemetry-collector" --no-headers 2>/dev/null | wc -l | tr -d ' ')
   node_pods=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.otel-node" --no-headers 2>/dev/null | wc -l | tr -d ' ')
-  restarts=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.otel-cluster" -o jsonpath='{range .items[*]}{.status.containerStatuses[0].restartCount}{"\n"}{end}' 2>/dev/null | awk '{s+=$1} END {print s+0}')
+  restarts=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.otel-cluster,app.kubernetes.io/component=opentelemetry-collector" -o jsonpath='{range .items[*]}{.status.containerStatuses[0].restartCount}{"\n"}{end}' 2>/dev/null | awk '{s+=$1} END {print s+0}')
   node_restarts=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.otel-node" -o jsonpath='{range .items[*]}{.status.containerStatuses[0].restartCount}{"\n"}{end}' 2>/dev/null | awk '{s+=$1} END {print s+0}')
-  image=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.otel-cluster" -o jsonpath='{.items[0].spec.containers[0].image}' 2>/dev/null)
+  image=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.otel-cluster,app.kubernetes.io/component=opentelemetry-collector" -o jsonpath='{.items[0].spec.containers[0].image}' 2>/dev/null)
   pods_per_node=$(oc get pods -A --field-selector=status.phase=Running -o jsonpath='{range .items[*]}{.spec.nodeName}{"\n"}{end}' | sort | uniq -c | awk 'BEGIN{printf "{"} {printf "%s\"%s\": %s", (NR>1?", ":""), $2, $1} END{printf "}"}')
   master_alloc=$(oc get nodes -l node-role.kubernetes.io/control-plane -o jsonpath='{range .items[*]}{.status.allocatable.cpu}{" "}{.status.allocatable.memory}{"\n"}{end}' | head -1)
   extra_json=", \"profile\": \"collector-only\", \"variant\": \"${VARIANT:-deployment}\", \"config\": \"${CONFIG:-}\", \"collector_image\": \"$image\", \"node_collector_pods\": $node_pods, \"node_collector_restarts\": $node_restarts, \"markers\": $(python3 -c 'import sys,json; m=[p.split("=",1) for p in sys.argv[1].split(";") if "=" in p]; print(json.dumps([{"name": n, "ts": int(t)} for n, t in m]))' "${MARKERS:-}")"

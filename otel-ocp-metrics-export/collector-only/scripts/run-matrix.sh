@@ -28,6 +28,15 @@ config() {
   echo "$INTERVAL interval, $((jobs - 1)) scrape jobs $([ "$KUBELET_JOBS" = 1 ] && echo with || echo without) kubelet proxy jobs${FILE_STORAGE:+, file_storage queue}, operator default image"
 }
 apply_cluster() {  # [ta]
+  # the operator webhook refuses a mode change on an existing CR: delete it first when switching between the
+  # Deployment and the StatefulSet shape (the collector is stateless, the queue is lost either way)
+  local want=deployment; [ "${1:-}" = ta ] && want=statefulset
+  local cur; cur=$(oc get otelcol otel-cluster -n "$ns" -o jsonpath='{.spec.mode}' 2>/dev/null)
+  if [ -n "$cur" ] && [ "$cur" != "$want" ]; then
+    log "mode change $cur -> $want: deleting the otel-cluster CR first"
+    oc delete otelcol otel-cluster -n "$ns" --wait=true >/dev/null
+    for i in $(seq 1 60); do [ "$(oc get pods -n "$ns" -l app.kubernetes.io/instance=$ns.otel-cluster --no-headers 2>/dev/null | wc -l | tr -d ' ')" = 0 ] && break; sleep 5; done
+  fi
   IMAGE= BACKEND=sink INTERVAL=$INTERVAL KUBELET_JOBS=$KUBELET_JOBS FILE_STORAGE=$FILE_STORAGE "$here/gen-cluster-collector.py" ${1:-} | oc apply -f - >/dev/null
   if [ "${1:-}" = ta ]; then
     VARIANT=statefulset-ta
@@ -80,7 +89,7 @@ case $phase in
     settle_and_measure "scale-out: $(current_pods) idle pods, statefulset with 2 replicas and target allocator" steady
     apply_cluster ;;
   nokubelet)
-    KUBELET_JOBS=0 apply_cluster
+    KUBELET_JOBS=0 apply_cluster; apply_node
     KUBELET_JOBS=0 settle_and_measure "documented shape: $(current_pods) idle pods, without kubelet proxy jobs" steady
     apply_cluster ;;
   long)

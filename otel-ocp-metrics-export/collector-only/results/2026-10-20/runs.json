@@ -183,5 +183,245 @@
   "node_collector_pods": 7,
   "node_collector_restarts": 0,
   "markers": []
+ },
+ {
+  "label": "scale-out: 1190 idle pods, statefulset with 2 replicas and target allocator",
+  "slug": "scale-out-1190-idle-pods-statefulset-with-2-replicas-and-target-allocator",
+  "kind": "steady",
+  "start": 1792469454,
+  "end": 1792470654,
+  "step": 30,
+  "collector_replicas": 2,
+  "collector_restarts": 0,
+  "load_pods": 1190,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 1463,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 250,
+    "ip-10-0-36-23.us-east-2.compute.internal": 242,
+    "ip-10-0-40-41.us-east-2.compute.internal": 107,
+    "ip-10-0-5-118.us-east-2.compute.internal": 181,
+    "ip-10-0-53-107.us-east-2.compute.internal": 250,
+    "ip-10-0-74-94.us-east-2.compute.internal": 250,
+    "ip-10-0-94-170.us-east-2.compute.internal": 183
+   }
+  },
+  "profile": "collector-only",
+  "variant": "statefulset-ta",
+  "config": "30s interval, 49 scrape jobs with kubelet proxy jobs, operator default image",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "markers": []
+ },
+ {
+  "label": "documented shape: 1190 idle pods, without kubelet proxy jobs",
+  "slug": "documented-shape-1190-idle-pods-without-kubelet-proxy-jobs",
+  "kind": "steady",
+  "start": 1792471050,
+  "end": 1792472250,
+  "step": 30,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 1190,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 1461,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 248,
+    "ip-10-0-36-23.us-east-2.compute.internal": 242,
+    "ip-10-0-40-41.us-east-2.compute.internal": 107,
+    "ip-10-0-5-118.us-east-2.compute.internal": 181,
+    "ip-10-0-53-107.us-east-2.compute.internal": 250,
+    "ip-10-0-74-94.us-east-2.compute.internal": 250,
+    "ip-10-0-94-170.us-east-2.compute.internal": 183
+   }
+  },
+  "profile": "collector-only",
+  "variant": "deployment",
+  "config": "30s interval, 45 scrape jobs without kubelet proxy jobs, operator default image",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "markers": []
+ },
+ {
+  "label": "outage: 5 min sink outage, 1190 idle pods",
+  "slug": "outage-5-min-sink-outage-1190-idle-pods",
+  "kind": "outage",
+  "start": 1792472344,
+  "end": 1792473244,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 1190,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 1461,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 248,
+    "ip-10-0-36-23.us-east-2.compute.internal": 243,
+    "ip-10-0-40-41.us-east-2.compute.internal": 107,
+    "ip-10-0-5-118.us-east-2.compute.internal": 181,
+    "ip-10-0-53-107.us-east-2.compute.internal": 250,
+    "ip-10-0-74-94.us-east-2.compute.internal": 249,
+    "ip-10-0-94-170.us-east-2.compute.internal": 183
+   }
+  },
+  "profile": "collector-only",
+  "variant": "deployment",
+  "config": "30s interval, 49 scrape jobs with kubelet proxy jobs, operator default image",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "markers": [
+   {
+    "name": "sink down",
+    "ts": 1792472520
+   },
+   {
+    "name": "sink up",
+    "ts": 1792472824
+   }
+  ]
+ },
+ {
+  "label": "outage: 5 min sink outage, 1190 idle pods, file_storage queue",
+  "slug": "outage-5-min-sink-outage-1190-idle-pods-file-storage-queue",
+  "kind": "outage",
+  "start": 1792473403,
+  "end": 1792474303,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 1190,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 1461,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 248,
+    "ip-10-0-36-23.us-east-2.compute.internal": 242,
+    "ip-10-0-40-41.us-east-2.compute.internal": 107,
+    "ip-10-0-5-118.us-east-2.compute.internal": 181,
+    "ip-10-0-53-107.us-east-2.compute.internal": 250,
+    "ip-10-0-74-94.us-east-2.compute.internal": 250,
+    "ip-10-0-94-170.us-east-2.compute.internal": 183
+   }
+  },
+  "profile": "collector-only",
+  "variant": "deployment",
+  "config": "30s interval, 49 scrape jobs with kubelet proxy jobs, file_storage queue, operator default image",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "markers": [
+   {
+    "name": "sink down",
+    "ts": 1792473579
+   },
+   {
+    "name": "sink up",
+    "ts": 1792473883
+   }
+  ]
+ },
+ {
+  "label": "rate: 1190 idle pods, 60s interval",
+  "slug": "rate-1190-idle-pods-60s-interval",
+  "kind": "rate",
+  "start": 1792474703,
+  "end": 1792475903,
+  "step": 30,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 1190,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 1461,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 248,
+    "ip-10-0-36-23.us-east-2.compute.internal": 242,
+    "ip-10-0-40-41.us-east-2.compute.internal": 107,
+    "ip-10-0-5-118.us-east-2.compute.internal": 181,
+    "ip-10-0-53-107.us-east-2.compute.internal": 250,
+    "ip-10-0-74-94.us-east-2.compute.internal": 250,
+    "ip-10-0-94-170.us-east-2.compute.internal": 183
+   }
+  },
+  "profile": "collector-only",
+  "variant": "deployment",
+  "config": "60s interval, 49 scrape jobs with kubelet proxy jobs, operator default image",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "markers": []
+ },
+ {
+  "label": "rate: 1190 idle pods, 15s interval",
+  "slug": "rate-1190-idle-pods-15s-interval",
+  "kind": "rate",
+  "start": 1792476294,
+  "end": 1792477494,
+  "step": 30,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 1190,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 1461,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 248,
+    "ip-10-0-36-23.us-east-2.compute.internal": 243,
+    "ip-10-0-40-41.us-east-2.compute.internal": 107,
+    "ip-10-0-5-118.us-east-2.compute.internal": 181,
+    "ip-10-0-53-107.us-east-2.compute.internal": 250,
+    "ip-10-0-74-94.us-east-2.compute.internal": 249,
+    "ip-10-0-94-170.us-east-2.compute.internal": 183
+   }
+  },
+  "profile": "collector-only",
+  "variant": "deployment",
+  "config": "15s interval, 49 scrape jobs with kubelet proxy jobs, operator default image",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "markers": []
  }
 ]
