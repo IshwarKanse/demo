@@ -14,3 +14,12 @@ oc apply -f 02-sample-app.yaml                # avalanche sample app + ServiceMo
 oc get prometheus -n otel-metrics-coo -o jsonpath='{.items[0].spec.remoteWrite}'
 scripts/pq.sh 'sum by (prometheus) (rate(prometheus_remote_storage_samples_total{remote_name="otel-collector"}[2m]))'
 ```
+
+## Result (2026-10-20, OpenShift 5.0.0-0.nightly-2026-10-19 on AWS, COO 1.5.3)
+
+The MonitoringStack reconciled (`ResourceDiscovery`, `Available`, `Reconciled` all true), the
+generated `prometheus.monitoring.rhobs` CR carries `remoteWrite[0].messageVersion: V2.0` and no
+`enableFeatures` or native histogram settings, and the instance sent the 165 avalanche series to
+the collector with 1 shard and 0 failed samples (`prometheus_remote_storage_*` queried with
+`promtool` inside the Prometheus pod). Same type limitation as CMO: no metadata, so the metrics
+arrive as untyped gauges until the API exposes the Prometheus feature settings.
