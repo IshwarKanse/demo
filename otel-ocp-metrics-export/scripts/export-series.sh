@@ -16,7 +16,7 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 label=$1; kind=$2; win=$3; end=${4:-$(date +%s)}; dir=${5:-results/$(date -u +%F)}
 profile=${PROFILE:-remotewrite}
-if [ "$profile" = collector-only ]; then ns=${NAMESPACE:-otel-platform-metrics}; else ns=${NAMESPACE:-otel-metrics-export}; fi
+if [ "$profile" = collector-only ] || [ "$profile" = k8scluster ]; then ns=${NAMESPACE:-otel-platform-metrics}; else ns=${NAMESPACE:-otel-metrics-export}; fi
 col=${COLLECTOR:-otel}; step=${STEP:-30}
 start=$((end - win*60))
 slug=$(echo "$label" | tr -c 'A-Za-z0-9\n' '-' | sed -E 's/-+/-/g; s/^-//; s/-$//' | tr 'A-Z' 'a-z')
@@ -63,6 +63,38 @@ apiserver_wss_bytes|sum(container_memory_working_set_bytes{namespace="openshift-
 kubelet_cpu_cores|sum by (node) (rate(container_cpu_usage_seconds_total{id="/system.slice/kubelet.service"}[2m]))
 cluster_pods_running|sum(kube_pod_status_phase{phase="Running"})
 cluster_pods_per_node|count by (node) (kube_pod_info * on (namespace, pod) group_left() (kube_pod_status_phase{phase="Running"} == 1))
+prometheus_head_series|sum by (pod) (prometheus_tsdb_head_series{namespace="openshift-monitoring",pod=~"prometheus-k8s-.*"})
+option1_rw_samples_s|sum(rate(prometheus_remote_storage_samples_total{remote_name="otel-collector"}[2m]))
+EOQ
+)
+elif [ "$profile" = k8scluster ]; then
+# the k8s_cluster-only collector (08-k8scluster-collector.yaml) against kube-state-metrics on the same cluster, plus the
+# API server view (list rate, watch rate, open watches and stored objects per resource) and the object inventory
+kpod="pod=~\"otel-k8scluster-collector-.*\""; tj="job=\"${ns}/otel-collectors-telemetry\""
+res='deployments|replicasets|pods|jobs|cronjobs|horizontalpodautoscalers|resourcequotas|clusterresourcequotas|configmaps|services|namespaces|nodes|daemonsets|statefulsets|endpoints|endpointslices'
+QUERIES=$(cat <<EOQ
+collector_cpu_cores|sum(rate(container_cpu_usage_seconds_total{namespace="$ns",container="otc-container",$kpod}[2m]))
+collector_wss_bytes|sum(container_memory_working_set_bytes{namespace="$ns",container="otc-container",$kpod})
+collector_rss_bytes|max(otelcol_process_memory_rss{namespace="$ns",$tj,$kpod})
+receiver_accepted_points_s|sum(rate(otelcol_receiver_accepted_metric_points{namespace="$ns",$tj,$kpod}[2m]))
+receiver_refused_points_s|sum(rate(otelcol_receiver_refused_metric_points{namespace="$ns",$tj,$kpod}[2m]))
+exporter_queue_items|sum(otelcol_exporter_queue_size{namespace="$ns",$tj,$kpod})
+memory_limiter_refused_points_s|sum(rate(otelcol_processor_memory_limiter_refused_metric_points{namespace="$ns",$tj,$kpod}[2m]))
+ksm_cpu_cores|sum(rate(container_cpu_usage_seconds_total{namespace="openshift-monitoring",container="kube-state-metrics"}[2m]))
+ksm_wss_bytes|sum(container_memory_working_set_bytes{namespace="openshift-monitoring",container="kube-state-metrics"})
+ksm_rss_bytes|max(process_resident_memory_bytes{job="kube-state-metrics"})
+ksm_samples_per_scrape|max(scrape_samples_scraped{job="kube-state-metrics",container="kube-rbac-proxy-main"})
+ksm_watch_s|sum by (resource) (rate(kube_state_metrics_watch_total[2m]))
+ksm_inventory|label_replace(count(kube_deployment_spec_replicas{namespace="otel-load-objects"}), "kind", "deployments", "", "") or label_replace(count(kube_replicaset_spec_replicas{namespace="otel-load-objects"}), "kind", "replicasets", "", "") or label_replace(count(kube_job_info{namespace="otel-load-objects"}), "kind", "jobs", "", "") or label_replace(count(kube_cronjob_info{namespace="otel-load-objects"}), "kind", "cronjobs", "", "") or label_replace(count(kube_horizontalpodautoscaler_spec_max_replicas{namespace="otel-load-objects"}), "kind", "hpas", "", "") or label_replace(count(kube_resourcequota{namespace="otel-load-objects",type="hard"}), "kind", "quotas", "", "") or label_replace(count(kube_configmap_info{namespace="otel-load-objects"}), "kind", "configmaps", "", "") or label_replace(count(kube_service_info{namespace="otel-load-objects"}), "kind", "services", "", "")
+apiserver_list_s|sum by (resource) (rate(apiserver_request_total{verb="LIST",resource=~"$res"}[2m]))
+apiserver_watch_s|sum by (resource) (rate(apiserver_request_total{verb="WATCH",resource=~"$res"}[2m]))
+apiserver_watchers|sum by (resource) (apiserver_longrunning_requests{verb="WATCH",resource=~"$res"})
+apiserver_storage_objects|max by (resource) (apiserver_storage_objects{resource=~"deployments.apps|replicasets.apps|configmaps|services|jobs.batch|cronjobs.batch|horizontalpodautoscalers.autoscaling|resourcequotas|clusterresourcequotas.quota.openshift.io|pods"})
+apiserver_cpu_cores|sum(rate(container_cpu_usage_seconds_total{namespace="openshift-kube-apiserver",container="kube-apiserver"}[2m]))
+apiserver_wss_bytes|sum(container_memory_working_set_bytes{namespace="openshift-kube-apiserver",container="kube-apiserver"})
+kcm_cpu_cores|sum(rate(container_cpu_usage_seconds_total{namespace="openshift-kube-controller-manager",container="kube-controller-manager"}[2m]))
+etcd_cpu_cores|sum(rate(container_cpu_usage_seconds_total{namespace="openshift-etcd",container="etcd"}[2m]))
+cluster_pods_running|sum(kube_pod_status_phase{phase="Running"})
 prometheus_head_series|sum by (pod) (prometheus_tsdb_head_series{namespace="openshift-monitoring",pod=~"prometheus-k8s-.*"})
 option1_rw_samples_s|sum(rate(prometheus_remote_storage_samples_total{remote_name="otel-collector"}[2m]))
 EOQ
@@ -122,7 +154,7 @@ if [ -n "${ONLY_MISSING:-}" ]; then echo "backfilled missing series in $out"; ex
 nodes=$(oc get nodes --no-headers | wc -l | tr -d ' ')
 workers=$(oc get nodes -l node-role.kubernetes.io/worker --no-headers | wc -l | tr -d ' ')
 pods_running=$(oc get pods -A --field-selector=status.phase=Running --no-headers | wc -l | tr -d ' ')
-if [ "$profile" = collector-only ]; then
+if [ "$profile" = collector-only ] || [ "$profile" = k8scluster ]; then
   load_pods=$(oc get deploy load-pods -n "$ns" -o jsonpath='{.status.readyReplicas}' 2>/dev/null); load_pods=${load_pods:-0}
   replicas=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.otel-cluster,app.kubernetes.io/component=opentelemetry-collector" --no-headers 2>/dev/null | wc -l | tr -d ' ')
   node_pods=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.otel-node" --no-headers 2>/dev/null | wc -l | tr -d ' ')
@@ -131,7 +163,7 @@ if [ "$profile" = collector-only ]; then
   image=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.otel-cluster,app.kubernetes.io/component=opentelemetry-collector" -o jsonpath='{.items[0].spec.containers[0].image}' 2>/dev/null)
   pods_per_node=$(oc get pods -A --field-selector=status.phase=Running -o jsonpath='{range .items[*]}{.spec.nodeName}{"\n"}{end}' | sort | uniq -c | awk 'BEGIN{printf "{"} {printf "%s\"%s\": %s", (NR>1?", ":""), $2, $1} END{printf "}"}')
   master_alloc=$(oc get nodes -l node-role.kubernetes.io/control-plane -o jsonpath='{range .items[*]}{.status.allocatable.cpu}{" "}{.status.allocatable.memory}{"\n"}{end}' | head -1)
-  extra_json=", \"profile\": \"collector-only\", \"variant\": \"${VARIANT:-deployment}\", \"config\": \"${CONFIG:-}\", \"collector_image\": \"$image\", \"node_collector_pods\": $node_pods, \"node_collector_restarts\": $node_restarts, \"markers\": $(python3 -c 'import sys,json; m=[p.split("=",1) for p in sys.argv[1].split(";") if "=" in p]; print(json.dumps([{"name": n, "ts": int(t)} for n, t in m]))' "${MARKERS:-}")"
+  extra_json=", \"profile\": \"$profile\", \"variant\": \"${VARIANT:-deployment}\", \"config\": \"${CONFIG:-}\", \"collector_image\": \"$image\", \"node_collector_pods\": $node_pods, \"node_collector_restarts\": $node_restarts, \"markers\": $(python3 -c 'import sys,json; m=[p.split("=",1) for p in sys.argv[1].split(";") if "=" in p]; print(json.dumps([{"name": n, "ts": int(t)} for n, t in m]))' "${MARKERS:-}")"
   shape_extra=", \"master_allocatable\": \"$master_alloc\", \"pods_per_node\": $pods_per_node"
 else
   load_pods=$(oc get deploy avalanche-load -n otel-metrics-load -o jsonpath='{.status.readyReplicas}' 2>/dev/null); load_pods=${load_pods:-0}

@@ -1,0 +1,89 @@
+# Sizing instrument, not part of the documented design: a collector with only the k8s_cluster receiver (the
+# settings of the cluster collector) so that its cost can be compared with kube-state-metrics on the same
+# cluster while a large object inventory (load/gen-objects.py) is created, held and churned. It exports to
+# the vendor stand-in Prometheus, where the inventory it has seen can be counted. Own service account so that
+# its API server requests can be told apart in the audit log.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: otel-k8scluster
+  namespace: otel-platform-metrics
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: otel-platform-metrics-k8scluster
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: otel-platform-metrics-cluster
+subjects:
+- kind: ServiceAccount
+  name: otel-k8scluster
+  namespace: otel-platform-metrics
+---
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-k8scluster
+  namespace: otel-platform-metrics
+spec:
+  mode: deployment
+  replicas: 1
+  serviceAccount: otel-k8scluster
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: "2"
+      memory: 4Gi
+  config:
+    receivers:
+      k8s_cluster:
+        distribution: openshift
+        collection_interval: 30s
+        node_conditions_to_report: [Ready, MemoryPressure, DiskPressure, PIDPressure]
+        allocatable_types_to_report: [cpu, memory, pods]
+    processors:
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 80
+        spike_limit_percentage: 20
+      # tells the series of this collector apart from the k8s_cluster series of the cluster collector in the vendor Prometheus
+      resource:
+        attributes:
+        - key: collector
+          value: otel-k8scluster
+          action: upsert
+    exporters:
+      otlp_http:
+        endpoint: http://vendor-prometheus.otel-platform-metrics.svc.cluster.local:9090/api/v1/otlp
+        tls:
+          insecure: true
+        retry_on_failure:
+          enabled: true
+          max_elapsed_time: 0
+        sending_queue:
+          enabled: true
+          sizer: items
+          queue_size: 200000
+          block_on_overflow: true
+          batch:
+            flush_timeout: 5s
+            min_size: 2000
+            max_size: 8000
+    service:
+      telemetry:
+        metrics:
+          readers:
+          - pull:
+              exporter:
+                prometheus:
+                  host: 0.0.0.0
+                  port: 8888
+      pipelines:
+        metrics:
+          receivers: [k8s_cluster]
+          processors: [memory_limiter, resource]
+          exporters: [otlp_http]

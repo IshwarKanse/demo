@@ -511,12 +511,136 @@ def render_collector_only(dirpath, runs, outdir):
     co_summary(dirpath, rows, runs)
 
 
+
+# ---------------------------------------------------------------------------------------------------------
+# k8scluster profile: the k8s_cluster-only collector against kube-state-metrics (collector-only/scripts/run-ksm-compare.sh)
+# ---------------------------------------------------------------------------------------------------------
+
+def by_label(dirpath, slug, metric, prefix):
+    """{label value: [(t, v)]} for a metric whose series are split by one label (resource=..., kind=...)."""
+    return {k.split("=", 1)[-1]: v for k, v in load(dirpath, slug, metric).items() if k.startswith(prefix)}
+
+
+def ksm_rows(dirpath, runs):
+    rows = []
+    for r in runs:
+        if r["kind"] == "timeline":
+            continue
+        s = r["slug"]
+        rows.append({
+            "run": r,
+            "ccpu": stats(total(dirpath, s, "collector_cpu_cores")), "cwss": tuple(x * MiB for x in stats(total(dirpath, s, "collector_wss_bytes"))),
+            "crss": tuple(x * MiB for x in stats(total(dirpath, s, "collector_rss_bytes"))), "cpoints": stats(total(dirpath, s, "receiver_accepted_points_s")),
+            "crefused": stats(total(dirpath, s, "receiver_refused_points_s"))[2],
+            "kcpu": stats(total(dirpath, s, "ksm_cpu_cores")), "kwss": tuple(x * MiB for x in stats(total(dirpath, s, "ksm_wss_bytes"))),
+            "krss": tuple(x * MiB for x in stats(total(dirpath, s, "ksm_rss_bytes"))), "ksamples": stats(total(dirpath, s, "ksm_samples_per_scrape")),
+            "list_s": stats(total(dirpath, s, "apiserver_list_s")), "watch_s": stats(total(dirpath, s, "apiserver_watch_s")),
+            "watchers": stats(total(dirpath, s, "apiserver_watchers")), "api_cpu": stats(total(dirpath, s, "apiserver_cpu_cores")),
+            "kcm_cpu": stats(total(dirpath, s, "kcm_cpu_cores")), "etcd_cpu": stats(total(dirpath, s, "etcd_cpu_cores")),
+            "objects": {k: stats(v)[2] for k, v in by_label(dirpath, s, "apiserver_storage_objects", "resource=").items()},
+        })
+    return rows
+
+
+def ksm_audit(dirpath):
+    """{(phase, user): {verb: count}} from raw/audit-requests.csv, if present."""
+    f = os.path.join(dirpath, "raw", "audit-requests.csv"); out = defaultdict(lambda: defaultdict(int))
+    if os.path.exists(f):
+        for row in csv.DictReader(open(f)):
+            out[(row["phase"], row["user"])][row["verb"]] += int(row["requests"])
+    return out
+
+
+def ksm_chart_timeline(dirpath, runs, outdir):
+    for r in [r for r in runs if r["kind"] == "timeline"]:
+        s = r["slug"]
+        objs = by_label(dirpath, s, "apiserver_storage_objects", "resource=")
+        lists = total(dirpath, s, "apiserver_list_s"); watches = total(dirpath, s, "apiserver_watch_s"); watchers = total(dirpath, s, "apiserver_watchers")
+        panels = [
+            ("thousand objects", [(k, v, 0.001) for k, v in sorted(objs.items()) if k.split(".")[0] in ("deployments", "replicasets", "configmaps", "services", "pods", "horizontalpodautoscalers")]),
+            ("CPU cores", [("k8s_cluster collector", total(dirpath, s, "collector_cpu_cores"), 1), ("kube-state-metrics", total(dirpath, s, "ksm_cpu_cores"), 1)]),
+            ("working set MiB", [("k8s_cluster collector", total(dirpath, s, "collector_wss_bytes"), MiB), ("kube-state-metrics", total(dirpath, s, "ksm_wss_bytes"), MiB)]),
+            ("RSS MiB", [("k8s_cluster collector", total(dirpath, s, "collector_rss_bytes"), MiB), ("kube-state-metrics", total(dirpath, s, "ksm_rss_bytes"), MiB)]),
+            ("collector data points/s", [("accepted", total(dirpath, s, "receiver_accepted_points_s"), 1), ("refused", total(dirpath, s, "receiver_refused_points_s"), 1)]),
+            ("kube-state-metrics samples per scrape (thousands)", [("samples", total(dirpath, s, "ksm_samples_per_scrape"), 0.001)]),
+            ("API server requests/s, all clients", [("LIST", lists, 1), ("WATCH starts", watches, 1)]),
+            ("open watches, all clients", [("watches", watchers, 1)]),
+            ("control plane CPU cores", [("kube-apiserver (3)", total(dirpath, s, "apiserver_cpu_cores"), 1), ("kube-controller-manager", total(dirpath, s, "kcm_cpu_cores"), 1), ("etcd (3)", total(dirpath, s, "etcd_cpu_cores"), 1)]),
+        ]
+        fig, axes = plt.subplots(len(panels), 1, figsize=(9, 2.1 * len(panels)), sharex=True)
+        markers = [(datetime.fromtimestamp(m["ts"], timezone.utc), m["name"]) for m in r.get("markers", [])]
+        for ax, (ylabel, items) in zip(axes, panels):
+            for i, (lab, pts, scale) in enumerate(items):
+                if pts:
+                    ax.plot([t for t, _ in pts], [v * scale for _, v in pts], color=SERIES[i % len(SERIES)], label=lab.split(".")[0])
+            ax.set_ylabel(ylabel, fontsize=8); ax.set_ylim(bottom=0)
+            if len(items) > 1:
+                ax.legend(loc="upper left", fontsize=7, ncol=2)
+            for t, _ in markers:
+                ax.axvline(t, color=MUTED, linewidth=1, linestyle="--")
+        for t, text in markers:
+            axes[0].annotate(text, (t, axes[0].get_ylim()[1]), textcoords="offset points", xytext=(2, -9), fontsize=7, color=MUTED, rotation=90, va="top")
+        axes[-1].xaxis.set_major_formatter(mdates.DateFormatter("%H:%M", tz=timezone.utc)); axes[-1].set_xlabel("time (UTC)")
+        fig.suptitle("k8s_cluster receiver against kube-state-metrics: inventory creation, steady state, collector restart, churn", color=TEXT)
+        fig.tight_layout(); fig.savefig(os.path.join(outdir, "ksm_timeline.png")); plt.close(fig)
+
+
+def ksm_chart_phases(dirpath, rows, outdir):
+    if not rows:
+        return
+    names = [r["run"]["label"].split(":")[0] for r in rows]
+    fig, axes = plt.subplots(1, 3, figsize=(13, 4))
+    import numpy as np
+    x = np.arange(len(rows)); w = 0.38
+    for ax, (ckey, kkey, idx, ylabel, fmt) in zip(axes, (("ccpu", "kcpu", 0, "CPU cores, average", "{:.3f}"), ("cwss", "kwss", 0, "working set MiB, average", "{:.0f}"), ("crss", "krss", 2, "RSS MiB, max", "{:.0f}"))):
+        cv = [r[ckey][idx] for r in rows]; kv = [r[kkey][idx] for r in rows]
+        b1 = ax.bar(x - w / 2, cv, w, color=SERIES[0], label="k8s_cluster collector"); b2 = ax.bar(x + w / 2, kv, w, color=SERIES[1], label="kube-state-metrics")
+        for b, v in list(zip(b1, cv)) + list(zip(b2, kv)):
+            label_point(ax, b.get_x() + b.get_width() / 2, v, fmt.format(v))
+        ax.set_xticks(x); ax.set_xticklabels(names, rotation=20, fontsize=8); ax.set_ylabel(ylabel); ax.set_ylim(0, max(cv + kv) * 1.2 if cv + kv else 1); ax.legend(fontsize=8, loc="upper left")
+    fig.suptitle("Per phase: the k8s_cluster-only collector against kube-state-metrics on the same cluster", color=TEXT)
+    fig.tight_layout(); fig.savefig(os.path.join(outdir, "ksm_phases.png")); plt.close(fig)
+
+
+def ksm_summary(dirpath, rows, runs):
+    audit = ksm_audit(dirpath)
+    env = {}
+    f = os.path.join(dirpath, "raw", "phases.env")
+    if os.path.exists(f):
+        for line in open(f):
+            if "=" in line:
+                k, v = line.strip().split("=", 1); env[k] = v
+    cl = runs[0]["cluster"] if runs else {}
+    head = [f"Cluster: OpenShift {cl.get('version')} on {cl.get('platform')}, {cl.get('nodes')} nodes. Collector image: {runs[0].get('collector_image', '')}.", ""]
+    if env:
+        head += [f"Inventory applied in {int(env.get('CREATE_END', 0)) - int(env.get('CREATE_START', 0))} s; full inventory seen by the collector {env.get('CREATE_SEEN_COLLECTOR')} s and by kube-state-metrics {env.get('CREATE_SEEN_KSM')} s after the apply ended (30 s scrape and collection intervals, 10 s polling); after a collector restart the full inventory was back after {env.get('RESTART_SEEN_COLLECTOR')} s.", ""]
+    lines = ["| phase | pods | deployments / replicasets / configmaps / services stored | collector CPU avg / p95 | collector WSS MiB avg / max | collector RSS MiB max | collector points/s | kube-state-metrics CPU avg / p95 | kube-state-metrics WSS MiB avg / max | kube-state-metrics RSS MiB max | kube-state-metrics samples per scrape | API server LIST/s | WATCH starts/s | open watches | kube-apiserver CPU | kube-controller-manager CPU | audit: collector list / watch | audit: kube-state-metrics list / watch |",
+             "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    for r in rows:
+        run = r["run"]; name = run["label"].split(":")[0]; o = r["objects"]
+        ac = audit.get((name, "otel-k8scluster"), {}); ak = audit.get((name, "kube-state-metrics"), {})
+        lines.append(f"| {name} | {run['cluster']['pods_running']} | {o.get('deployments.apps', 0):,.0f} / {o.get('replicasets.apps', 0):,.0f} / {o.get('configmaps', 0):,.0f} / {o.get('services', 0):,.0f} | {r['ccpu'][0]:.3f} / {r['ccpu'][1]:.3f} | {r['cwss'][0]:.0f} / {r['cwss'][2]:.0f} | {r['crss'][2]:.0f} | {r['cpoints'][0]:,.0f} | {r['kcpu'][0]:.3f} / {r['kcpu'][1]:.3f} | {r['kwss'][0]:.0f} / {r['kwss'][2]:.0f} | {r['krss'][2]:.0f} | {r['ksamples'][0]:,.0f} | {r['list_s'][0]:.2f} | {r['watch_s'][0]:.2f} | {r['watchers'][0]:.0f} | {r['api_cpu'][0]:.2f} | {r['kcm_cpu'][0]:.2f} | {ac.get('list', 0)} / {ac.get('watch', 0)} | {ak.get('list', 0)} / {ak.get('watch', 0)} |")
+    with open(os.path.join(dirpath, "summary.md"), "w") as f:
+        f.write("\n".join(head + lines) + "\n")
+
+
+def render_k8scluster(dirpath, runs, outdir):
+    rows = ksm_rows(dirpath, runs)
+    ksm_chart_timeline(dirpath, runs, outdir)
+    ksm_chart_phases(dirpath, rows, outdir)
+    ksm_summary(dirpath, rows, runs)
+
+
 def main():
     dirpath = sys.argv[1]
     runs = json.load(open(os.path.join(dirpath, "runs.json")))
     outdir = os.path.join(dirpath, "charts"); os.makedirs(outdir, exist_ok=True)
     if runs and runs[0].get("profile") == "collector-only":
         render_collector_only(dirpath, runs, outdir)
+        print("charts:", sorted(os.listdir(outdir)))
+        return
+    if runs and runs[0].get("profile") == "k8scluster":
+        render_k8scluster(dirpath, runs, outdir)
         print("charts:", sorted(os.listdir(outdir)))
         return
     rows = steady_rows(dirpath, runs)
