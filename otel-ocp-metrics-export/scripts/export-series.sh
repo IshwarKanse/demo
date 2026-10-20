@@ -8,10 +8,16 @@
 # env: NAMESPACE (default otel-metrics-export), COLLECTOR (default otel), KUBECONFIG,
 #      STEP (query step seconds, default 30), EXTRA_SERIES (series added by the load generator, informational),
 #      ONLY_MISSING=1 (backfill: write only the CSV files that do not exist yet, do not touch runs.json)
+#      PROFILE=collector-only: the option 2 collectors (collector-only/, namespace otel-platform-metrics by default):
+#        the series are split by collector (node / cluster), the load is the idle-pod deployment, and the run
+#        records VARIANT (deployment | statefulset-ta), CONFIG (free text: interval, kubelet jobs, file_storage)
+#        and MARKERS ("name=unix ts;name=unix ts", e.g. the outage start and end) in runs.json
 set -uo pipefail
 cd "$(dirname "$0")/.."
 label=$1; kind=$2; win=$3; end=${4:-$(date +%s)}; dir=${5:-results/$(date -u +%F)}
-ns=${NAMESPACE:-otel-metrics-export}; col=${COLLECTOR:-otel}; step=${STEP:-30}
+profile=${PROFILE:-remotewrite}
+if [ "$profile" = collector-only ]; then ns=${NAMESPACE:-otel-platform-metrics}; else ns=${NAMESPACE:-otel-metrics-export}; fi
+col=${COLLECTOR:-otel}; step=${STEP:-30}
 start=$((end - win*60))
 slug=$(echo "$label" | tr -c 'A-Za-z0-9\n' '-' | sed -E 's/-+/-/g; s/^-//; s/-$//' | tr 'A-Z' 'a-z')
 out="$dir/raw/$slug"; mkdir -p "$out"
@@ -23,6 +29,45 @@ oc get configmap default-ingress-cert -n openshift-config-managed -o jsonpath='{
 [ -s "$CA" ] || { echo "could not read the ingress CA bundle"; exit 1; }
 pods="pod=~\"${col}-collector-.*\""; mon="job=\"${col}-collector-monitoring\""
 # query list: one 'name|promql' per line (plain bash 3 compatible, no associative arrays)
+if [ "$profile" = collector-only ]; then
+# cAdvisor series of the collector containers and the collectors' own telemetry (PodMonitor 07-uwm-podmonitor.yaml),
+# both split by collector through the pod name; plus the control plane cost of the design (API server node proxy
+# requests, kube-apiserver CPU and memory) and the cluster shape (running pods, pods per node, platform Prometheus series)
+cpods="pod=~\"otel-(node|cluster)-collector-.*\""; tj="job=\"${ns}/otel-collectors-telemetry\""
+bycol() { echo "label_replace($1, \"collector\", \"\$1\", \"pod\", \"otel-(node|cluster)-collector-.*\")"; }
+cadv_cpu="rate(container_cpu_usage_seconds_total{namespace=\"$ns\",container=\"otc-container\",$cpods}[2m])"
+cadv_wss="container_memory_working_set_bytes{namespace=\"$ns\",container=\"otc-container\",$cpods}"
+QUERIES=$(cat <<EOQ
+collector_cpu_cores|sum by (collector) ($(bycol "$cadv_cpu"))
+collector_cpu_cores_max_pod|max by (collector) ($(bycol "$cadv_cpu"))
+collector_wss_bytes|sum by (collector) ($(bycol "$cadv_wss"))
+collector_wss_bytes_max_pod|max by (collector) ($(bycol "$cadv_wss"))
+collector_rss_bytes|max by (collector) ($(bycol "otelcol_process_memory_rss{namespace=\"$ns\",$tj,$cpods}"))
+collector_rss_bytes_sum|sum by (collector) ($(bycol "otelcol_process_memory_rss{namespace=\"$ns\",$tj,$cpods}"))
+receiver_accepted_points_s|sum by (collector) ($(bycol "rate(otelcol_receiver_accepted_metric_points{namespace=\"$ns\",$tj,$cpods}[2m])"))
+receiver_accepted_points_s_by_receiver|sum by (collector, receiver) ($(bycol "rate(otelcol_receiver_accepted_metric_points{namespace=\"$ns\",$tj,$cpods}[2m])"))
+receiver_refused_points_s|sum by (collector) ($(bycol "rate(otelcol_receiver_refused_metric_points{namespace=\"$ns\",$tj,$cpods}[2m])"))
+exporter_sent_points_s|sum by (collector) ($(bycol "rate(otelcol_exporter_sent_metric_points{namespace=\"$ns\",$tj,$cpods}[2m])"))
+exporter_failed_points_s|sum by (collector) ($(bycol "rate(otelcol_exporter_send_failed_metric_points{namespace=\"$ns\",$tj,$cpods}[2m])"))
+exporter_enqueue_failed_points_s|sum by (collector) ($(bycol "rate(otelcol_exporter_enqueue_failed_metric_points{namespace=\"$ns\",$tj,$cpods}[2m])"))
+exporter_queue_items|sum by (collector) ($(bycol "otelcol_exporter_queue_size{namespace=\"$ns\",$tj,$cpods}"))
+memory_limiter_refused_points_s|sum by (collector) ($(bycol "rate(otelcol_processor_memory_limiter_refused_metric_points{namespace=\"$ns\",$tj,$cpods}[2m])"))
+scraper_errored_points_s|sum by (collector) ($(bycol "rate(otelcol_scraper_errored_metric_points{namespace=\"$ns\",$tj,$cpods}[2m])"))
+ta_cpu_cores|sum(rate(container_cpu_usage_seconds_total{namespace="$ns",pod=~"otel-cluster-targetallocator-.*",container!=""}[2m]))
+ta_wss_bytes|sum(container_memory_working_set_bytes{namespace="$ns",pod=~"otel-cluster-targetallocator-.*",container!=""})
+sink_cpu_cores|sum(rate(container_cpu_usage_seconds_total{namespace="$ns",pod=~"sink-collector-.*",container="otc-container"}[2m]))
+sink_wss_bytes|sum(container_memory_working_set_bytes{namespace="$ns",pod=~"sink-collector-.*",container="otc-container"})
+apiserver_node_proxy_req_s|sum(rate(apiserver_request_total{resource="nodes",subresource="proxy"}[2m]))
+apiserver_cpu_cores|sum(rate(container_cpu_usage_seconds_total{namespace="openshift-kube-apiserver",container="kube-apiserver"}[2m]))
+apiserver_wss_bytes|sum(container_memory_working_set_bytes{namespace="openshift-kube-apiserver",container="kube-apiserver"})
+kubelet_cpu_cores|sum by (node) (rate(container_cpu_usage_seconds_total{id="/system.slice/kubelet.service"}[2m]))
+cluster_pods_running|sum(kube_pod_status_phase{phase="Running"})
+cluster_pods_per_node|count by (node) (kube_pod_info * on (namespace, pod) group_left() (kube_pod_status_phase{phase="Running"} == 1))
+prometheus_head_series|sum by (pod) (prometheus_tsdb_head_series{namespace="openshift-monitoring",pod=~"prometheus-k8s-.*"})
+option1_rw_samples_s|sum(rate(prometheus_remote_storage_samples_total{remote_name="otel-collector"}[2m]))
+EOQ
+)
+else
 QUERIES=$(cat <<EOQ
 collector_cpu_cores|sum(rate(container_cpu_usage_seconds_total{namespace="$ns",container="otc-container",$pods}[2m]))
 collector_wss_bytes|sum(container_memory_working_set_bytes{namespace="$ns",container="otc-container",$pods})
@@ -56,6 +101,7 @@ uwm_series_created_s|sum(rate(prometheus_tsdb_head_series_created_total{namespac
 uwm_compactions_total|sum by (pod) (prometheus_tsdb_compactions_total{namespace="openshift-user-workload-monitoring",pod=~"prometheus-user-workload-.*"})
 EOQ
 )
+fi
 while IFS="|" read -r name query; do
   [ -n "$name" ] || continue
   if [ -n "${ONLY_MISSING:-}" ] && [ -s "$out/$name.csv" ]; then continue; fi
@@ -76,9 +122,23 @@ if [ -n "${ONLY_MISSING:-}" ]; then echo "backfilled missing series in $out"; ex
 nodes=$(oc get nodes --no-headers | wc -l | tr -d ' ')
 workers=$(oc get nodes -l node-role.kubernetes.io/worker --no-headers | wc -l | tr -d ' ')
 pods_running=$(oc get pods -A --field-selector=status.phase=Running --no-headers | wc -l | tr -d ' ')
-load_pods=$(oc get deploy avalanche-load -n otel-metrics-load -o jsonpath='{.status.readyReplicas}' 2>/dev/null); load_pods=${load_pods:-0}
-replicas=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.${col}" --no-headers 2>/dev/null | wc -l | tr -d ' ')
-restarts=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.${col}" -o jsonpath='{range .items[*]}{.status.containerStatuses[0].restartCount}{"\n"}{end}' 2>/dev/null | awk '{s+=$1} END {print s+0}')
+if [ "$profile" = collector-only ]; then
+  load_pods=$(oc get deploy load-pods -n "$ns" -o jsonpath='{.status.readyReplicas}' 2>/dev/null); load_pods=${load_pods:-0}
+  replicas=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.otel-cluster" --no-headers 2>/dev/null | wc -l | tr -d ' ')
+  node_pods=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.otel-node" --no-headers 2>/dev/null | wc -l | tr -d ' ')
+  restarts=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.otel-cluster" -o jsonpath='{range .items[*]}{.status.containerStatuses[0].restartCount}{"\n"}{end}' 2>/dev/null | awk '{s+=$1} END {print s+0}')
+  node_restarts=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.otel-node" -o jsonpath='{range .items[*]}{.status.containerStatuses[0].restartCount}{"\n"}{end}' 2>/dev/null | awk '{s+=$1} END {print s+0}')
+  image=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.otel-cluster" -o jsonpath='{.items[0].spec.containers[0].image}' 2>/dev/null)
+  pods_per_node=$(oc get pods -A --field-selector=status.phase=Running -o jsonpath='{range .items[*]}{.spec.nodeName}{"\n"}{end}' | sort | uniq -c | awk 'BEGIN{printf "{"} {printf "%s\"%s\": %s", (NR>1?", ":""), $2, $1} END{printf "}"}')
+  master_alloc=$(oc get nodes -l node-role.kubernetes.io/control-plane -o jsonpath='{range .items[*]}{.status.allocatable.cpu}{" "}{.status.allocatable.memory}{"\n"}{end}' | head -1)
+  extra_json=", \"profile\": \"collector-only\", \"variant\": \"${VARIANT:-deployment}\", \"config\": \"${CONFIG:-}\", \"collector_image\": \"$image\", \"node_collector_pods\": $node_pods, \"node_collector_restarts\": $node_restarts, \"markers\": $(python3 -c 'import sys,json; m=[p.split("=",1) for p in sys.argv[1].split(";") if "=" in p]; print(json.dumps([{"name": n, "ts": int(t)} for n, t in m]))' "${MARKERS:-}")"
+  shape_extra=", \"master_allocatable\": \"$master_alloc\", \"pods_per_node\": $pods_per_node"
+else
+  load_pods=$(oc get deploy avalanche-load -n otel-metrics-load -o jsonpath='{.status.readyReplicas}' 2>/dev/null); load_pods=${load_pods:-0}
+  replicas=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.${col}" --no-headers 2>/dev/null | wc -l | tr -d ' ')
+  restarts=$(oc get pods -n "$ns" -l "app.kubernetes.io/instance=${ns}.${col}" -o jsonpath='{range .items[*]}{.status.containerStatuses[0].restartCount}{"\n"}{end}' 2>/dev/null | awk '{s+=$1} END {print s+0}')
+  extra_json=""; shape_extra=""
+fi
 alloc=$(oc get nodes -l node-role.kubernetes.io/worker -o jsonpath='{range .items[*]}{.status.allocatable.cpu}{" "}{.status.allocatable.memory}{"\n"}{end}' | head -1)
 version=$(oc get clusterversion version -o jsonpath='{.status.desired.version}')
 platform=$(oc get infrastructure cluster -o jsonpath='{.status.platform}')
@@ -90,7 +150,7 @@ runs = [r for r in runs if r["slug"] != "$slug"]
 runs.append({"label": "$label", "slug": "$slug", "kind": "$kind", "start": $start, "end": $end, "step": $step,
   "collector_replicas": $replicas, "collector_restarts": $restarts, "load_pods": $load_pods, "extra_series": int("${EXTRA_SERIES:-0}"),
   "cluster": {"version": "$version", "platform": "$platform", "nodes": $nodes, "workers": $workers,
-              "worker_allocatable": "$alloc", "pods_running": $pods_running}})
+              "worker_allocatable": "$alloc", "pods_running": $pods_running$shape_extra}$extra_json})
 runs.sort(key=lambda r: r["start"])
 json.dump(runs, open(f, "w"), indent=1)
 print(f"recorded run '{'$label'}' ({len(runs)} runs in {f})")

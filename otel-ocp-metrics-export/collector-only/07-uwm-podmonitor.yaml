@@ -1,0 +1,17 @@
+# Measurement instrument for the sizing runs only, not part of the design: a PodMonitor so that the user
+# workload monitoring Prometheus of the cluster scrapes the collectors' own telemetry (port 8888) and
+# scripts/export-series.sh can read it, together with the cAdvisor CPU and working set of the collector
+# containers, from the Thanos Querier. It adds a few hundred series to the user workload Prometheus.
+# Nothing of the option 2 collection depends on it.
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: otel-collectors-telemetry
+  namespace: otel-platform-metrics
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: opentelemetry-collector
+  podMetricsEndpoints:
+  - port: metrics
+    interval: 30s

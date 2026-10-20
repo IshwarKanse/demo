@@ -26,12 +26,19 @@ SINK = os.environ.get("BACKEND", "vendor") == "sink"
 # FILE_STORAGE=1 persists the exporter queue on disk with the file_storage extension (an emptyDir here; a PVC in
 # production so that the queue survives a pod reschedule, not only a container restart)
 FILE_STORAGE = os.environ.get("FILE_STORAGE", "") == "1"
+# INTERVAL overrides the 30 s scrape and collection interval (sizing: sample rate tiers at a fixed series count)
+INTERVAL = os.environ.get("INTERVAL", "30s")
+# KUBELET_JOBS=0 leaves out the optional kubelet jobs through the API server node proxy (/metrics, /metrics/cadvisor,
+# /metrics/resource, /metrics/probes): the documented shape is the k8s_cluster receiver plus the platform endpoints,
+# the kubelet_stats receiver of the node collector already covers the pods and containers
+KUBELET_JOBS = os.environ.get("KUBELET_JOBS", "1") == "1"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TOKEN = "/var/run/secrets/kubernetes.io/serviceaccount/token"
 SA_CA = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
 SVC_CA = "/etc/service-ca/service-ca.crt"
-IMAGE = "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:359726016f0f6b9a408cc47f03be66b095f8b4e725f482442f1a02c0ce8b9128"
+# IMAGE="" leaves spec.image out so that the Red Hat build of OpenTelemetry operator uses its default collector image
+IMAGE = os.environ.get("IMAGE", "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:359726016f0f6b9a408cc47f03be66b095f8b4e725f482442f1a02c0ce8b9128")
 
 # the drop lists the Cluster Monitoring Operator applies to the heaviest control plane endpoints
 APISERVER_DROPS = [
@@ -135,7 +142,7 @@ if True:
         jobs.append(job(name, ns, svc, port, path, SVC_CA, server_name, drops))
 # kubelet endpoints through the API server node proxy (optional; the kubelet_stats receiver of the node
 # collector covers the same data with OpenTelemetry names)
-for name, path in (("kubelet", "/metrics"), ("kubelet-cadvisor", "/metrics/cadvisor"), ("kubelet-resource", "/metrics/resource"), ("kubelet-probes", "/metrics/probes")):
+for name, path in (("kubelet", "/metrics"), ("kubelet-cadvisor", "/metrics/cadvisor"), ("kubelet-resource", "/metrics/resource"), ("kubelet-probes", "/metrics/probes")) if KUBELET_JOBS else ():
     jobs.append("\n".join([
         f"            - job_name: {q(name)}",
         "              scheme: https",
@@ -302,6 +309,7 @@ sink_pipeline = """
           exporters: [otlp_http/telemetry]""" if SINK else ""
 main_endpoint = "http://sink-collector.otel-platform-metrics.svc.cluster.local:4318" if SINK else "http://vendor-prometheus.otel-platform-metrics.svc.cluster.local:9090/api/v1/otlp"
 
+image_line = f"  image: {IMAGE}\n" if IMAGE else ""
 print(f"""{header} with the k8s_cluster receiver (cluster object state, with the k8s_cluster receiver (cluster object state,
 # distribution: openshift, Technology Preview) and the prometheus receiver scraping the control plane
 # and operator /metrics endpoints with the collector service account token. The kube-apiserver is
@@ -327,8 +335,7 @@ metadata:
   name: otel-cluster
   namespace: otel-platform-metrics
 spec:
-  image: {IMAGE}
-{mode_block}
+{image_line}{mode_block}
   serviceAccount: otel-cluster
   resources:
     requests:
@@ -349,7 +356,7 @@ spec:
 {extensions_block}    receivers:
       k8s_cluster:{leader_field}
         distribution: openshift
-        collection_interval: 30s
+        collection_interval: {INTERVAL}
         node_conditions_to_report: [Ready, MemoryPressure, DiskPressure, PIDPressure]
         allocatable_types_to_report: [cpu, memory, pods]
       prometheus:
@@ -361,7 +368,7 @@ spec:
             endpoint: 127.0.0.1:9090
         config:
           global:
-            scrape_interval: 30s
+            scrape_interval: {INTERVAL}
             scrape_timeout: 10s
           scrape_configs:
 {chr(10).join(jobs)}{sink_receivers}

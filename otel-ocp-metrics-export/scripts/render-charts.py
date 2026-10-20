@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Render the benchmark graphs from the CSV files written by scripts/export-series.sh.
 
-usage: .venv/bin/python scripts/render-charts.py <results dir>   (e.g. results/2026-10-20)
+usage: .venv/bin/python scripts/render-charts.py <results dir>   (e.g. results/2026-10-20, or
+       collector-only/results/2026-10-20 for the option 2 runs exported with PROFILE=collector-only)
 
 Reads <results dir>/runs.json and <results dir>/raw/<slug>/<metric>.csv, writes PNGs to
 <results dir>/charts/ and a summary table to <results dir>/summary.md. Every number in a chart
@@ -248,10 +249,274 @@ def summary(dirpath, rows, runs):
         f.write("\n".join(head + lines) + "\n")
 
 
+
+# ---------------------------------------------------------------------------------------------------------
+# collector-only profile (option 2: collector-only/, runs.json entries with "profile": "collector-only")
+# ---------------------------------------------------------------------------------------------------------
+
+def col_series(dirpath, slug, metric, col):
+    """[(datetime, value)] of one collector (node | cluster) for a metric split by the collector label."""
+    return load(dirpath, slug, metric).get(f"collector={col}", [])
+
+
+def co_rows(dirpath, runs):
+    rows = []
+    for r in runs:
+        if r["kind"] not in ("steady", "rate", "long"):
+            continue
+        s = r["slug"]; row = {"run": r, "pods": r["cluster"]["pods_running"]}
+        for c in ("cluster", "node"):
+            row[c] = {
+                "cpu": stats(col_series(dirpath, s, "collector_cpu_cores", c)),
+                "cpu_pod": stats(col_series(dirpath, s, "collector_cpu_cores_max_pod", c)),
+                "wss": tuple(x * MiB for x in stats(col_series(dirpath, s, "collector_wss_bytes", c))),
+                "wss_pod": tuple(x * MiB for x in stats(col_series(dirpath, s, "collector_wss_bytes_max_pod", c))),
+                "rss": tuple(x * MiB for x in stats(col_series(dirpath, s, "collector_rss_bytes", c))),
+                "points": stats(col_series(dirpath, s, "receiver_accepted_points_s", c)),
+                "refused": stats(col_series(dirpath, s, "receiver_refused_points_s", c))[2],
+                "queue": stats(col_series(dirpath, s, "exporter_queue_items", c))[2],
+                "enqueue_failed": stats(col_series(dirpath, s, "exporter_enqueue_failed_points_s", c))[2],
+                "ml_refused": stats(col_series(dirpath, s, "memory_limiter_refused_points_s", c))[2],
+                "by_receiver": {k.split("receiver=")[-1]: stats(v)[0] for k, v in load(dirpath, s, "receiver_accepted_points_s_by_receiver").items() if f"collector={c}" in k},
+            }
+        row["proxy_req"] = stats(total(dirpath, s, "apiserver_node_proxy_req_s"))[0]
+        row["apiserver_cpu"] = stats(total(dirpath, s, "apiserver_cpu_cores"))[0]
+        row["apiserver_wss"] = stats(total(dirpath, s, "apiserver_wss_bytes"))[0] * MiB
+        row["ta_cpu"] = stats(total(dirpath, s, "ta_cpu_cores"))[0]
+        row["ta_wss"] = stats(total(dirpath, s, "ta_wss_bytes"))[0] * MiB
+        row["option1_rw"] = stats(total(dirpath, s, "option1_rw_samples_s"))[0]
+        row["head_series"] = stats(total(dirpath, s, "prometheus_head_series"))[0] / 2
+        rows.append(row)
+    return rows
+
+
+def co_kind(row):
+    """deployment tier | scale-out | documented shape | rate, from the run label prefix."""
+    return row["run"]["label"].split(":", 1)[0]
+
+
+def co_point_label(row):
+    r = row["run"]
+    if r["kind"] == "rate":
+        return r["config"].split(" interval")[0] + " interval"
+    if co_kind(row) == "scale-out":
+        return "2 replicas + TA"
+    if co_kind(row) == "documented shape":
+        return "no kubelet jobs"
+    return None
+
+
+def co_scatter(ax, rows, xkey, ykey, color, label, marker="o", annotate=None):
+    rows = sorted(rows, key=xkey)
+    xs = [xkey(r) for r in rows]; ys = [ykey(r) for r in rows]
+    ax.plot(xs, ys, marker=marker, markersize=6, color=color, label=label, linewidth=2 if len(rows) > 1 else 0)
+    for r, x, y in zip(rows, xs, ys):
+        text = annotate(r, y) if annotate else None
+        if text:
+            label_point(ax, x, y, text)
+
+
+def co_split(rows):
+    tiers = [r for r in rows if co_kind(r) == "tiers"]
+    others = [r for r in rows if co_kind(r) != "tiers" and r["run"]["kind"] != "long"]
+    return tiers, others
+
+
+def co_chart_cpu(dirpath, rows, outdir):
+    tiers, others = co_split(rows)
+    if not tiers:
+        return
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4.2))
+    ax = axes[0]
+    co_scatter(ax, tiers, lambda r: r["pods"], lambda r: r["cluster"]["cpu"][0], SERIES[0], "deployment, 1 replica, average", annotate=lambda r, y: f"{y:.2f}")
+    co_scatter(ax, tiers, lambda r: r["pods"], lambda r: r["cluster"]["cpu"][1], SERIES[1], "deployment, 1 replica, p95")
+    for i, r in enumerate(others):
+        co_scatter(ax, [r], lambda r: r["pods"], lambda r: r["cluster"]["cpu"][0], SERIES[2 + i % 4], co_point_label(r) + ", average", marker="D", annotate=lambda r, y: f"{y:.2f}")
+    ax.set_xlabel("pods running in the cluster"); ax.set_ylabel("CPU cores, all replicas"); ax.set_ylim(bottom=0)
+    ax.set_title("Cluster collector"); ax.legend(fontsize=8, loc="upper left")
+    ax = axes[1]
+    co_scatter(ax, tiers, lambda r: r["pods"], lambda r: r["node"]["cpu_pod"][0], SERIES[0], "busiest node, average", annotate=lambda r, y: f"{y:.3f}")
+    co_scatter(ax, tiers, lambda r: r["pods"], lambda r: r["node"]["cpu"][0], SERIES[1], "all nodes together, average", annotate=lambda r, y: f"{y:.3f}")
+    ax.set_xlabel("pods running in the cluster"); ax.set_ylabel("CPU cores"); ax.set_ylim(bottom=0)
+    ax.set_title("Node collector (one pod per node)"); ax.legend(fontsize=8, loc="upper left")
+    fig.suptitle("Collector CPU against the number of pods", color=TEXT)
+    fig.tight_layout(); fig.savefig(os.path.join(outdir, "co_cpu_vs_pods.png")); plt.close(fig)
+
+
+def co_chart_memory(dirpath, rows, outdir):
+    tiers, others = co_split(rows)
+    if not tiers:
+        return
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4.2))
+    ax = axes[0]
+    co_scatter(ax, tiers, lambda r: r["pods"], lambda r: r["cluster"]["wss"][0], SERIES[0], "working set, average", annotate=lambda r, y: f"{y:.0f}")
+    co_scatter(ax, tiers, lambda r: r["pods"], lambda r: r["cluster"]["wss"][2], SERIES[1], "working set, max")
+    co_scatter(ax, tiers, lambda r: r["pods"], lambda r: r["cluster"]["rss"][2], SERIES[2], "RSS, max")
+    for i, r in enumerate(others):
+        co_scatter(ax, [r], lambda r: r["pods"], lambda r: r["cluster"]["wss"][0], SERIES[3 + i % 3], co_point_label(r) + ", working set avg", marker="D", annotate=lambda r, y: f"{y:.0f}")
+    ax.set_xlabel("pods running in the cluster"); ax.set_ylabel("MiB, all replicas together"); ax.set_ylim(bottom=0)
+    ax.set_title("Cluster collector"); ax.legend(fontsize=8, loc="upper left")
+    ax = axes[1]
+    co_scatter(ax, tiers, lambda r: r["pods"], lambda r: r["node"]["wss_pod"][0], SERIES[0], "busiest node, working set avg", annotate=lambda r, y: f"{y:.0f}")
+    co_scatter(ax, tiers, lambda r: r["pods"], lambda r: r["node"]["wss_pod"][2], SERIES[1], "busiest node, working set max")
+    co_scatter(ax, tiers, lambda r: r["pods"], lambda r: r["node"]["rss"][2], SERIES[2], "busiest node, RSS max")
+    ax.set_xlabel("pods running in the cluster"); ax.set_ylabel("MiB, one node collector pod"); ax.set_ylim(bottom=0)
+    ax.set_title("Node collector (one pod per node)"); ax.legend(fontsize=8, loc="upper left")
+    fig.suptitle("Collector memory against the number of pods", color=TEXT)
+    fig.tight_layout(); fig.savefig(os.path.join(outdir, "co_memory_vs_pods.png")); plt.close(fig)
+
+
+def co_chart_points(dirpath, rows, outdir):
+    tiers, _ = co_split(rows)
+    if not tiers:
+        return
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4.2))
+    for ax, c, title in ((axes[0], "cluster", "Cluster collector"), (axes[1], "node", "Node collector, all nodes together")):
+        receivers = sorted({k for r in tiers for k in r[c]["by_receiver"]})
+        for i, rec in enumerate(receivers):
+            co_scatter(ax, tiers, lambda r: r["pods"], lambda r, rec=rec: r[c]["by_receiver"].get(rec, 0) / 1000, SERIES[i], rec)
+        co_scatter(ax, tiers, lambda r: r["pods"], lambda r: r[c]["points"][0] / 1000, SERIES[5], "total", annotate=lambda r, y: f"{y:.1f}k")
+        ax.set_xlabel("pods running in the cluster"); ax.set_ylabel("thousand data points per second"); ax.set_ylim(bottom=0)
+        ax.set_title(title); ax.legend(fontsize=8, loc="upper left")
+    fig.suptitle("Data points per second received, by receiver (a histogram or summary counts as one point)", color=TEXT)
+    fig.tight_layout(); fig.savefig(os.path.join(outdir, "co_points_vs_pods.png")); plt.close(fig)
+
+
+def co_chart_cpu_vs_points(dirpath, rows, outdir):
+    rows = [r for r in rows if r["run"]["kind"] in ("steady", "rate")]
+    if len(rows) < 2:
+        return
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4.2))
+    for ax, c, title, ykey in ((axes[0], "cluster", "Cluster collector, all replicas", lambda r: r["cluster"]["cpu"][0]),
+                               (axes[1], "node", "Node collector, busiest node", lambda r: r["node"]["cpu_pod"][0])):
+        xkey = (lambda r: r[c]["points"][0] / 1000) if c == "cluster" else (lambda r: r["node"]["points"][0] / 1000 / max(r["run"]["node_collector_pods"], 1))
+        tiers = [r for r in rows if co_kind(r) == "tiers"]
+        rates = [r for r in rows if r["run"]["kind"] == "rate"]
+        others = [r for r in rows if co_kind(r) not in ("tiers",) and r["run"]["kind"] != "rate"]
+        co_scatter(ax, tiers, xkey, ykey, SERIES[0], "pod tiers, 30 s interval", annotate=lambda r, y: f"{r['pods']} pods")
+        co_scatter(ax, rates, xkey, ykey, SERIES[1], "interval tiers, same pods", marker="s", annotate=lambda r, y: co_point_label(r))
+        for i, r in enumerate(others):
+            co_scatter(ax, [r], xkey, ykey, SERIES[2 + i % 4], co_point_label(r), marker="D")
+        ax.set_xlabel("thousand data points per second" + (" per node" if c == "node" else "")); ax.set_ylabel("CPU cores, average"); ax.set_ylim(bottom=0)
+        ax.set_title(title); ax.legend(fontsize=8, loc="upper left")
+    fig.suptitle("Collector CPU against the data point rate (pods vary the series, the interval varies the rate)", color=TEXT)
+    fig.tight_layout(); fig.savefig(os.path.join(outdir, "co_cpu_vs_points.png")); plt.close(fig)
+
+
+def co_chart_control_plane(dirpath, rows, outdir):
+    tiers, others = co_split(rows)
+    if not tiers:
+        return
+    fig, axes = plt.subplots(1, 3, figsize=(13, 4))
+    for ax, key, ylabel, fmt in ((axes[0], "proxy_req", "API server node proxy requests/s", "{:.1f}"),
+                                 (axes[1], "apiserver_cpu", "kube-apiserver CPU cores, 3 instances", "{:.2f}"),
+                                 (axes[2], "apiserver_wss", "kube-apiserver working set MiB, 3 instances", "{:.0f}")):
+        co_scatter(ax, tiers, lambda r: r["pods"], lambda r, key=key: r[key], SERIES[0], "pod tiers", annotate=lambda r, y, fmt=fmt: fmt.format(y))
+        for i, r in enumerate(others):
+            co_scatter(ax, [r], lambda r: r["pods"], lambda r, key=key: r[key], SERIES[2 + i % 4], co_point_label(r), marker="D", annotate=lambda r, y, fmt=fmt: fmt.format(y))
+        ax.set_xlabel("pods running in the cluster"); ax.set_ylabel(ylabel); ax.set_ylim(bottom=0); ax.legend(fontsize=8, loc="upper left")
+    fig.suptitle("Control plane cost: kubelet access through the API server node proxy and kube-apiserver usage per tier", color=TEXT)
+    fig.tight_layout(); fig.savefig(os.path.join(outdir, "co_control_plane.png")); plt.close(fig)
+
+
+def co_timeline(dirpath, run, outdir, panels, filename, title):
+    """timeline() variant for series split by collector: items are (metric, collector or None, label, scale)."""
+    s = run["slug"]
+    fig, axes = plt.subplots(len(panels), 1, figsize=(9, 2.2 * len(panels)), sharex=True)
+    markers = [(datetime.fromtimestamp(m["ts"], timezone.utc), m["name"]) for m in run.get("markers", [])]
+    for ax, (ylabel, items) in zip(axes, panels):
+        for i, (metric, col, lab, scale) in enumerate(items):
+            pts = col_series(dirpath, s, metric, col) if col else total(dirpath, s, metric)
+            if not pts:
+                continue
+            ax.plot([t for t, _ in pts], [v * scale for _, v in pts], color=SERIES[i], label=lab)
+        ax.set_ylabel(ylabel); ax.set_ylim(bottom=0)
+        if len(items) > 1:
+            ax.legend(loc="upper left", fontsize=8)
+        for t, _ in markers:
+            ax.axvline(t, color=MUTED, linewidth=1, linestyle="--")
+    for t, text in markers:
+        axes[0].annotate(text, (t, axes[0].get_ylim()[1]), textcoords="offset points", xytext=(3, -10), fontsize=8, color=MUTED)
+    axes[-1].xaxis.set_major_formatter(mdates.DateFormatter("%H:%M", tz=timezone.utc))
+    axes[-1].set_xlabel("time (UTC)")
+    fig.suptitle(title, color=TEXT)
+    fig.tight_layout(); fig.savefig(os.path.join(outdir, filename)); plt.close(fig)
+
+
+def co_chart_outage(dirpath, runs, outdir):
+    for r in [r for r in runs if r["kind"] == "outage"]:
+        co_timeline(dirpath, r, outdir, [
+            ("queue items", [("exporter_queue_items", "cluster", "cluster collector", 1), ("exporter_queue_items", "node", "node collectors together", 1)]),
+            ("cluster collector MiB", [("collector_wss_bytes", "cluster", "working set", MiB), ("collector_rss_bytes", "cluster", "RSS", MiB)]),
+            ("cluster collector points/s", [("receiver_accepted_points_s", "cluster", "accepted", 1), ("receiver_refused_points_s", "cluster", "refused", 1), ("exporter_sent_points_s", "cluster", "exported", 1), ("exporter_enqueue_failed_points_s", "cluster", "enqueue failed", 1)]),
+            ("node collectors points/s", [("receiver_accepted_points_s", "node", "accepted", 1), ("receiver_refused_points_s", "node", "refused", 1), ("exporter_sent_points_s", "node", "exported", 1)]),
+            ("node collector MiB", [("collector_wss_bytes_max_pod", "node", "working set, busiest node", MiB), ("collector_rss_bytes", "node", "RSS, busiest node", MiB)]),
+        ], f"outage_{r['slug']}.png", f"Backend outage and recovery: {r['label']}")
+
+
+def co_chart_long(dirpath, runs, outdir):
+    for r in [r for r in runs if r["kind"] == "long"]:
+        co_timeline(dirpath, r, outdir, [
+            ("pods running", [("cluster_pods_running", None, "pods", 1)]),
+            ("cluster collector CPU cores", [("collector_cpu_cores", "cluster", "CPU", 1)]),
+            ("cluster collector MiB", [("collector_wss_bytes", "cluster", "working set", MiB), ("collector_rss_bytes", "cluster", "RSS", MiB)]),
+            ("cluster collector points/s", [("receiver_accepted_points_s", "cluster", "accepted", 1), ("receiver_refused_points_s", "cluster", "refused", 1)]),
+            ("node collector MiB", [("collector_wss_bytes_max_pod", "node", "working set, busiest node", MiB), ("collector_rss_bytes", "node", "RSS, busiest node", MiB)]),
+            ("node collectors points/s", [("receiver_accepted_points_s", "node", "accepted, all nodes", 1), ("receiver_refused_points_s", "node", "refused", 1)]),
+        ], f"long_{r['slug']}.png", f"Long steady window: {r['label']}")
+
+
+def co_fit(tiers, key):
+    """least-squares slope and intercept of key(row) against the pod count."""
+    xs = [r["pods"] for r in tiers]; ys = [key(r) for r in tiers]
+    n = len(xs)
+    if n < 2:
+        return (0.0, ys[0] if ys else 0.0)
+    mx, my = sum(xs) / n, sum(ys) / n
+    sxx = sum((x - mx) ** 2 for x in xs)
+    slope = sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / sxx if sxx else 0.0
+    return slope, my - slope * mx
+
+
+def co_summary(dirpath, rows, runs):
+    cl = runs[0]["cluster"] if runs else {}
+    tiers = [r for r in rows if co_kind(r) == "tiers"]
+    head = [f"Cluster: OpenShift {cl.get('version')} on {cl.get('platform')}, {cl.get('nodes')} nodes ({cl.get('workers')} workers, allocatable {cl.get('worker_allocatable')} each; control plane {cl.get('master_allocatable')} each).",
+            f"Collector image: {runs[0].get('collector_image', '')}.", ""]
+    if len(tiers) >= 2:
+        sw, iw = co_fit(tiers, lambda r: r["cluster"]["wss"][0]); sc, ic = co_fit(tiers, lambda r: r["cluster"]["cpu"][0])
+        sp, ip = co_fit(tiers, lambda r: r["cluster"]["points"][0])
+        head += [f"Linear fit over the deployment tiers (cluster collector): working set {iw:.0f} MiB + {sw * 1000:.0f} MiB per 1,000 pods, "
+                 f"CPU {ic:.2f} cores + {sc * 1000:.2f} cores per 1,000 pods, {ip:,.0f} + {sp * 1000:,.0f} data points/s per 1,000 pods.", ""]
+    lines = ["| run | pods running | idle pods | cluster collector: points/s | CPU avg / p95 | WSS MiB avg / max | RSS MiB max | refused/s max | queue max | node collector: points/s all nodes | busiest node CPU avg | busiest node WSS MiB avg / max | RSS MiB max | refused/s max | API server node proxy req/s | kube-apiserver CPU | kube-apiserver WSS MiB | option 1 remote write samples/s | restarts cluster / node |",
+             "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    for r in rows:
+        run = r["run"]; c = r["cluster"]; n = r["node"]
+        lines.append(f"| {run['label']} | {r['pods']} | {run['load_pods']} | {c['points'][0]:,.0f} | {c['cpu'][0]:.2f} / {c['cpu'][1]:.2f} | {c['wss'][0]:.0f} / {c['wss'][2]:.0f} | {c['rss'][2]:.0f} | {c['refused']:.0f} | {c['queue']:,.0f} | {n['points'][0]:,.0f} | {n['cpu_pod'][0]:.3f} | {n['wss_pod'][0]:.0f} / {n['wss_pod'][2]:.0f} | {n['rss'][2]:.0f} | {n['refused']:.0f} | {r['proxy_req']:.1f} | {r['apiserver_cpu']:.2f} | {r['apiserver_wss']:.0f} | {r['option1_rw']:,.0f} | {run['collector_restarts']} / {run.get('node_collector_restarts', 0)} |")
+    with open(os.path.join(dirpath, "summary.md"), "w") as f:
+        f.write("\n".join(head + lines) + "\n")
+
+
+def render_collector_only(dirpath, runs, outdir):
+    rows = co_rows(dirpath, runs)
+    co_chart_cpu(dirpath, rows, outdir)
+    co_chart_memory(dirpath, rows, outdir)
+    co_chart_points(dirpath, rows, outdir)
+    co_chart_cpu_vs_points(dirpath, rows, outdir)
+    co_chart_control_plane(dirpath, rows, outdir)
+    co_chart_outage(dirpath, runs, outdir)
+    co_chart_long(dirpath, runs, outdir)
+    co_summary(dirpath, rows, runs)
+
+
 def main():
     dirpath = sys.argv[1]
     runs = json.load(open(os.path.join(dirpath, "runs.json")))
     outdir = os.path.join(dirpath, "charts"); os.makedirs(outdir, exist_ok=True)
+    if runs and runs[0].get("profile") == "collector-only":
+        render_collector_only(dirpath, runs, outdir)
+        print("charts:", sorted(os.listdir(outdir)))
+        return
     rows = steady_rows(dirpath, runs)
     chart_cpu_vs_samples(dirpath, rows, outdir)
     chart_memory(dirpath, rows, outdir)
