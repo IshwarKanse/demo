@@ -1,0 +1,23 @@
+create units 50-100: 4441 done (0 errors) in 5 s, 888/s, retries {}
+create units 50-100: 8523 done (0 errors) in 10 s, 852/s, retries {}
+create units 50-100: 12806 done (0 errors) in 15 s, 853/s, retries {}
+create units 50-100: 16901 done (0 errors) in 20 s, 845/s, retries {}
+create units 50-100: 20818 done (0 errors) in 25 s, 833/s, retries {}
+create units 50-100: 24520 done (0 errors) in 30 s, 817/s, retries {}
+create units 50-100: 28155 done (0 errors) in 35 s, 804/s, retries {}
+create units 50-100: 32436 done (0 errors) in 40 s, 811/s, retries {}
+create units 50-100: 36732 done (0 errors) in 45 s, 816/s, retries {}
+create units 50-100: 40991 done (0 errors) in 50 s, 820/s, retries {}
+create units 50-100: 44846 done (0 errors) in 55 s, 815/s, retries {}
+create units 50-100: 47962 done (0 errors) in 60 s, 798/s, retries {}
+create units 50-100: 48063 done (0 errors) in 65 s, 738/s, retries {}
+create units 50-100: 48077 done (0 errors) in 70 s, 684/s, retries {}
+create units 50-100: 48087 done (0 errors) in 79 s, 611/s, retries {}
+create units 50-100: 48099 done (0 errors) in 84 s, 575/s, retries {}
+create units 50-100: 48107 done (0 errors) in 96 s, 499/s, retries {'500': 5}
+create units 50-100: 48112 done (0 errors) in 111 s, 432/s, retries {'500': 12}
+create units 50-100: 48129 done (0 errors) in 119 s, 405/s, retries {'500': 16, '504': 5}
+create units 50-100: 48131 done (0 errors) in 124 s, 388/s, retries {'500': 17, '504': 5}
+create units 50-100: 48134 done (0 errors) in 134 s, 359/s, retries {'500': 18, '504': 5}
+create units 50-100: 48689 done (0 errors) in 140 s, 347/s, retries {'500': 18, '504': 6}
+{"label": "create units 50-100", "requests": 50000, "created_or_deleted": 49978, "already": 22, "errors": 0, "seconds": 145.4, "rate": 343.9, "workers": 24, "latency_s": {"p50": 0.018, "p90": 0.067, "p99": 0.241}, "retries": {"500": 18, "504": 6}, "per_kind": {"namespaces": {"ok": 50, "exists": 0, "errors": 0}, "configmaps": {"ok": 19978, "exists": 22, "errors": 0}, "secrets": {"ok": 13150, "exists": 0, "errors": 0}, "deployments": {"ok": 7500, "exists": 0, "errors": 0}, "services": {"ok": 5000, "exists": 0, "errors": 0}, "jobs": {"ok": 2500, "exists": 0, "errors": 0}, "cronjobs": {"ok": 1500, "exists": 0, "errors": 0}, "quotas": {"ok": 300, "exists": 0, "errors": 0}}}

@@ -1,0 +1,820 @@
+[
+ {
+  "label": "0k steady: empty inventory",
+  "slug": "0k-steady-empty-inventory",
+  "kind": "steady",
+  "start": 1792512212,
+  "end": 1792512512,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 25,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 44,
+    "ip-10-0-53-107.us-east-2.compute.internal": 30,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 50
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 0,
+  "markers": []
+ },
+ {
+  "label": "10k create: inventory grown to 10 units",
+  "slug": "10k-create-inventory-grown-to-10-units",
+  "kind": "steady",
+  "start": 1792512657,
+  "end": 1792512957,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 25,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 44,
+    "ip-10-0-53-107.us-east-2.compute.internal": 30,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 50
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 10,
+  "markers": [
+   {
+    "name": "loader start",
+    "ts": 1792512657
+   },
+   {
+    "name": "loader end",
+    "ts": 1792512678
+   }
+  ]
+ },
+ {
+  "label": "10k steady: full inventory",
+  "slug": "10k-steady-full-inventory",
+  "kind": "steady",
+  "start": 1792513108,
+  "end": 1792514308,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 44,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 50
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 10,
+  "markers": []
+ },
+ {
+  "label": "10k restart: collector pod recreated",
+  "slug": "10k-restart-collector-pod-recreated",
+  "kind": "steady",
+  "start": 1792514451,
+  "end": 1792514691,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 25,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 44,
+    "ip-10-0-53-107.us-east-2.compute.internal": 32,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 50
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 10,
+  "markers": [
+   {
+    "name": "pod start",
+    "ts": 1792514474
+   }
+  ]
+ },
+ {
+  "label": "10k restart-ksm: kube-state-metrics pod recreated",
+  "slug": "10k-restart-ksm-kube-state-metrics-pod-recreated",
+  "kind": "steady",
+  "start": 1792514733,
+  "end": 1792515213,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 275,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 45,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 51
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 10,
+  "markers": [
+   {
+    "name": "pod start",
+    "ts": 1792514794
+   }
+  ]
+ },
+ {
+  "label": "10k churn: deployments of 1 namespaces recreated",
+  "slug": "10k-churn-deployments-of-1-namespaces-recreated",
+  "kind": "steady",
+  "start": 1792515285,
+  "end": 1792515825,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 44,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 50
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 10,
+  "markers": [
+   {
+    "name": "delete",
+    "ts": 1792515327
+   },
+   {
+    "name": "deleted",
+    "ts": 1792515336
+   },
+   {
+    "name": "recreated",
+    "ts": 1792515405
+   }
+  ]
+ },
+ {
+  "label": "10k steady2: after the churn",
+  "slug": "10k-steady2-after-the-churn",
+  "kind": "steady",
+  "start": 1792516072,
+  "end": 1792516672,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 45,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 49
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 10,
+  "markers": []
+ },
+ {
+  "label": "50k create: inventory grown to 50 units",
+  "slug": "50k-create-inventory-grown-to-50-units",
+  "kind": "steady",
+  "start": 1792516830,
+  "end": 1792517130,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 45,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 49
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 50,
+  "markers": [
+   {
+    "name": "loader start",
+    "ts": 1792516854
+   },
+   {
+    "name": "loader end",
+    "ts": 1792516911
+   }
+  ]
+ },
+ {
+  "label": "50k steady: full inventory",
+  "slug": "50k-steady-full-inventory",
+  "kind": "steady",
+  "start": 1792517394,
+  "end": 1792518594,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 45,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 49
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 50,
+  "markers": []
+ },
+ {
+  "label": "50k restart: collector pod recreated",
+  "slug": "50k-restart-collector-pod-recreated",
+  "kind": "steady",
+  "start": 1792518723,
+  "end": 1792518963,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 45,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 49
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 50,
+  "markers": [
+   {
+    "name": "pod start",
+    "ts": 1792518747
+   }
+  ]
+ },
+ {
+  "label": "50k restart-ksm: kube-state-metrics pod recreated",
+  "slug": "50k-restart-ksm-kube-state-metrics-pod-recreated",
+  "kind": "steady",
+  "start": 1792519074,
+  "end": 1792519314,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 45,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 49
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 50,
+  "markers": [
+   {
+    "name": "pod start",
+    "ts": 1792519093
+   }
+  ]
+ },
+ {
+  "label": "50k churn: deployments of 5 namespaces recreated",
+  "slug": "50k-churn-deployments-of-5-namespaces-recreated",
+  "kind": "steady",
+  "start": 1792519374,
+  "end": 1792519914,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 45,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 49
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 50,
+  "markers": [
+   {
+    "name": "delete",
+    "ts": 1792519415
+   },
+   {
+    "name": "deleted",
+    "ts": 1792519424
+   },
+   {
+    "name": "recreated",
+    "ts": 1792519493
+   }
+  ]
+ },
+ {
+  "label": "50k steady2: after the churn",
+  "slug": "50k-steady2-after-the-churn",
+  "kind": "steady",
+  "start": 1792519961,
+  "end": 1792520621,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 45,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 49
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 50,
+  "markers": []
+ },
+ {
+  "label": "100k create: inventory grown to 100 units",
+  "slug": "100k-create-inventory-grown-to-100-units",
+  "kind": "steady",
+  "start": 1792520716,
+  "end": 1792521136,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 45,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 49
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 100,
+  "markers": [
+   {
+    "name": "loader start",
+    "ts": 1792520775
+   },
+   {
+    "name": "loader end",
+    "ts": 1792520932
+   }
+  ]
+ },
+ {
+  "label": "100k steady: full inventory",
+  "slug": "100k-steady-full-inventory",
+  "kind": "steady",
+  "start": 1792521310,
+  "end": 1792522510,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 45,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 49
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 100,
+  "markers": []
+ },
+ {
+  "label": "100k restart: collector pod recreated",
+  "slug": "100k-restart-collector-pod-recreated",
+  "kind": "steady",
+  "start": 1792522648,
+  "end": 1792522888,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 45,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 49
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 100,
+  "markers": [
+   {
+    "name": "pod start",
+    "ts": 1792522671
+   }
+  ]
+ },
+ {
+  "label": "100k restart-ksm: kube-state-metrics pod recreated",
+  "slug": "100k-restart-ksm-kube-state-metrics-pod-recreated",
+  "kind": "steady",
+  "start": 1792522974,
+  "end": 1792523214,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 45,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 49
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 100,
+  "markers": [
+   {
+    "name": "pod start",
+    "ts": 1792522992
+   }
+  ]
+ },
+ {
+  "label": "100k churn: deployments of 10 namespaces recreated",
+  "slug": "100k-churn-deployments-of-10-namespaces-recreated",
+  "kind": "steady",
+  "start": 1792523304,
+  "end": 1792523964,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 45,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 49
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 100,
+  "markers": [
+   {
+    "name": "delete",
+    "ts": 1792523319
+   },
+   {
+    "name": "deleted",
+    "ts": 1792523334
+   },
+   {
+    "name": "recreated",
+    "ts": 1792523544
+   }
+  ]
+ },
+ {
+  "label": "100k steady2: after the churn",
+  "slug": "100k-steady2-after-the-churn",
+  "kind": "steady",
+  "start": 1792524100,
+  "end": 1792524700,
+  "step": 15,
+  "collector_replicas": 1,
+  "collector_restarts": 0,
+  "load_pods": 0,
+  "extra_series": 0,
+  "cluster": {
+   "version": "5.0.0-0.nightly-2026-10-19-060022",
+   "platform": "AWS",
+   "nodes": 7,
+   "workers": 4,
+   "worker_allocatable": "15500m 60815304Ki",
+   "pods_running": 273,
+   "master_allocatable": "3500m 14924844Ki",
+   "pods_per_node": {
+    "ip-10-0-24-228.us-east-2.compute.internal": 24,
+    "ip-10-0-36-23.us-east-2.compute.internal": 26,
+    "ip-10-0-40-41.us-east-2.compute.internal": 68,
+    "ip-10-0-5-118.us-east-2.compute.internal": 45,
+    "ip-10-0-53-107.us-east-2.compute.internal": 31,
+    "ip-10-0-74-94.us-east-2.compute.internal": 30,
+    "ip-10-0-94-170.us-east-2.compute.internal": 49
+   }
+  },
+  "profile": "k8scluster-scale",
+  "variant": "k8scluster",
+  "config": "k8s_cluster receiver only, 30 s interval, vendor Prometheus backend, collector memory limit 4Gi",
+  "collector_image": "registry.redhat.io/rhosdt/opentelemetry-collector-rhel9@sha256:af76e9b5eaa89400714f189c0bf94026e41bd3476920d4dd961ac217fff4630a",
+  "node_collector_pods": 7,
+  "node_collector_restarts": 0,
+  "units": 100,
+  "markers": []
+ }
+]

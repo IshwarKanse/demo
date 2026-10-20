@@ -1,0 +1,175 @@
+== 2026-10-20T16:03:32Z phase baseline 
+recorded run '0k steady: empty inventory' (1 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/0k-steady-empty-inventory
+== 2026-10-20T16:10:16Z control plane: {"tag": "0k-steady", "ts": 1792512576, "apiserver_wss_max_pod_gib": 2.62, "apiserver_cpu_cores": 0.8680828089921524, "etcd_db_mib": 69.7, "etcd_wss_max_pod_gib": 0.51, "etcd_fsync_p99_s": 0.003788569943564214, "etcd_leader_changes_1h": 0.0, "apiserver_429_s": 0.0, "list_p99_s": 0.07658571428571462, "kcm_wss_max_pod_gib": 0.4, "storage_objects": 20257.0, "master_memory_pressure": 0.0, "prometheus_k8s_wss_max_gib": 4.86, "at_limit": []}
+scripts/run-scale-ladder.sh: line 268:  7392 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+== 2026-10-20T16:10:16Z phase baseline done
+== 2026-10-20T16:10:16Z phase step (step 10k)
+== 2026-10-20T16:10:17Z phase create (step 10k)
+== 2026-10-20T16:10:57Z control plane: {"tag": "10k-before-create", "ts": 1792512617, "apiserver_wss_max_pod_gib": 2.81, "apiserver_cpu_cores": 0.8285240120492233, "etcd_db_mib": 69.7, "etcd_wss_max_pod_gib": 0.5, "etcd_fsync_p99_s": 0.0035601271709223554, "etcd_leader_changes_1h": 0.0, "apiserver_429_s": 0.0, "list_p99_s": 0.0727142096053621, "kcm_wss_max_pod_gib": 0.4, "storage_objects": 20257.0, "master_memory_pressure": 0.0, "prometheus_k8s_wss_max_gib": 4.8, "at_limit": []}
+== 2026-10-20T16:10:57Z growing the inventory from 0 to 10 units
+== 2026-10-20T16:11:18Z loader: {"label": "create units 0-10", "requests": 10320, "created_or_deleted": 10320, "already": 0, "errors": 0, "seconds": 10.5, "rate": 983.2, "workers": 24, "latency_s": {"p50": 0.018, "p90": 0.046, "p99": 0.098}, "retries": {}, "per_kind": {"crqs": {"ok": 20, "exists": 0, "errors": 0}, "namespaces": {"ok": 10, "exists": 0, "errors": 0}, "configmaps": {"ok": 4000, "exists": 0, "errors": 0}, "secrets": {"ok": 2630, "exists": 0, "errors": 0}, "deployments": {"ok": 1500, "exists": 0, "errors": 0}, "services": {"ok": 1000, "exists": 0, "errors": 0}, "jobs": {"ok": 500, "exists": 0, "errors": 0}, "cronjobs": {"ok": 300, "exists": 0, "errors": 0}, "quotas": {"ok": 60, "exists": 0, "errors": 0}, "hpas": {"ok": 300, "exists": 0, "errors": 0}}}
+/private/tmp/claude-501/-Users-ikanse-redhat-build-of-opentelemetry-workspace--claude-worktrees-ibm-p-z-openshift-ci-jobs-21f7d6/6b279011-5edc-41ce-ac4b-4a6befe76a5c/scratchpad/ladder-a.sh: line 7:  7551 Terminated: 15          scripts/run-scale-ladder.sh $d step 10
+== 2026-10-20T16:15:49Z runner restarted after the nested-quote fix: the 10k create phase is finished from the saved loader timestamps (create-finish)
+== 2026-10-20T16:15:50Z phase create-finish (step 10k)
+== 2026-10-20T16:15:57Z full inventory seen by the collector after 5 s, by kube-state-metrics after 0 s (from the end of the loader, from the stored series)
+recorded run '10k create: inventory grown to 10 units' (2 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/10k-create-inventory-grown-to-10-units
+scripts/run-scale-ladder.sh: line 70:  8860 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+scripts/run-scale-ladder.sh: line 161:  9196 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+6 audit events in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/audit/10k-create.jsonl
+== 2026-10-20T16:18:28Z control plane: {"tag": "10k-after-create", "ts": 1792513067, "apiserver_wss_max_pod_gib": 3.1, "apiserver_cpu_cores": 0.7639593835848939, "etcd_db_mib": 109.2, "etcd_wss_max_pod_gib": 0.55, "etcd_fsync_p99_s": 0.0035606164820727168, "etcd_leader_changes_1h": 0.0, "apiserver_429_s": 0.0, "list_p99_s": 0.03126134492239547, "kcm_wss_max_pod_gib": 0.46, "storage_objects": 63711.0, "master_memory_pressure": 0.0, "prometheus_k8s_wss_max_gib": 4.97, "at_limit": []}
+== 2026-10-20T16:18:28Z phase create-finish done
+== 2026-10-20T16:18:28Z phase steady (step 10k)
+recorded run '10k steady: full inventory' (3 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/10k-steady-full-inventory
+scripts/run-scale-ladder.sh: line 161: 11229 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+80 audit events in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/audit/10k-steady.jsonl
+== 2026-10-20T16:41:13Z control plane: {"tag": "10k-steady", "ts": 1792514432, "apiserver_wss_max_pod_gib": 2.94, "apiserver_cpu_cores": 0.6908911814974964, "etcd_db_mib": 109.2, "etcd_wss_max_pod_gib": 0.5, "etcd_fsync_p99_s": 0.0036067371822086835, "etcd_leader_changes_1h": 0.0, "apiserver_429_s": 0.0, "list_p99_s": 0.04312500000000004, "kcm_wss_max_pod_gib": 0.47, "storage_objects": 63741.0, "master_memory_pressure": 0.0, "prometheus_k8s_wss_max_gib": 5.04, "at_limit": []}
+== 2026-10-20T16:41:13Z phase steady done
+== 2026-10-20T16:41:13Z phase restart (step 10k)
+== 2026-10-20T16:41:49Z after a restart the collector had the full inventory after 35 s (pod otel-k8scluster-collector-665bf56cb-mp54f)
+scripts/run-scale-ladder.sh: line 199: 11616 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+recorded run '10k restart: collector pod recreated' (4 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/10k-restart-collector-pod-recreated
+scripts/run-scale-ladder.sh: line 161: 12023 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+0 audit events in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/audit/10k-restart.jsonl
+== 2026-10-20T16:46:32Z phase restart done
+== 2026-10-20T16:46:32Z phase restart-ksm (step 10k)
+== 2026-10-20T16:52:37Z runner restarted again: kube-state-metrics restart check now uses the sample count of the new scrape target; audit pulls keep the ResponseStarted stage (client-go watch lists)
+== 2026-10-20T16:52:38Z phase audit-repull (step 10k-restartk)
+62 audit events in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/audit/10k-restart.jsonl
+== 2026-10-20T16:53:23Z phase audit-repull done
+== 2026-10-20T16:53:23Z phase restart-ksm-finish (step 10k)
+== 2026-10-20T16:53:33Z after a restart kube-state-metrics served the full inventory after 45 s (pod kube-state-metrics-6bbff564d4-85szm; first scrape with at least 81912 of 86224 samples, 60 s scrape interval)
+recorded run '10k restart-ksm: kube-state-metrics pod recreated' (5 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/10k-restart-ksm-kube-state-metrics-pod-recreated
+scripts/run-scale-ladder.sh: line 162: 13681 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+142 audit events in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/audit/10k-restart-ksm.jsonl
+== 2026-10-20T16:55:27Z phase restart-ksm-finish done
+== 2026-10-20T16:55:27Z phase churn (step 10k)
+== 2026-10-20T16:55:36Z loader delete: {"label": "delete units 0-1", "requests": 1, "created_or_deleted": 1, "already": 0, "errors": 0, "seconds": 0.9, "rate": 1.1, "workers": 8, "latency_s": {"p50": 0.894, "p90": 0.894, "p99": 0.894}, "retries": {}, "per_kind": {"delete-deployments": {"ok": 1, "exists": 0, "errors": 0}}}
+== 2026-10-20T16:56:45Z loader recreate: {"label": "recreate units 0-1", "requests": 150, "created_or_deleted": 150, "already": 0, "errors": 0, "seconds": 0.2, "rate": 952.6, "workers": 24, "latency_s": {"p50": 0.02, "p90": 0.033, "p99": 0.046}, "retries": {}, "per_kind": {"deployments": {"ok": 150, "exists": 0, "errors": 0}}}
+== 2026-10-20T16:56:45Z churn: the deployments of 1 namespace(s) (150) deleted and recreated
+recorded run '10k churn: deployments of 1 namespaces recreated' (6 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/10k-churn-deployments-of-1-namespaces-recreated
+scripts/run-scale-ladder.sh: line 162: 14294 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+159 audit events in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/audit/10k-churn.jsonl
+== 2026-10-20T17:07:52Z phase churn done
+== 2026-10-20T17:07:52Z phase steady2 (step 10k)
+recorded run '10k steady2: after the churn' (7 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/10k-steady2-after-the-churn
+== 2026-10-20T17:19:56Z control plane: {"tag": "10k-steady2", "ts": 1792516736, "apiserver_wss_max_pod_gib": 2.14, "apiserver_cpu_cores": 0.8306323594281998, "etcd_db_mib": 109.2, "etcd_wss_max_pod_gib": 0.52, "etcd_fsync_p99_s": 0.0038806461720869065, "etcd_leader_changes_1h": 0.0, "apiserver_429_s": 0.0, "list_p99_s": 0.03876270430905069, "kcm_wss_max_pod_gib": 0.41, "storage_objects": 21698.0, "master_memory_pressure": 0.0, "prometheus_k8s_wss_max_gib": 4.79, "at_limit": []}
+scripts/run-scale-ladder.sh: line 330: 14893 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+== 2026-10-20T17:19:56Z phase steady2 done
+== 2026-10-20T17:19:56Z phase step (step 50k)
+== 2026-10-20T17:19:57Z phase create (step 50k)
+== 2026-10-20T17:20:54Z control plane: {"tag": "50k-before-create", "ts": 1792516797, "apiserver_wss_max_pod_gib": 2.59, "apiserver_cpu_cores": 0.7679156324722657, "etcd_db_mib": 109.2, "etcd_wss_max_pod_gib": 0.52, "etcd_fsync_p99_s": 0.003875489397834366, "etcd_leader_changes_1h": 0.0, "apiserver_429_s": 0.0, "list_p99_s": 0.07283664783853958, "kcm_wss_max_pod_gib": 0.42, "storage_objects": 21698.0, "master_memory_pressure": 0.0, "prometheus_k8s_wss_max_gib": 4.73, "at_limit": []}
+== 2026-10-20T17:20:54Z growing the inventory from 10 to 50 units
+== 2026-10-20T17:21:51Z loader: {"label": "create units 10-50", "requests": 40000, "created_or_deleted": 40000, "already": 0, "errors": 0, "seconds": 46.7, "rate": 856.9, "workers": 24, "latency_s": {"p50": 0.02, "p90": 0.053, "p99": 0.132}, "retries": {}, "per_kind": {"namespaces": {"ok": 40, "exists": 0, "errors": 0}, "configmaps": {"ok": 16000, "exists": 0, "errors": 0}, "secrets": {"ok": 10520, "exists": 0, "errors": 0}, "deployments": {"ok": 6000, "exists": 0, "errors": 0}, "services": {"ok": 4000, "exists": 0, "errors": 0}, "jobs": {"ok": 2000, "exists": 0, "errors": 0}, "cronjobs": {"ok": 1200, "exists": 0, "errors": 0}, "quotas": {"ok": 240, "exists": 0, "errors": 0}}}
+== 2026-10-20T17:22:29Z full inventory seen by the collector after 0 s, by kube-state-metrics after 25 s (from the end of the loader)
+recorded run '50k create: inventory grown to 50 units' (8 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/50k-create-inventory-grown-to-50-units
+scripts/run-scale-ladder.sh: line 162: 15850 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+24 audit events in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/audit/50k-create.jsonl
+== 2026-10-20T17:29:54Z control plane: {"tag": "50k-after-create", "ts": 1792517354, "apiserver_wss_max_pod_gib": 3.72, "apiserver_cpu_cores": 0.8591996563725564, "etcd_db_mib": 267.2, "etcd_wss_max_pod_gib": 0.79, "etcd_fsync_p99_s": 0.0037041434639832047, "etcd_leader_changes_1h": 0.0, "apiserver_429_s": 0.0, "list_p99_s": 0.08520504458251835, "kcm_wss_max_pod_gib": 0.82, "storage_objects": 78256.0, "master_memory_pressure": 0.0, "prometheus_k8s_wss_max_gib": 5.52, "at_limit": []}
+== 2026-10-20T17:29:54Z phase create done
+== 2026-10-20T17:29:54Z phase steady (step 50k)
+recorded run '50k steady: full inventory' (9 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/50k-steady-full-inventory
+scripts/run-scale-ladder.sh: line 162: 17804 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+205 audit events in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/audit/50k-steady.jsonl
+== 2026-10-20T17:52:25Z control plane: {"tag": "50k-steady", "ts": 1792518705, "apiserver_wss_max_pod_gib": 3.56, "apiserver_cpu_cores": 0.7041607693332809, "etcd_db_mib": 267.2, "etcd_wss_max_pod_gib": 0.79, "etcd_fsync_p99_s": 0.0035393673728345678, "etcd_leader_changes_1h": 0.0, "apiserver_429_s": 0.0, "list_p99_s": 0.09513080057674868, "kcm_wss_max_pod_gib": 0.82, "storage_objects": 78257.0, "master_memory_pressure": 0.0, "prometheus_k8s_wss_max_gib": 5.51, "at_limit": []}
+== 2026-10-20T17:52:25Z phase steady done
+== 2026-10-20T17:52:26Z phase restart (step 50k)
+== 2026-10-20T17:53:02Z after a restart the collector had the full inventory after 35 s (pod otel-k8scluster-collector-665bf56cb-56x2d)
+scripts/run-scale-ladder.sh: line 201: 18175 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+recorded run '50k restart: collector pod recreated' (10 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/50k-restart-collector-pod-recreated
+scripts/run-scale-ladder.sh: line 162: 18474 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+28 audit events in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/audit/50k-restart.jsonl
+== 2026-10-20T17:58:08Z phase restart done
+== 2026-10-20T17:58:08Z phase restart-ksm (step 50k)
+== 2026-10-20T17:58:54Z after a restart kube-state-metrics served the full inventory after 35 s (pod kube-state-metrics-6bbff564d4-4j528; first scrape with at least 304899 of 320947 samples, 60 s scrape interval)
+recorded run '50k restart-ksm: kube-state-metrics pod recreated' (11 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/50k-restart-ksm-kube-state-metrics-pod-recreated
+scripts/run-scale-ladder.sh: line 162: 18995 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+99 audit events in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/audit/50k-restart-ksm.jsonl
+== 2026-10-20T18:03:35Z phase restart-ksm done
+== 2026-10-20T18:03:35Z phase churn (step 50k)
+== 2026-10-20T18:03:44Z loader delete: {"label": "delete units 0-5", "requests": 5, "created_or_deleted": 5, "already": 0, "errors": 0, "seconds": 1.6, "rate": 3.1, "workers": 8, "latency_s": {"p50": 1.609, "p90": 1.615, "p99": 1.615}, "retries": {}, "per_kind": {"delete-deployments": {"ok": 5, "exists": 0, "errors": 0}}}
+== 2026-10-20T18:04:53Z loader recreate: {"label": "recreate units 0-5", "requests": 750, "created_or_deleted": 750, "already": 0, "errors": 0, "seconds": 0.6, "rate": 1174.1, "workers": 24, "latency_s": {"p50": 0.018, "p90": 0.027, "p99": 0.061}, "retries": {}, "per_kind": {"deployments": {"ok": 750, "exists": 0, "errors": 0}}}
+== 2026-10-20T18:04:53Z churn: the deployments of 5 namespace(s) (750) deleted and recreated
+recorded run '50k churn: deployments of 5 namespaces recreated' (12 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/50k-churn-deployments-of-5-namespaces-recreated
+scripts/run-scale-ladder.sh: line 162: 19567 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+72 audit events in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/audit/50k-churn.jsonl
+== 2026-10-20T18:13:40Z phase churn done
+== 2026-10-20T18:13:40Z phase steady2 (step 50k)
+recorded run '50k steady2: after the churn' (13 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/50k-steady2-after-the-churn
+== 2026-10-20T18:25:27Z control plane: {"tag": "50k-steady2", "ts": 1792520686, "apiserver_wss_max_pod_gib": 3.7, "apiserver_cpu_cores": 0.8287077071269202, "etcd_db_mib": 267.2, "etcd_wss_max_pod_gib": 0.79, "etcd_fsync_p99_s": 0.0037602804718755707, "etcd_leader_changes_1h": 0.0, "apiserver_429_s": 0.0, "list_p99_s": 0.07987912542225996, "kcm_wss_max_pod_gib": 0.98, "storage_objects": 77785.0, "master_memory_pressure": 0.0, "prometheus_k8s_wss_max_gib": 5.15, "at_limit": []}
+scripts/run-scale-ladder.sh: line 330: 20258 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+== 2026-10-20T18:25:27Z phase steady2 done
+== 2026-10-20T18:25:27Z phase step done
+== 2026-10-20T18:25:34Z phase step (step 100k)
+== 2026-10-20T18:25:34Z phase create (step 100k)
+== 2026-10-20T18:26:15Z control plane: {"tag": "100k-before-create", "ts": 1792520734, "apiserver_wss_max_pod_gib": 3.42, "apiserver_cpu_cores": 0.8665672993633923, "etcd_db_mib": 267.2, "etcd_wss_max_pod_gib": 0.79, "etcd_fsync_p99_s": 0.0037377261766492627, "etcd_leader_changes_1h": 0.0, "apiserver_429_s": 0.0, "list_p99_s": 0.07662189366052509, "kcm_wss_max_pod_gib": 0.98, "storage_objects": 77785.0, "master_memory_pressure": 0.0, "prometheus_k8s_wss_max_gib": 5.06, "at_limit": []}
+== 2026-10-20T18:26:15Z growing the inventory from 50 to 100 units
+== 2026-10-20T18:28:52Z loader: {"label": "create units 50-100", "requests": 50000, "created_or_deleted": 49978, "already": 22, "errors": 0, "seconds": 145.4, "rate": 343.9, "workers": 24, "latency_s": {"p50": 0.018, "p90": 0.067, "p99": 0.241}, "retries": {"500": 18, "504": 6}, "per_kind": {"namespaces": {"ok": 50, "exists": 0, "errors": 0}, "configmaps": {"ok": 19978, "exists": 22, "errors": 0}, "secrets": {"ok": 13150, "exists": 0, "errors": 0}, "deployments": {"ok": 7500, "exists": 0, "errors": 0}, "services": {"ok": 5000, "exists": 0, "errors": 0}, "jobs": {"ok": 2500, "exists": 0, "errors": 0}, "cronjobs": {"ok": 1500, "exists": 0, "errors": 0}, "quotas": {"ok": 300, "exists": 0, "errors": 0}}}
+== 2026-10-20T18:29:16Z full inventory seen by the collector after 10 s, by kube-state-metrics after 0 s (from the end of the loader)
+recorded run '100k create: inventory grown to 100 units' (14 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/100k-create-inventory-grown-to-100-units
+scripts/run-scale-ladder.sh: line 162: 21531 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+41 audit events in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/audit/100k-create.jsonl
+== 2026-10-20T18:35:10Z control plane: {"tag": "100k-after-create", "ts": 1792521270, "apiserver_wss_max_pod_gib": 4.0, "apiserver_cpu_cores": 1.3757999027518286, "etcd_db_mib": 418.4, "etcd_wss_max_pod_gib": 0.86, "etcd_fsync_p99_s": 0.008673071042715402, "etcd_leader_changes_1h": 1.0084033613445378, "apiserver_429_s": 0.0, "list_p99_s": 9.249813416666647, "kcm_wss_max_pod_gib": 1.29, "storage_objects": 147282.0, "master_memory_pressure": 0.0, "prometheus_k8s_wss_max_gib": 5.68, "at_limit": []}
+== 2026-10-20T18:35:10Z phase create done
+== 2026-10-20T18:35:10Z phase steady (step 100k)
+recorded run '100k steady: full inventory' (15 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/100k-steady-full-inventory
+scripts/run-scale-ladder.sh: line 162: 24676 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+206 audit events in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/audit/100k-steady.jsonl
+== 2026-10-20T18:57:49Z control plane: {"tag": "100k-steady", "ts": 1792522629, "apiserver_wss_max_pod_gib": 5.01, "apiserver_cpu_cores": 1.1742600487812083, "etcd_db_mib": 419.3, "etcd_wss_max_pod_gib": 0.87, "etcd_fsync_p99_s": 0.0036522213207696597, "etcd_leader_changes_1h": 1.0084033613445378, "apiserver_429_s": 0.0, "list_p99_s": 0.1284000000000013, "kcm_wss_max_pod_gib": 1.21, "storage_objects": 147283.0, "master_memory_pressure": 0.0, "prometheus_k8s_wss_max_gib": 5.78, "at_limit": []}
+== 2026-10-20T18:57:49Z phase steady done
+== 2026-10-20T18:57:49Z phase restart (step 100k)
+== 2026-10-20T18:58:27Z after a restart the collector had the full inventory after 36 s (pod otel-k8scluster-collector-665bf56cb-7pfwb)
+scripts/run-scale-ladder.sh: line 201: 25144 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+recorded run '100k restart: collector pod recreated' (16 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/100k-restart-collector-pod-recreated
+scripts/run-scale-ladder.sh: line 162: 25717 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+33 audit events in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/audit/100k-restart.jsonl
+== 2026-10-20T19:03:07Z phase restart done
+== 2026-10-20T19:03:07Z phase restart-ksm (step 100k)
+== 2026-10-20T19:03:54Z after a restart kube-state-metrics served the full inventory after 35 s (pod kube-state-metrics-6bbff564d4-tfn8m; first scrape with at least 583622 of 614339 samples, 60 s scrape interval)
+recorded run '100k restart-ksm: kube-state-metrics pod recreated' (17 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/100k-restart-ksm-kube-state-metrics-pod-recreated
+scripts/run-scale-ladder.sh: line 162: 26478 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+102 audit events in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/audit/100k-restart-ksm.jsonl
+== 2026-10-20T19:08:39Z phase restart-ksm done
+== 2026-10-20T19:08:39Z phase churn (step 100k)
+== 2026-10-20T19:08:54Z loader delete: {"label": "delete units 0-10", "requests": 10, "created_or_deleted": 10, "already": 0, "errors": 0, "seconds": 3.1, "rate": 3.2, "workers": 8, "latency_s": {"p50": 2.162, "p90": 2.425, "p99": 2.425}, "retries": {}, "per_kind": {"delete-deployments": {"ok": 10, "exists": 0, "errors": 0}}}
+== 2026-10-20T19:12:24Z loader recreate: {"label": "recreate units 0-10", "requests": 1500, "created_or_deleted": 1500, "already": 0, "errors": 0, "seconds": 7.8, "rate": 191.6, "workers": 24, "latency_s": {"p50": 0.018, "p90": 0.364, "p99": 1.377}, "retries": {}, "per_kind": {"deployments": {"ok": 1500, "exists": 0, "errors": 0}}}
+== 2026-10-20T19:12:24Z churn: the deployments of 10 namespace(s) (1500) deleted and recreated
+recorded run '100k churn: deployments of 10 namespaces recreated' (18 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/100k-churn-deployments-of-10-namespaces-recreated
+scripts/run-scale-ladder.sh: line 162: 27910 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+103 audit events in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/audit/100k-churn.jsonl
+== 2026-10-20T19:21:39Z phase churn done
+== 2026-10-20T19:21:40Z phase steady2 (step 100k)
+recorded run '100k steady2: after the churn' (19 runs in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/runs.json)
+raw series in /Users/ikanse/demo/otel-ocp-metrics-export/collector-only/results/2026-10-20-k8scluster-scale/raw/100k-steady2-after-the-churn
+== 2026-10-20T19:33:27Z control plane: {"tag": "100k-steady2", "ts": 1792524767, "apiserver_wss_max_pod_gib": 4.72, "apiserver_cpu_cores": 1.3794192342418616, "etcd_db_mib": 419.3, "etcd_wss_max_pod_gib": 0.98, "etcd_fsync_p99_s": 0.0036150581451466564, "etcd_leader_changes_1h": 0.0, "apiserver_429_s": 0.0, "list_p99_s": 0.17115467600535944, "kcm_wss_max_pod_gib": 1.46, "storage_objects": 147779.0, "master_memory_pressure": 0.0, "prometheus_k8s_wss_max_gib": 5.98, "at_limit": []}
+scripts/run-scale-ladder.sh: line 330: 29312 Terminated: 15          oc port-forward -n "$ns" svc/vendor-prometheus 19090:9090 > /dev/null 2>&1
+== 2026-10-20T19:33:27Z phase steady2 done
+== 2026-10-20T19:33:27Z phase step done
+== 2026-10-20T19:33:27Z phase step (step 200k)
+== 2026-10-20T19:33:27Z phase create (step 200k)
+Exception ignored while flushing sys.stdout:
+BrokenPipeError: [Errno 32] Broken pipe
+== 2026-10-20T19:34:12Z the 200k create runs with 8 loader workers (the 24-worker burst of the 100k step overloaded the etcd leader: 500/504 responses for about 70 s and one leader change)
+== 2026-10-20T19:34:19Z phase step (step 200k)
+== 2026-10-20T19:34:19Z phase create (step 200k)
+== 2026-10-20T19:35:00Z control plane: {"tag": "200k-before-create", "ts": 1792524859, "apiserver_wss_max_pod_gib": 4.14, "apiserver_cpu_cores": 1.1366429879403845, "etcd_db_mib": 419.3, "etcd_wss_max_pod_gib": 0.96, "etcd_fsync_p99_s": 0.0037624895595524907, "etcd_leader_changes_1h": 0.0, "apiserver_429_s": 0.0, "list_p99_s": 0.17450000000000085, "kcm_wss_max_pod_gib": 1.46, "storage_objects": 147779.0, "master_memory_pressure": 0.0, "prometheus_k8s_wss_max_gib": 5.9, "at_limit": []}
+== 2026-10-20T19:35:00Z growing the inventory from 100 to 200 units
+== 2026-10-20T19:50:51Z ladder stopped during the 200k create: the control plane is the limit (masters at 89-99 % memory and CPU, kube-apiserver on ip-10-0-40-41 restarted 4 times, 500/504 responses, loader throttled to 110 creates/s); the loader job was deleted at about 74,000 of 100,000 objects
+== 2026-10-20T20:08:26Z k8s_cluster-only collector deleted during the recovery (its measurements are complete)

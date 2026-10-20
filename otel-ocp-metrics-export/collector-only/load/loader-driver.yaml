@@ -1,0 +1,54 @@
+# The in-cluster driver of load/loader.py: its own namespace, a service account whose requests can be told apart
+# in the audit log, and the cluster role it needs to create and delete the load objects (no read verbs: it never
+# lists or gets anything, deletecollection by label selector needs none). The script itself is put
+# into the config map `loader` by scripts/run-scale-ladder.sh (oc create configmap loader --from-file=loader.py)
+# and each phase runs it as a Job from the template at the end of the runner.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: otel-load-driver
+  labels:
+    app.kubernetes.io/part-of: otel-load-objects
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: loader
+  namespace: otel-load-driver
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: otel-load-driver
+rules:
+- apiGroups: [""]
+  resources: [namespaces]
+  verbs: [create, delete]
+- apiGroups: [""]
+  resources: [configmaps, secrets, services, resourcequotas]
+  verbs: [create, delete, deletecollection]
+- apiGroups: [apps]
+  resources: [deployments]
+  verbs: [create, delete, deletecollection]
+- apiGroups: [batch]
+  resources: [jobs, cronjobs]
+  verbs: [create, delete, deletecollection]
+- apiGroups: [autoscaling]
+  resources: [horizontalpodautoscalers]
+  verbs: [create, delete, deletecollection]
+- apiGroups: [quota.openshift.io]
+  resources: [clusterresourcequotas]
+  verbs: [create, delete, deletecollection]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: otel-load-driver
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: otel-load-driver
+subjects:
+- kind: ServiceAccount
+  name: loader
+  namespace: otel-load-driver

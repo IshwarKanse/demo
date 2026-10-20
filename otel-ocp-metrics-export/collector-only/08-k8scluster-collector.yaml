@@ -67,7 +67,8 @@ spec:
         sending_queue:
           enabled: true
           sizer: items
-          queue_size: 200000
+          # one collection cycle of a 200k object inventory is ~180k points: the queue must hold more than one cycle
+          queue_size: 1000000
           block_on_overflow: true
           batch:
             flush_timeout: 5s

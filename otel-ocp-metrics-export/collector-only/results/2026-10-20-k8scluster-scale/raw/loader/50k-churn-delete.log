@@ -1,0 +1,1 @@
+{"label": "delete units 0-5", "requests": 5, "created_or_deleted": 5, "already": 0, "errors": 0, "seconds": 1.6, "rate": 3.1, "workers": 8, "latency_s": {"p50": 1.609, "p90": 1.615, "p99": 1.615}, "retries": {}, "per_kind": {"delete-deployments": {"ok": 5, "exists": 0, "errors": 0}}}

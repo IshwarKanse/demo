@@ -1,0 +1,1 @@
+{"label": "recreate units 0-5", "requests": 750, "created_or_deleted": 750, "already": 0, "errors": 0, "seconds": 0.6, "rate": 1174.1, "workers": 24, "latency_s": {"p50": 0.018, "p90": 0.027, "p99": 0.061}, "retries": {}, "per_kind": {"deployments": {"ok": 750, "exists": 0, "errors": 0}}}

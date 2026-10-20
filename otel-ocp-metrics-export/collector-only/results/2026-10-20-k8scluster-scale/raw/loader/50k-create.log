@@ -1,0 +1,10 @@
+create units 10-50: 4933 done (0 errors) in 5 s, 986/s, retries {}
+create units 10-50: 9397 done (0 errors) in 10 s, 940/s, retries {}
+create units 10-50: 13421 done (0 errors) in 15 s, 895/s, retries {}
+create units 10-50: 17433 done (0 errors) in 20 s, 871/s, retries {}
+create units 10-50: 21576 done (0 errors) in 25 s, 863/s, retries {}
+create units 10-50: 25948 done (0 errors) in 30 s, 865/s, retries {}
+create units 10-50: 30333 done (0 errors) in 35 s, 866/s, retries {}
+create units 10-50: 34657 done (0 errors) in 40 s, 866/s, retries {}
+create units 10-50: 38921 done (0 errors) in 45 s, 865/s, retries {}
+{"label": "create units 10-50", "requests": 40000, "created_or_deleted": 40000, "already": 0, "errors": 0, "seconds": 46.7, "rate": 856.9, "workers": 24, "latency_s": {"p50": 0.02, "p90": 0.053, "p99": 0.132}, "retries": {}, "per_kind": {"namespaces": {"ok": 40, "exists": 0, "errors": 0}, "configmaps": {"ok": 16000, "exists": 0, "errors": 0}, "secrets": {"ok": 10520, "exists": 0, "errors": 0}, "deployments": {"ok": 6000, "exists": 0, "errors": 0}, "services": {"ok": 4000, "exists": 0, "errors": 0}, "jobs": {"ok": 2000, "exists": 0, "errors": 0}, "cronjobs": {"ok": 1200, "exists": 0, "errors": 0}, "quotas": {"ok": 240, "exists": 0, "errors": 0}}}

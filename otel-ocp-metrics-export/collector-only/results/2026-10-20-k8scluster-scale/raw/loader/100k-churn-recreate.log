@@ -1,0 +1,2 @@
+recreate units 0-10: 938 done (0 errors) in 5 s, 188/s, retries {}
+{"label": "recreate units 0-10", "requests": 1500, "created_or_deleted": 1500, "already": 0, "errors": 0, "seconds": 7.8, "rate": 191.6, "workers": 24, "latency_s": {"p50": 0.018, "p90": 0.364, "p99": 1.377}, "retries": {}, "per_kind": {"deployments": {"ok": 1500, "exists": 0, "errors": 0}}}
