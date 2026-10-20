@@ -20,7 +20,7 @@ here=$(cd "$(dirname "$0")" && pwd); root=$(cd "$here/../.." && pwd)
 cd "$here/.."
 dir=$1; phase=$2; shift 2
 ns=${NAMESPACE:-otel-platform-metrics}; settle=${SETTLE_MIN:-5}; window=${WINDOW_MIN:-20}
-mkdir -p "$dir"; table="$dir/table.md"
+mkdir -p "$dir"; dir=$(cd "$dir" && pwd); table="$dir/table.md"
 log() { echo "== $(date -u +%FT%TZ) $*"; }
 INTERVAL=${INTERVAL:-30s}; KUBELET_JOBS=${KUBELET_JOBS:-1}; FILE_STORAGE=${FILE_STORAGE:-}; VARIANT=deployment
 config() {
