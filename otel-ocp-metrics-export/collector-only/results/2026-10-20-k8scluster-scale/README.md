@@ -32,8 +32,9 @@ step with the same phases. The ladder ended where the control plane ended, not w
   before each create and after each phase (`raw/control-plane.jsonl`); the ladder stops when the snapshot before a
   create shows the control plane at its limit.
 - **Instruments**: the collector under test is `08-k8scluster-collector.yaml` (the `k8s_cluster` receiver alone,
-  30 s interval, product collector 0.158.0, 4Gi limit with the percentage memory_limiter, exported to the vendor
-  stand-in Prometheus whose limit was raised to 24Gi for the series count); kube-state-metrics is the one of the
+  30 s interval, product collector 0.158.0, 4Gi limit with the percentage memory_limiter, the item-sized sending
+  queue raised to 1,000,000 so that one collection cycle of a 200k inventory fits, exported to the vendor stand-in
+  Prometheus whose limit was raised to 24Gi for the series count); kube-state-metrics is the one of the
   monitoring stack (no limit, 1 min scrape), read through the platform Prometheus. Series exported by
   `scripts/export-series.sh` with `PROFILE=k8scluster-scale` (cAdvisor and the collectors' telemetry, the API server
   LIST and watch-list histograms, etcd size, kube-state-metrics scrape duration) into `raw/<run>/*.csv`, charts by
@@ -50,7 +51,7 @@ Per step, steady averages over 20 min, maxima over all phases of the step (`summ
 
 | step (created) | stored / watched by collector / by kube-state-metrics | collector CPU steady, churn p95 | collector WSS steady, max, RSS max | collector points/s (points per cycle vs expected) | kube-state-metrics CPU steady, churn p95 | kube-state-metrics WSS steady, max, RSS max | kube-state-metrics samples per scrape, scrape s | inventory after create: collector / ksm | after restart: collector / ksm | kube-apiserver CPU (3), WSS max per instance | etcd db |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 0k | 21k / 1.3k / 3.5k | 0.001 / - | 68 / 68 / 157 MiB | 119 (100 %) | 0.002 / - | 164 / 168 / 152 MiB | 23.6k, 0.1 | - | - | 0.87, 2.7 GiB | 70 MiB |
+| 0k | 8k / 1.3k / 3.5k | 0.001 / - | 68 / 68 / 157 MiB | 119 (100 %) | 0.002 / - | 164 / 168 / 152 MiB | 23.6k, 0.1 | - | - | 0.87, 2.7 GiB | 70 MiB |
 | 10k | 21k / 6.0k / 15k | 0.003 / 0.005 | 124 / 131 / 210 MiB | 470 (111 %) | 0.002 / 0.004 | 174 / 211 / 240 MiB | 86k, 0.2 | 5 s / 0 s | 35 s / 45 s | 0.82, 3.2 GiB | 109 MiB |
 | 50k | 78k / 25k / 65k | 0.010 / 0.017 | 308 / 317 / 367 MiB | 1,719 (106 %) | 0.006 / 0.013 | 249 / 568 / 498 MiB | 321k, 0.8 | 0 s / 25 s | 35 s / 35 s | 0.82, 3.8 GiB | 267 MiB |
 | 100k | 147k / 50k / 128k | 0.020 / 0.030 | 572 / 594 / 566 MiB | 3,278 (106 %) | 0.012 / 0.022 | 517 / 963 / 782 MiB | 614k, 1.7 | 10 s / 0 s | 36 s / 35 s | 1.18, 5.3 GiB | 419 MiB |
@@ -80,8 +81,8 @@ What the phases showed:
   streaming. During the steady windows both only re-establish expiring watches (the collector 22 to 38, kube-state-
   metrics 58 to 83 in 20 min); the churn adds nothing visible.
 - **The control plane is the limit, not the clients.** kube-apiserver memory grows with the stored objects (its watch
-  cache holds every object for every client): 2.6 GiB per instance at 21k, 3.8 at 78k, 5.0 at 147k and 6.7 GiB
-  during the 200k create, about 2 GiB per 100,000 stored objects per instance. The 24-connection create burst of the
+  cache holds every object for every client): 2.6 GiB per instance with the empty inventory (8k stored), 2.9 at 21k,
+  3.8 at 78k, 5.0 at 147k and 6.7 GiB during the 200k create, about 2 GiB per 100,000 stored objects per instance. The 24-connection create burst of the
   100k step (800 creates/s) overloaded the etcd leader for 70 s ("leader is overloaded likely from slow disk", one
   leader change, 500 and 504 responses, LIST p99 9 s in that window) while the clients kept their inventories (both
   had the 100k inventory 10 s after the loader ended). The 200k step was run with 8 connections and still went down
