@@ -1,0 +1,633 @@
+2026-10-22T06:43:13.628Z	info	otelconftelemetry/tracer.go:47	Internal trace telemetry disabled	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}}
+2026-10-22T06:43:13.628Z	info	filterprocessor@v0.158.0/metrics.go:125	Metric filter configured	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "filter/dump", "otelcol.component.kind": "processor", "otelcol.pipeline.id": "metrics/dump", "otelcol.signal": "metrics", "include match_type": "regexp", "include expressions": [], "include metric names": ["^(up|scrape_samples_scraped|node_cpu_seconds(_total)?|node_memory_MemAvailable_bytes|node_network_receive_bytes(_total)?|etcd_disk_wal_fsync_duration_seconds(_bucket|_sum|_count)?|prometheus_tsdb_head_series|prometheus_remote_storage_(samples|histograms|exemplars)_.*|kube_node_status_condition|kubelet_running_pods|go_gc_duration_seconds(_sum|_count)?|container_cpu_usage_seconds(_total)?|ALERTS|target_info)$"], "include metrics with resource attributes": null, "exclude match_type": "", "exclude expressions": [], "exclude metric names": [], "exclude metrics with resource attributes": null}
+2026-10-22T06:43:13.628Z	info	memorylimiter@v0.158.0/memorylimiter.go:185	Using percentage memory limiter	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.kind": "processor", "total_memory_mib": 2048, "limit_percentage": 80, "spike_limit_percentage": 20}
+2026-10-22T06:43:13.628Z	info	memorylimiter@v0.158.0/memorylimiter.go:109	Memory limiter configured	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.kind": "processor", "limit_mib": 1638, "spike_limit_mib": 409, "check_interval": 1}
+2026-10-22T06:43:13.629Z	warn	builders/builders.go:40	"otlphttp" alias is deprecated; use "otlp_http" instead	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics"}
+2026-10-22T06:43:13.629Z	info	service@v0.158.0/service.go:259	Starting otelcol...	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "Version": "0.158.0", "NumCPU": 4}
+2026-10-22T06:43:13.629Z	info	extensions/extensions.go:44	Starting extensions...	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}}
+2026-10-22T06:43:13.630Z	info	service@v0.158.0/service.go:282	Everything is ready. Begin running and processing data.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}}
+2026-10-22T07:06:05.560Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "5.652519131s"}
+2026-10-22T07:06:05.841Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "6.505410252s"}
+2026-10-22T07:06:05.893Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "7.345105749s"}
+2026-10-22T07:06:05.917Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "6.761552866s"}
+2026-10-22T07:06:06.098Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "4.479149047s"}
+2026-10-22T07:06:06.170Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "3.637695367s"}
+2026-10-22T07:06:06.209Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "7.190662848s"}
+2026-10-22T07:06:06.356Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "5.454166622s"}
+2026-10-22T07:06:06.731Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "4.719817571s"}
+2026-10-22T07:06:06.741Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "4.715128778s"}
+2026-10-22T07:06:15.708Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "7.922215194s"}
+2026-10-22T07:06:17.012Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "11.564734792s"}
+2026-10-22T07:06:18.399Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "7.941150664s"}
+2026-10-22T07:06:19.931Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "13.792162592s"}
+2026-10-22T07:06:20.006Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "16.621459622s"}
+2026-10-22T07:06:20.418Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "8.480524146s"}
+2026-10-22T07:06:20.716Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "12.918790613s"}
+2026-10-22T07:06:22.119Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "8.171221s"}
+2026-10-22T07:06:23.656Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "22.528057571s"}
+2026-10-22T07:06:23.767Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "12.051029061s"}
+2026-10-22T07:06:26.355Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "11.014375994s"}
+2026-10-22T07:06:28.596Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "20.230484923s"}
+2026-10-22T07:06:28.922Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "23.986563585s"}
+2026-10-22T07:06:30.319Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "19.05823282s"}
+2026-10-22T07:06:31.138Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "17.738572897s"}
+2026-10-22T07:06:33.647Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "23.57260665s"}
+2026-10-22T07:06:33.743Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "16.178922285s"}
+2026-10-22T07:06:35.836Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "23.785057209s"}
+2026-10-22T07:06:36.650Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "11.71408862s"}
+2026-10-22T07:06:37.384Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "16.841329054s"}
+2026-10-22T07:06:40.820Z	error	internal/base_exporter.go:118	Exporting failed. Rejecting data.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "context canceled", "rejected_items": 2000}
+go.opentelemetry.io/collector/exporter/exporterhelper/internal.(*BaseExporter).Send
+	go.opentelemetry.io/collector/exporter/exporterhelper@v0.158.0/internal/base_exporter.go:118
+go.opentelemetry.io/collector/exporter/exporterhelper/internal.NewMetricsRequest.newConsumeMetrics.func1
+	go.opentelemetry.io/collector/exporter/exporterhelper@v0.158.0/internal/new_request.go:176
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/service/internal/refconsumer.refMetrics.ConsumeMetrics
+	go.opentelemetry.io/collector/service@v0.158.0/internal/refconsumer/metrics.go:29
+go.opentelemetry.io/collector/internal/fanoutconsumer.(*metricsConsumer).ConsumeMetrics
+	go.opentelemetry.io/collector/internal/fanoutconsumer@v0.158.0/metrics.go:60
+go.opentelemetry.io/collector/processor/processorhelper.NewMetrics.func1
+	go.opentelemetry.io/collector/processor/processorhelper@v0.158.0/metrics.go:71
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/service/internal/refconsumer.refMetrics.ConsumeMetrics
+	go.opentelemetry.io/collector/service@v0.158.0/internal/refconsumer/metrics.go:29
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/internal/fanoutconsumer.(*metricsConsumer).ConsumeMetrics
+	go.opentelemetry.io/collector/internal/fanoutconsumer@v0.158.0/metrics.go:53
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver.(*prometheusRemoteWriteReceiver).handlePRW
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver@v0.158.0/receiver.go:229
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+net/http.(*ServeMux).ServeHTTP
+	net/http/server.go:2828
+go.opentelemetry.io/collector/config/confighttp.(*decompressor).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/compression.go:289
+go.opentelemetry.io/collector/config/confighttp.(*ServerConfig).ToServer.maxRequestBodySizeInterceptor.func3
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/server.go:394
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*middleware).serveHTTP
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:185
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.NewMiddleware.func2.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:67
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/collector/config/confighttp.(*clientInfoHandler).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/clientinfohandler.go:26
+net/http.serverHandler.ServeHTTP
+	net/http/server.go:3311
+net/http.(*conn).serve
+	net/http/server.go:2067
+2026-10-22T07:06:40.820Z	error	prometheusremotewritereceiver@v0.158.0/receiver.go:232	Error consuming metrics	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "prometheus_remote_write", "otelcol.component.kind": "receiver", "otelcol.signal": "metrics", "error": "context canceled"}
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver.(*prometheusRemoteWriteReceiver).handlePRW
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver@v0.158.0/receiver.go:232
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+net/http.(*ServeMux).ServeHTTP
+	net/http/server.go:2828
+go.opentelemetry.io/collector/config/confighttp.(*decompressor).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/compression.go:289
+go.opentelemetry.io/collector/config/confighttp.(*ServerConfig).ToServer.maxRequestBodySizeInterceptor.func3
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/server.go:394
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*middleware).serveHTTP
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:185
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.NewMiddleware.func2.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:67
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/collector/config/confighttp.(*clientInfoHandler).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/clientinfohandler.go:26
+net/http.serverHandler.ServeHTTP
+	net/http/server.go:3311
+net/http.(*conn).serve
+	net/http/server.go:2067
+2026-10-22T07:06:40.822Z	error	internal/base_exporter.go:118	Exporting failed. Rejecting data.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "context canceled", "rejected_items": 2000}
+go.opentelemetry.io/collector/exporter/exporterhelper/internal.(*BaseExporter).Send
+	go.opentelemetry.io/collector/exporter/exporterhelper@v0.158.0/internal/base_exporter.go:118
+go.opentelemetry.io/collector/exporter/exporterhelper/internal.NewMetricsRequest.newConsumeMetrics.func1
+	go.opentelemetry.io/collector/exporter/exporterhelper@v0.158.0/internal/new_request.go:176
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/service/internal/refconsumer.refMetrics.ConsumeMetrics
+	go.opentelemetry.io/collector/service@v0.158.0/internal/refconsumer/metrics.go:29
+go.opentelemetry.io/collector/internal/fanoutconsumer.(*metricsConsumer).ConsumeMetrics
+	go.opentelemetry.io/collector/internal/fanoutconsumer@v0.158.0/metrics.go:60
+go.opentelemetry.io/collector/processor/processorhelper.NewMetrics.func1
+	go.opentelemetry.io/collector/processor/processorhelper@v0.158.0/metrics.go:71
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/service/internal/refconsumer.refMetrics.ConsumeMetrics
+	go.opentelemetry.io/collector/service@v0.158.0/internal/refconsumer/metrics.go:29
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/internal/fanoutconsumer.(*metricsConsumer).ConsumeMetrics
+	go.opentelemetry.io/collector/internal/fanoutconsumer@v0.158.0/metrics.go:53
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver.(*prometheusRemoteWriteReceiver).handlePRW
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver@v0.158.0/receiver.go:229
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+net/http.(*ServeMux).ServeHTTP
+	net/http/server.go:2828
+go.opentelemetry.io/collector/config/confighttp.(*decompressor).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/compression.go:289
+go.opentelemetry.io/collector/config/confighttp.(*ServerConfig).ToServer.maxRequestBodySizeInterceptor.func3
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/server.go:394
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*middleware).serveHTTP
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:185
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.NewMiddleware.func2.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:67
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/collector/config/confighttp.(*clientInfoHandler).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/clientinfohandler.go:26
+net/http.serverHandler.ServeHTTP
+	net/http/server.go:3311
+net/http.(*conn).serve
+	net/http/server.go:2067
+2026-10-22T07:06:40.822Z	error	prometheusremotewritereceiver@v0.158.0/receiver.go:232	Error consuming metrics	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "prometheus_remote_write", "otelcol.component.kind": "receiver", "otelcol.signal": "metrics", "error": "context canceled"}
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver.(*prometheusRemoteWriteReceiver).handlePRW
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver@v0.158.0/receiver.go:232
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+net/http.(*ServeMux).ServeHTTP
+	net/http/server.go:2828
+go.opentelemetry.io/collector/config/confighttp.(*decompressor).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/compression.go:289
+go.opentelemetry.io/collector/config/confighttp.(*ServerConfig).ToServer.maxRequestBodySizeInterceptor.func3
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/server.go:394
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*middleware).serveHTTP
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:185
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.NewMiddleware.func2.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:67
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/collector/config/confighttp.(*clientInfoHandler).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/clientinfohandler.go:26
+net/http.serverHandler.ServeHTTP
+	net/http/server.go:3311
+net/http.(*conn).serve
+	net/http/server.go:2067
+2026-10-22T07:06:46.208Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "16.722883086s"}
+2026-10-22T07:06:48.386Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "33.57999038s"}
+2026-10-22T07:06:48.846Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "20.063133619s"}
+2026-10-22T07:06:48.890Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "22.264746538s"}
+2026-10-22T07:06:49.407Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "20.068785353s"}
+2026-10-22T07:06:49.942Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "14.221405193s"}
+2026-10-22T07:06:52.931Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "13.270902968s"}
+2026-10-22T07:06:54.239Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "26.184416097s"}
+2026-10-22T07:06:57.233Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "22.084482642s"}
+2026-10-22T07:06:59.638Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "21.692907039s"}
+2026-10-22T07:07:02.954Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "26.474619876s"}
+2026-10-22T07:07:04.195Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "39.069668504s"}
+2026-10-22T07:07:06.224Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "36.261032137s"}
+2026-10-22T07:07:08.929Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "44.514920081s"}
+2026-10-22T07:07:09.505Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "26.241474188s"}
+2026-10-22T07:07:10.851Z	error	internal/base_exporter.go:118	Exporting failed. Rejecting data.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "context canceled", "rejected_items": 2000}
+go.opentelemetry.io/collector/exporter/exporterhelper/internal.(*BaseExporter).Send
+	go.opentelemetry.io/collector/exporter/exporterhelper@v0.158.0/internal/base_exporter.go:118
+go.opentelemetry.io/collector/exporter/exporterhelper/internal.NewMetricsRequest.newConsumeMetrics.func1
+	go.opentelemetry.io/collector/exporter/exporterhelper@v0.158.0/internal/new_request.go:176
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/service/internal/refconsumer.refMetrics.ConsumeMetrics
+	go.opentelemetry.io/collector/service@v0.158.0/internal/refconsumer/metrics.go:29
+go.opentelemetry.io/collector/internal/fanoutconsumer.(*metricsConsumer).ConsumeMetrics
+	go.opentelemetry.io/collector/internal/fanoutconsumer@v0.158.0/metrics.go:60
+go.opentelemetry.io/collector/processor/processorhelper.NewMetrics.func1
+	go.opentelemetry.io/collector/processor/processorhelper@v0.158.0/metrics.go:71
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/service/internal/refconsumer.refMetrics.ConsumeMetrics
+	go.opentelemetry.io/collector/service@v0.158.0/internal/refconsumer/metrics.go:29
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/internal/fanoutconsumer.(*metricsConsumer).ConsumeMetrics
+	go.opentelemetry.io/collector/internal/fanoutconsumer@v0.158.0/metrics.go:53
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver.(*prometheusRemoteWriteReceiver).handlePRW
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver@v0.158.0/receiver.go:229
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+net/http.(*ServeMux).ServeHTTP
+	net/http/server.go:2828
+go.opentelemetry.io/collector/config/confighttp.(*decompressor).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/compression.go:289
+go.opentelemetry.io/collector/config/confighttp.(*ServerConfig).ToServer.maxRequestBodySizeInterceptor.func3
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/server.go:394
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*middleware).serveHTTP
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:185
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.NewMiddleware.func2.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:67
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/collector/config/confighttp.(*clientInfoHandler).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/clientinfohandler.go:26
+net/http.serverHandler.ServeHTTP
+	net/http/server.go:3311
+net/http.(*conn).serve
+	net/http/server.go:2067
+2026-10-22T07:07:10.851Z	error	prometheusremotewritereceiver@v0.158.0/receiver.go:232	Error consuming metrics	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "prometheus_remote_write", "otelcol.component.kind": "receiver", "otelcol.signal": "metrics", "error": "context canceled"}
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver.(*prometheusRemoteWriteReceiver).handlePRW
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver@v0.158.0/receiver.go:232
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+net/http.(*ServeMux).ServeHTTP
+	net/http/server.go:2828
+go.opentelemetry.io/collector/config/confighttp.(*decompressor).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/compression.go:289
+go.opentelemetry.io/collector/config/confighttp.(*ServerConfig).ToServer.maxRequestBodySizeInterceptor.func3
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/server.go:394
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*middleware).serveHTTP
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:185
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.NewMiddleware.func2.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:67
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/collector/config/confighttp.(*clientInfoHandler).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/clientinfohandler.go:26
+net/http.serverHandler.ServeHTTP
+	net/http/server.go:3311
+net/http.(*conn).serve
+	net/http/server.go:2067
+2026-10-22T07:07:10.852Z	error	internal/base_exporter.go:118	Exporting failed. Rejecting data.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "context canceled", "rejected_items": 2000}
+go.opentelemetry.io/collector/exporter/exporterhelper/internal.(*BaseExporter).Send
+	go.opentelemetry.io/collector/exporter/exporterhelper@v0.158.0/internal/base_exporter.go:118
+go.opentelemetry.io/collector/exporter/exporterhelper/internal.NewMetricsRequest.newConsumeMetrics.func1
+	go.opentelemetry.io/collector/exporter/exporterhelper@v0.158.0/internal/new_request.go:176
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/service/internal/refconsumer.refMetrics.ConsumeMetrics
+	go.opentelemetry.io/collector/service@v0.158.0/internal/refconsumer/metrics.go:29
+go.opentelemetry.io/collector/internal/fanoutconsumer.(*metricsConsumer).ConsumeMetrics
+	go.opentelemetry.io/collector/internal/fanoutconsumer@v0.158.0/metrics.go:60
+go.opentelemetry.io/collector/processor/processorhelper.NewMetrics.func1
+	go.opentelemetry.io/collector/processor/processorhelper@v0.158.0/metrics.go:71
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/service/internal/refconsumer.refMetrics.ConsumeMetrics
+	go.opentelemetry.io/collector/service@v0.158.0/internal/refconsumer/metrics.go:29
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/internal/fanoutconsumer.(*metricsConsumer).ConsumeMetrics
+	go.opentelemetry.io/collector/internal/fanoutconsumer@v0.158.0/metrics.go:53
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver.(*prometheusRemoteWriteReceiver).handlePRW
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver@v0.158.0/receiver.go:229
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+net/http.(*ServeMux).ServeHTTP
+	net/http/server.go:2828
+go.opentelemetry.io/collector/config/confighttp.(*decompressor).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/compression.go:289
+go.opentelemetry.io/collector/config/confighttp.(*ServerConfig).ToServer.maxRequestBodySizeInterceptor.func3
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/server.go:394
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*middleware).serveHTTP
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:185
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.NewMiddleware.func2.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:67
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/collector/config/confighttp.(*clientInfoHandler).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/clientinfohandler.go:26
+net/http.serverHandler.ServeHTTP
+	net/http/server.go:3311
+net/http.(*conn).serve
+	net/http/server.go:2067
+2026-10-22T07:07:10.852Z	error	prometheusremotewritereceiver@v0.158.0/receiver.go:232	Error consuming metrics	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "prometheus_remote_write", "otelcol.component.kind": "receiver", "otelcol.signal": "metrics", "error": "context canceled"}
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver.(*prometheusRemoteWriteReceiver).handlePRW
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver@v0.158.0/receiver.go:232
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+net/http.(*ServeMux).ServeHTTP
+	net/http/server.go:2828
+go.opentelemetry.io/collector/config/confighttp.(*decompressor).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/compression.go:289
+go.opentelemetry.io/collector/config/confighttp.(*ServerConfig).ToServer.maxRequestBodySizeInterceptor.func3
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/server.go:394
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*middleware).serveHTTP
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:185
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.NewMiddleware.func2.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:67
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/collector/config/confighttp.(*clientInfoHandler).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/clientinfohandler.go:26
+net/http.serverHandler.ServeHTTP
+	net/http/server.go:3311
+net/http.(*conn).serve
+	net/http/server.go:2067
+2026-10-22T07:07:11.167Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "37.318804319s"}
+2026-10-22T07:07:19.331Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "34.756903355s"}
+2026-10-22T07:07:20.438Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "31.977142218s"}
+2026-10-22T07:07:21.350Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "42.769334012s"}
+2026-10-22T07:07:21.986Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "18.084252126s"}
+2026-10-22T07:07:29.452Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "34.32429372s"}
+2026-10-22T07:07:35.777Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "26.762058143s"}
+2026-10-22T07:07:40.089Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "23.791920671s"}
+2026-10-22T07:07:40.913Z	error	internal/base_exporter.go:118	Exporting failed. Rejecting data.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "context canceled", "rejected_items": 2000}
+go.opentelemetry.io/collector/exporter/exporterhelper/internal.(*BaseExporter).Send
+	go.opentelemetry.io/collector/exporter/exporterhelper@v0.158.0/internal/base_exporter.go:118
+go.opentelemetry.io/collector/exporter/exporterhelper/internal.NewMetricsRequest.newConsumeMetrics.func1
+	go.opentelemetry.io/collector/exporter/exporterhelper@v0.158.0/internal/new_request.go:176
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/service/internal/refconsumer.refMetrics.ConsumeMetrics
+	go.opentelemetry.io/collector/service@v0.158.0/internal/refconsumer/metrics.go:29
+go.opentelemetry.io/collector/internal/fanoutconsumer.(*metricsConsumer).ConsumeMetrics
+	go.opentelemetry.io/collector/internal/fanoutconsumer@v0.158.0/metrics.go:60
+go.opentelemetry.io/collector/processor/processorhelper.NewMetrics.func1
+	go.opentelemetry.io/collector/processor/processorhelper@v0.158.0/metrics.go:71
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/service/internal/refconsumer.refMetrics.ConsumeMetrics
+	go.opentelemetry.io/collector/service@v0.158.0/internal/refconsumer/metrics.go:29
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/internal/fanoutconsumer.(*metricsConsumer).ConsumeMetrics
+	go.opentelemetry.io/collector/internal/fanoutconsumer@v0.158.0/metrics.go:53
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver.(*prometheusRemoteWriteReceiver).handlePRW
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver@v0.158.0/receiver.go:229
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+net/http.(*ServeMux).ServeHTTP
+	net/http/server.go:2828
+go.opentelemetry.io/collector/config/confighttp.(*decompressor).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/compression.go:289
+go.opentelemetry.io/collector/config/confighttp.(*ServerConfig).ToServer.maxRequestBodySizeInterceptor.func3
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/server.go:394
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*middleware).serveHTTP
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:185
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.NewMiddleware.func2.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:67
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/collector/config/confighttp.(*clientInfoHandler).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/clientinfohandler.go:26
+net/http.serverHandler.ServeHTTP
+	net/http/server.go:3311
+net/http.(*conn).serve
+	net/http/server.go:2067
+2026-10-22T07:07:40.913Z	error	prometheusremotewritereceiver@v0.158.0/receiver.go:232	Error consuming metrics	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "prometheus_remote_write", "otelcol.component.kind": "receiver", "otelcol.signal": "metrics", "error": "context canceled"}
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver.(*prometheusRemoteWriteReceiver).handlePRW
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver@v0.158.0/receiver.go:232
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+net/http.(*ServeMux).ServeHTTP
+	net/http/server.go:2828
+go.opentelemetry.io/collector/config/confighttp.(*decompressor).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/compression.go:289
+go.opentelemetry.io/collector/config/confighttp.(*ServerConfig).ToServer.maxRequestBodySizeInterceptor.func3
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/server.go:394
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*middleware).serveHTTP
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:185
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.NewMiddleware.func2.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:67
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/collector/config/confighttp.(*clientInfoHandler).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/clientinfohandler.go:26
+net/http.serverHandler.ServeHTTP
+	net/http/server.go:3311
+net/http.(*conn).serve
+	net/http/server.go:2067
+2026-10-22T07:07:40.913Z	error	internal/base_exporter.go:118	Exporting failed. Rejecting data.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "context canceled", "rejected_items": 2000}
+go.opentelemetry.io/collector/exporter/exporterhelper/internal.(*BaseExporter).Send
+	go.opentelemetry.io/collector/exporter/exporterhelper@v0.158.0/internal/base_exporter.go:118
+go.opentelemetry.io/collector/exporter/exporterhelper/internal.NewMetricsRequest.newConsumeMetrics.func1
+	go.opentelemetry.io/collector/exporter/exporterhelper@v0.158.0/internal/new_request.go:176
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/service/internal/refconsumer.refMetrics.ConsumeMetrics
+	go.opentelemetry.io/collector/service@v0.158.0/internal/refconsumer/metrics.go:29
+go.opentelemetry.io/collector/internal/fanoutconsumer.(*metricsConsumer).ConsumeMetrics
+	go.opentelemetry.io/collector/internal/fanoutconsumer@v0.158.0/metrics.go:60
+go.opentelemetry.io/collector/processor/processorhelper.NewMetrics.func1
+	go.opentelemetry.io/collector/processor/processorhelper@v0.158.0/metrics.go:71
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/service/internal/refconsumer.refMetrics.ConsumeMetrics
+	go.opentelemetry.io/collector/service@v0.158.0/internal/refconsumer/metrics.go:29
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/internal/fanoutconsumer.(*metricsConsumer).ConsumeMetrics
+	go.opentelemetry.io/collector/internal/fanoutconsumer@v0.158.0/metrics.go:53
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver.(*prometheusRemoteWriteReceiver).handlePRW
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver@v0.158.0/receiver.go:229
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+net/http.(*ServeMux).ServeHTTP
+	net/http/server.go:2828
+go.opentelemetry.io/collector/config/confighttp.(*decompressor).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/compression.go:289
+go.opentelemetry.io/collector/config/confighttp.(*ServerConfig).ToServer.maxRequestBodySizeInterceptor.func3
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/server.go:394
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*middleware).serveHTTP
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:185
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.NewMiddleware.func2.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:67
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/collector/config/confighttp.(*clientInfoHandler).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/clientinfohandler.go:26
+net/http.serverHandler.ServeHTTP
+	net/http/server.go:3311
+net/http.(*conn).serve
+	net/http/server.go:2067
+2026-10-22T07:07:40.913Z	error	prometheusremotewritereceiver@v0.158.0/receiver.go:232	Error consuming metrics	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "prometheus_remote_write", "otelcol.component.kind": "receiver", "otelcol.signal": "metrics", "error": "context canceled"}
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver.(*prometheusRemoteWriteReceiver).handlePRW
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver@v0.158.0/receiver.go:232
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+net/http.(*ServeMux).ServeHTTP
+	net/http/server.go:2828
+go.opentelemetry.io/collector/config/confighttp.(*decompressor).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/compression.go:289
+go.opentelemetry.io/collector/config/confighttp.(*ServerConfig).ToServer.maxRequestBodySizeInterceptor.func3
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/server.go:394
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*middleware).serveHTTP
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:185
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.NewMiddleware.func2.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:67
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/collector/config/confighttp.(*clientInfoHandler).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/clientinfohandler.go:26
+net/http.serverHandler.ServeHTTP
+	net/http/server.go:3311
+net/http.(*conn).serve
+	net/http/server.go:2067
+2026-10-22T07:07:42.508Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "22.467279556s"}
+2026-10-22T07:07:43.284Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "43.941549963s"}
+2026-10-22T07:07:48.499Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "19.893551069s"}
+2026-10-22T07:07:52.430Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "29.624069488s"}
+2026-10-22T07:07:53.463Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "22.199094609s"}
+2026-10-22T07:07:54.100Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "35.662316108s"}
+2026-10-22T07:08:02.567Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "40.027929413s"}
+2026-10-22T07:08:03.799Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "27.010189338s"}
+2026-10-22T07:08:03.901Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "24.62838543s"}
+2026-10-22T07:08:04.138Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "23.49113034s"}
+2026-10-22T07:08:04.998Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "19.364282982s"}
+2026-10-22T07:08:08.406Z	info	internal/retry_sender.go:136	Exporting failed. Will retry the request after interval.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "failed to make an HTTP request: Post \"http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp/v1/metrics\": dial tcp IP-91:9090: connect: connection refused", "interval": "26.88038875s"}
+2026-10-22T07:08:11.034Z	error	internal/base_exporter.go:118	Exporting failed. Rejecting data.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "context canceled", "rejected_items": 2000}
+go.opentelemetry.io/collector/exporter/exporterhelper/internal.(*BaseExporter).Send
+	go.opentelemetry.io/collector/exporter/exporterhelper@v0.158.0/internal/base_exporter.go:118
+go.opentelemetry.io/collector/exporter/exporterhelper/internal.NewMetricsRequest.newConsumeMetrics.func1
+	go.opentelemetry.io/collector/exporter/exporterhelper@v0.158.0/internal/new_request.go:176
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/service/internal/refconsumer.refMetrics.ConsumeMetrics
+	go.opentelemetry.io/collector/service@v0.158.0/internal/refconsumer/metrics.go:29
+go.opentelemetry.io/collector/internal/fanoutconsumer.(*metricsConsumer).ConsumeMetrics
+	go.opentelemetry.io/collector/internal/fanoutconsumer@v0.158.0/metrics.go:60
+go.opentelemetry.io/collector/processor/processorhelper.NewMetrics.func1
+	go.opentelemetry.io/collector/processor/processorhelper@v0.158.0/metrics.go:71
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/service/internal/refconsumer.refMetrics.ConsumeMetrics
+	go.opentelemetry.io/collector/service@v0.158.0/internal/refconsumer/metrics.go:29
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/internal/fanoutconsumer.(*metricsConsumer).ConsumeMetrics
+	go.opentelemetry.io/collector/internal/fanoutconsumer@v0.158.0/metrics.go:53
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver.(*prometheusRemoteWriteReceiver).handlePRW
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver@v0.158.0/receiver.go:229
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+net/http.(*ServeMux).ServeHTTP
+	net/http/server.go:2828
+go.opentelemetry.io/collector/config/confighttp.(*decompressor).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/compression.go:289
+go.opentelemetry.io/collector/config/confighttp.(*ServerConfig).ToServer.maxRequestBodySizeInterceptor.func3
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/server.go:394
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*middleware).serveHTTP
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:185
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.NewMiddleware.func2.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:67
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/collector/config/confighttp.(*clientInfoHandler).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/clientinfohandler.go:26
+net/http.serverHandler.ServeHTTP
+	net/http/server.go:3311
+net/http.(*conn).serve
+	net/http/server.go:2067
+2026-10-22T07:08:11.034Z	error	prometheusremotewritereceiver@v0.158.0/receiver.go:232	Error consuming metrics	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "prometheus_remote_write", "otelcol.component.kind": "receiver", "otelcol.signal": "metrics", "error": "context canceled"}
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver.(*prometheusRemoteWriteReceiver).handlePRW
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver@v0.158.0/receiver.go:232
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+net/http.(*ServeMux).ServeHTTP
+	net/http/server.go:2828
+go.opentelemetry.io/collector/config/confighttp.(*decompressor).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/compression.go:289
+go.opentelemetry.io/collector/config/confighttp.(*ServerConfig).ToServer.maxRequestBodySizeInterceptor.func3
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/server.go:394
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*middleware).serveHTTP
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:185
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.NewMiddleware.func2.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:67
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/collector/config/confighttp.(*clientInfoHandler).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/clientinfohandler.go:26
+net/http.serverHandler.ServeHTTP
+	net/http/server.go:3311
+net/http.(*conn).serve
+	net/http/server.go:2067
+2026-10-22T07:08:11.050Z	error	internal/base_exporter.go:118	Exporting failed. Rejecting data.	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "otlphttp", "otelcol.component.kind": "exporter", "otelcol.signal": "metrics", "error": "context canceled", "rejected_items": 2000}
+go.opentelemetry.io/collector/exporter/exporterhelper/internal.(*BaseExporter).Send
+	go.opentelemetry.io/collector/exporter/exporterhelper@v0.158.0/internal/base_exporter.go:118
+go.opentelemetry.io/collector/exporter/exporterhelper/internal.NewMetricsRequest.newConsumeMetrics.func1
+	go.opentelemetry.io/collector/exporter/exporterhelper@v0.158.0/internal/new_request.go:176
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/service/internal/refconsumer.refMetrics.ConsumeMetrics
+	go.opentelemetry.io/collector/service@v0.158.0/internal/refconsumer/metrics.go:29
+go.opentelemetry.io/collector/internal/fanoutconsumer.(*metricsConsumer).ConsumeMetrics
+	go.opentelemetry.io/collector/internal/fanoutconsumer@v0.158.0/metrics.go:60
+go.opentelemetry.io/collector/processor/processorhelper.NewMetrics.func1
+	go.opentelemetry.io/collector/processor/processorhelper@v0.158.0/metrics.go:71
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/service/internal/refconsumer.refMetrics.ConsumeMetrics
+	go.opentelemetry.io/collector/service@v0.158.0/internal/refconsumer/metrics.go:29
+go.opentelemetry.io/collector/consumer.ConsumeMetricsFunc.ConsumeMetrics
+	go.opentelemetry.io/collector/consumer@v1.64.0/metrics.go:27
+go.opentelemetry.io/collector/internal/fanoutconsumer.(*metricsConsumer).ConsumeMetrics
+	go.opentelemetry.io/collector/internal/fanoutconsumer@v0.158.0/metrics.go:53
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver.(*prometheusRemoteWriteReceiver).handlePRW
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver@v0.158.0/receiver.go:229
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+net/http.(*ServeMux).ServeHTTP
+	net/http/server.go:2828
+go.opentelemetry.io/collector/config/confighttp.(*decompressor).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/compression.go:289
+go.opentelemetry.io/collector/config/confighttp.(*ServerConfig).ToServer.maxRequestBodySizeInterceptor.func3
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/server.go:394
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*middleware).serveHTTP
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:185
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.NewMiddleware.func2.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:67
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/collector/config/confighttp.(*clientInfoHandler).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/clientinfohandler.go:26
+net/http.serverHandler.ServeHTTP
+	net/http/server.go:3311
+net/http.(*conn).serve
+	net/http/server.go:2067
+2026-10-22T07:08:11.050Z	error	prometheusremotewritereceiver@v0.158.0/receiver.go:232	Error consuming metrics	{"resource": {"service.instance.id": "UUID", "service.name": "otelcol", "service.version": "0.158.0"}, "otelcol.component.id": "prometheus_remote_write", "otelcol.component.kind": "receiver", "otelcol.signal": "metrics", "error": "context canceled"}
+github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver.(*prometheusRemoteWriteReceiver).handlePRW
+	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusremotewritereceiver@v0.158.0/receiver.go:232
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+net/http.(*ServeMux).ServeHTTP
+	net/http/server.go:2828
+go.opentelemetry.io/collector/config/confighttp.(*decompressor).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/compression.go:289
+go.opentelemetry.io/collector/config/confighttp.(*ServerConfig).ToServer.maxRequestBodySizeInterceptor.func3
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/server.go:394
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.(*middleware).serveHTTP
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:185
+go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.NewMiddleware.func2.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp@v0.69.0/handler.go:67
+net/http.HandlerFunc.ServeHTTP
+	net/http/server.go:2286
+go.opentelemetry.io/collector/config/confighttp.(*clientInfoHandler).ServeHTTP
+	go.opentelemetry.io/collector/config/confighttp@v0.158.0/clientinfohandler.go:26
+net/http.serverHandler.ServeHTTP
+	net/http/server.go:3311
+net/http.(*conn).serve
+	net/http/server.go:2067

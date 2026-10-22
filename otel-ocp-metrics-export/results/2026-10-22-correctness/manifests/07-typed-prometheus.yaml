@@ -1,0 +1,117 @@
+# Typed sender: upstream Prometheus main with metadata WAL records (so remote write v2 carries
+# type, unit and help), exemplar storage, created timestamp ingestion, native histogram scraping
+# and classic histogram to NHCB conversion (classic series still scraped, as in the reproduction
+# of opentelemetry-collector-contrib issue 52224). It scrapes itself, avalanche, the two
+# OpenMetrics apps and the internal telemetry of the three collectors, and sends everything with
+# remote write v2 (native histograms and exemplars on) to the typed collector.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: typed-prometheus-config
+  namespace: otel-correctness
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      scrape_timeout: 10s
+    scrape_configs:
+      - job_name: prometheus
+        scrape_native_histograms: true
+        convert_classic_histograms_to_nhcb: true
+        always_scrape_classic_histograms: true
+        static_configs:
+          - targets: ['localhost:9090']
+      - job_name: avalanche
+        scrape_native_histograms: true
+        convert_classic_histograms_to_nhcb: true
+        always_scrape_classic_histograms: true
+        static_configs:
+          - targets: ['avalanche.otel-correctness.svc:9001']
+      - job_name: exemplar-app
+        scrape_native_histograms: true
+        convert_classic_histograms_to_nhcb: true
+        always_scrape_classic_histograms: true
+        static_configs:
+          - targets: ['exemplar-app.otel-correctness.svc:8080']
+      - job_name: stale-app
+        static_configs:
+          - targets: ['stale-app.otel-correctness.svc:8080']
+      - job_name: otelcol
+        scrape_native_histograms: true
+        convert_classic_histograms_to_nhcb: true
+        always_scrape_classic_histograms: true
+        static_configs:
+          - targets:
+              - 'prod-collector-monitoring.otel-correctness.svc:8888'
+              - 'prod-contrib-collector-monitoring.otel-correctness.svc:8888'
+              - 'typed-collector-monitoring.otel-correctness.svc:8888'
+    remote_write:
+      - name: typed
+        url: http://typed-collector.otel-correctness.svc.cluster.local:9090/api/v1/write
+        protobuf_message: io.prometheus.write.v2.Request
+        send_native_histograms: true
+        send_exemplars: true
+        remote_timeout: 30s
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: typed-prometheus
+  namespace: otel-correctness
+  labels:
+    app: typed-prometheus
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: typed-prometheus
+  template:
+    metadata:
+      labels:
+        app: typed-prometheus
+    spec:
+      containers:
+        - name: prometheus
+          image: quay.io/prometheus/prometheus:main
+          args:
+            - --config.file=/etc/prometheus/prometheus.yml
+            - --storage.tsdb.path=/prometheus
+            - --storage.tsdb.retention.time=2d
+            - --web.enable-lifecycle
+            - --enable-feature=metadata-wal-records,exemplar-storage,created-timestamp-zero-ingestion
+          ports:
+            - name: web
+              containerPort: 9090
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: "2"
+              memory: 4Gi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/prometheus
+            - name: data
+              mountPath: /prometheus
+      volumes:
+        - name: config
+          configMap:
+            name: typed-prometheus-config
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: typed-prometheus
+  namespace: otel-correctness
+spec:
+  selector:
+    app: typed-prometheus
+  ports:
+    - name: web
+      port: 9090
+      targetPort: 9090

@@ -1,0 +1,60 @@
+# Known metric types for the typed path: gauges, counters, classic histograms, a native histogram
+# and a summary, 20 series each, values changing every 15 s, series and metric names fixed
+# (series-interval and metric-interval 0) so that every series exists for the whole window.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: avalanche
+  namespace: otel-correctness
+  labels:
+    app: avalanche
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: avalanche
+  template:
+    metadata:
+      labels:
+        app: avalanche
+    spec:
+      containers:
+        - name: avalanche
+          image: quay.io/prometheuscommunity/avalanche:v0.7.0
+          args:
+            - --gauge-metric-count=3
+            - --counter-metric-count=3
+            - --histogram-metric-count=2
+            - --histogram-metric-bucket-count=7
+            - --native-histogram-metric-count=1
+            - --summary-metric-count=1
+            - --summary-metric-objective-count=2
+            - --series-count=20
+            - --label-count=3
+            - --value-interval=15
+            - --series-interval=0
+            - --metric-interval=0
+            - --port=9001
+          ports:
+            - name: metrics
+              containerPort: 9001
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: avalanche
+  namespace: otel-correctness
+spec:
+  selector:
+    app: avalanche
+  ports:
+    - name: metrics
+      port: 9001
+      targetPort: 9001

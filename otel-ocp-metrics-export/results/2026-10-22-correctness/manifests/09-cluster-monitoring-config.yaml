@@ -1,0 +1,19 @@
+# Production path: remote write v2 from the platform Prometheus (both replicas) to the product
+# collector and, as a second entry, to the contrib nightly collector. The cluster of this run had
+# no cluster-monitoring-config; on a cluster that has one, merge these entries into it instead of
+# applying this file.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-monitoring-config
+  namespace: openshift-monitoring
+data:
+  config.yaml: |
+    prometheusK8s:
+      remoteWrite:
+        - name: prod
+          url: http://prod-collector.otel-correctness.svc.cluster.local:9090/api/v1/write
+          messageVersion: V2.0
+        - name: prod-contrib
+          url: http://prod-contrib-collector.otel-correctness.svc.cluster.local:9090/api/v1/write
+          messageVersion: V2.0

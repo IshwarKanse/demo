@@ -1,0 +1,96 @@
+# OTLP sink that keeps everything the collectors emit, queryable with PromQL. Upstream Prometheus
+# main with the OTLP receiver; NoTranslation keeps the metric names exactly as the collector sent
+# them, every resource attribute is promoted to a label so that it can be inspected, and the
+# out-of-order window absorbs the replay after the backend outage. The data lives on a PVC so that
+# the 2 minute outage (scale to 0) does not lose what arrived before it.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sink-prometheus-config
+  namespace: otel-correctness
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 30s
+    otlp:
+      translation_strategy: NoTranslation
+      promote_all_resource_attributes: true
+    storage:
+      tsdb:
+        out_of_order_time_window: 1h
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sink-prometheus-data
+  namespace: otel-correctness
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 30Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sink-prometheus
+  namespace: otel-correctness
+  labels:
+    app: sink-prometheus
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: sink-prometheus
+  template:
+    metadata:
+      labels:
+        app: sink-prometheus
+    spec:
+      containers:
+        - name: prometheus
+          image: quay.io/prometheus/prometheus:main
+          args:
+            - --config.file=/etc/prometheus/prometheus.yml
+            - --storage.tsdb.path=/prometheus
+            - --storage.tsdb.retention.time=2d
+            - --web.enable-otlp-receiver
+            - --web.enable-lifecycle
+            - --enable-feature=exemplar-storage
+          ports:
+            - name: web
+              containerPort: 9090
+          resources:
+            requests:
+              cpu: "1"
+              memory: 2Gi
+            limits:
+              cpu: "4"
+              memory: 12Gi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/prometheus
+            - name: data
+              mountPath: /prometheus
+      volumes:
+        - name: config
+          configMap:
+            name: sink-prometheus-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: sink-prometheus-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sink-prometheus
+  namespace: otel-correctness
+spec:
+  selector:
+    app: sink-prometheus
+  ports:
+    - name: web
+      port: 9090
+      targetPort: 9090

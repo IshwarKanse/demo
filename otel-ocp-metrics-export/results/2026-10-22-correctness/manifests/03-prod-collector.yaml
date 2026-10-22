@@ -1,0 +1,85 @@
+# Production path: the Red Hat build of OpenTelemetry collector (operator default image, 0.158.0)
+# receives remote write v2 from the platform Prometheus with the documented production
+# configuration (memory_limiter only, resilient otlphttp exporter) and forwards everything to the
+# sink. A second pipeline from the same receiver writes a fixed set of metric families to a JSON
+# file through the file exporter; the filter processor only selects whole metric families there
+# and never touches a data point (the full stream would be tens of GB over the window). The dumper
+# sidecar shares the volume so that the file can be copied out with oc cp.
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: prod
+  namespace: otel-correctness
+spec:
+  mode: deployment
+  replicas: 1
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+  ports:
+    - name: prw
+      port: 9090
+      targetPort: 9090
+      protocol: TCP
+  volumes:
+    - name: dump
+      emptyDir:
+        sizeLimit: 20Gi
+  volumeMounts:
+    - name: dump
+      mountPath: /data
+  additionalContainers:
+    - name: dumper
+      image: registry.access.redhat.com/ubi9/ubi-minimal:latest
+      command: ["sleep", "infinity"]
+      volumeMounts:
+        - name: dump
+          mountPath: /data
+  config:
+    receivers:
+      prometheus_remote_write:
+        endpoint: 0.0.0.0:9090
+    processors:
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 80
+        spike_limit_percentage: 20
+      filter/dump:
+        metrics:
+          include:
+            match_type: regexp
+            metric_names:
+              - '^(up|scrape_samples_scraped|node_cpu_seconds(_total)?|node_memory_MemAvailable_bytes|node_network_receive_bytes(_total)?|etcd_disk_wal_fsync_duration_seconds(_bucket|_sum|_count)?|prometheus_tsdb_head_series|prometheus_remote_storage_(samples|histograms|exemplars)_.*|kube_node_status_condition|kubelet_running_pods|go_gc_duration_seconds(_sum|_count)?|container_cpu_usage_seconds(_total)?|ALERTS|target_info)$'
+    exporters:
+      otlphttp:
+        endpoint: http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp
+        tls:
+          insecure: true
+        retry_on_failure:
+          enabled: true
+          max_elapsed_time: 0
+        sending_queue:
+          enabled: true
+          sizer: items
+          queue_size: 100000
+          block_on_overflow: true
+          batch:
+            flush_timeout: 1s
+            min_size: 4000
+            max_size: 8000
+      file:
+        path: /data/export.jsonl
+    service:
+      pipelines:
+        metrics/sink:
+          receivers: [prometheus_remote_write]
+          processors: [memory_limiter]
+          exporters: [otlphttp]
+        metrics/dump:
+          receivers: [prometheus_remote_write]
+          processors: [memory_limiter, filter/dump]
+          exporters: [file]

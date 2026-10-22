@@ -1,0 +1,58 @@
+typed-source-w1.json: success 1843 results
+typed-counters-w1-start.json: success 15 results
+typed-counters-w1-end.json: success 15 results
+otelcol-counters-w1-start.json: success 19 results
+otelcol-counters-w1-end.json: success 19 results
+otelcol-counters-w1-raw.json: success 10 results
+prod0-source-w1.json: success 2986 results
+prod0-counters-w1-start.json: success 58 results
+prod0-counters-w1-end.json: success 58 results
+results/2026-10-22-correctness/raw/prod0-family-counts-w1.json 2783 families, totals {'': 10483618.0} errors 0
+prod1-source-w1.json: success 2986 results
+prod1-counters-w1-start.json: success 58 results
+prod1-counters-w1-end.json: success 58 results
+results/2026-10-22-correctness/raw/prod1-family-counts-w1.json 2786 families, totals {'': 10485534.0} errors 0
+results/2026-10-22-correctness/raw/sink-family-counts-w1.json 2778 families, totals {'prometheus-k8s-1': 10485534.0, 'prometheus-k8s-0': 10483618.0} errors 0
+results/2026-10-22-correctness/raw/sink-typed-family-counts-w1.json 341 families, totals {'avalanche': 26160.0, 'exemplar-app': 1253.0, 'stale-app': 440.0, 'prometheus': 31164.0, 'otelcol': 3840.0} errors 0
+results/2026-10-22-correctness/raw/typed-family-counts-w1.json 429 families, totals {'avalanche': 31920.0, 'exemplar-app': 1541.0, 'stale-app': 814.0, 'prometheus': 48605.0, 'otelcol': 3840.0} errors 0
+typed-source-w2.json: success 1818 results
+typed-counters-w2-start.json: success 15 results
+typed-counters-w2-end.json: success 15 results
+otelcol-counters-w2-start.json: success 19 results
+otelcol-counters-w2-end.json: success 20 results
+otelcol-counters-w2-raw.json: success 10 results
+prod0-source-w2.json: success 2986 results
+prod0-counters-w2-start.json: success 58 results
+prod0-counters-w2-end.json: success 58 results
+results/2026-10-22-correctness/raw/prod0-family-counts-w2.json 2783 families, totals {'': 7872449.0} errors 0
+prod1-source-w2.json: success 2986 results
+prod1-counters-w2-start.json: success 58 results
+prod1-counters-w2-end.json: success 58 results
+results/2026-10-22-correctness/raw/prod1-family-counts-w2.json 2786 families, totals {'': 7873078.0} errors 0
+results/2026-10-22-correctness/raw/sink-family-counts-w2.json 2778 families, totals {'prometheus-k8s-1': 7873078.0, 'prometheus-k8s-0': 7872449.0} errors 0
+results/2026-10-22-correctness/raw/sink-typed-family-counts-w2.json 341 families, totals {'avalanche': 19620.0, 'exemplar-app': 940.0, 'prometheus': 23760.0, 'otelcol': 2910.0, 'stale-app': 180.0} errors 0
+results/2026-10-22-correctness/raw/typed-family-counts-w2.json 429 families, totals {'avalanche': 23940.0, 'exemplar-app': 1156.0, 'prometheus': 37260.0, 'otelcol': 2910.0, 'stale-app': 180.0} errors 0
+sh: line 1: gzip: command not found
+command terminated with exit code 127
+prod dump transfer 0 of  bytes, retrying
+prod dump transfer 0 of  bytes, retrying
+prod dump transfer 0 of  bytes, retrying
+prod dump transfer 0 of  bytes, retrying
+prod dump transfer 0 of  bytes, retrying
+ls: results/2026-10-22-correctness/raw/prod-dump.jsonl: No such file or directory
+sh: line 1: gzip: command not found
+command terminated with exit code 127
+prod-contrib dump transfer 0 of  bytes, retrying
+prod-contrib dump transfer 0 of  bytes, retrying
+prod-contrib dump transfer 0 of  bytes, retrying
+prod-contrib dump transfer 0 of  bytes, retrying
+prod-contrib dump transfer 0 of  bytes, retrying
+ls: results/2026-10-22-correctness/raw/prod-contrib-dump.jsonl: No such file or directory
+sh: line 1: gzip: command not found
+command terminated with exit code 127
+typed dump transfer 0 of  bytes, retrying
+typed dump transfer 0 of  bytes, retrying
+typed dump transfer 0 of  bytes, retrying
+typed dump transfer 0 of  bytes, retrying
+typed dump transfer 0 of  bytes, retrying
+ls: results/2026-10-22-correctness/raw/typed-dump.jsonl: No such file or directory

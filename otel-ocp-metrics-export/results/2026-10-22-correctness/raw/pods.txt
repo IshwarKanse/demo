@@ -1,0 +1,8 @@
+NAME                                      READY   STATUS    RESTARTS   AGE   IP            NODE                                        NOMINATED NODE   READINESS GATES
+avalanche-5c5f7f8487-r94zp                1/1     Running   0          48m   IP-93   node-2    <none>           <none>
+exemplar-app-c8ddbcbb-6c6c5               1/1     Running   0          45m   IP-94   node-2    <none>           <none>
+prod-collector-5458546c98-224gl           2/2     Running   0          48m   IP-95   node-4   <none>           <none>
+prod-contrib-collector-58f675c896-ws4wq   2/2     Running   0          48m   IP-96   node-2    <none>           <none>
+sink-prometheus-5c7d54db55-zn6mf          1/1     Running   0          23m   IP-97   node-3   <none>           <none>
+typed-collector-556688b74-prh77           2/2     Running   0          48m   IP-98   node-4   <none>           <none>
+typed-prometheus-8f6c746b5-87vbk          1/1     Running   0          47m   IP-99   node-2    <none>           <none>

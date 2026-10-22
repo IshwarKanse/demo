@@ -1,0 +1,77 @@
+# Typed path: the newest upstream receiver (contrib nightly) receives remote write v2 with
+# metadata, native histograms and exemplars from the dedicated Prometheus main instance, forwards
+# everything to the sink and writes the complete stream to a JSON file (no filter: the stream is
+# small). memory_limiter only, no batch processor.
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: typed
+  namespace: otel-correctness
+spec:
+  image: docker.io/otel/opentelemetry-collector-contrib:0.164.0-nightly.29f43fe
+  mode: deployment
+  replicas: 1
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+  ports:
+    - name: prw
+      port: 9090
+      targetPort: 9090
+      protocol: TCP
+  volumes:
+    - name: dump
+      emptyDir:
+        sizeLimit: 10Gi
+  volumeMounts:
+    - name: dump
+      mountPath: /data
+  additionalContainers:
+    - name: dumper
+      image: registry.access.redhat.com/ubi9/ubi-minimal:latest
+      command: ["sleep", "infinity"]
+      volumeMounts:
+        - name: dump
+          mountPath: /data
+  config:
+    receivers:
+      prometheus_remote_write:
+        endpoint: 0.0.0.0:9090
+    processors:
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 80
+        spike_limit_percentage: 20
+    exporters:
+      otlphttp:
+        endpoint: http://sink-prometheus.otel-correctness.svc.cluster.local:9090/api/v1/otlp
+        tls:
+          insecure: true
+        retry_on_failure:
+          enabled: true
+          max_elapsed_time: 0
+        sending_queue:
+          enabled: true
+          sizer: items
+          queue_size: 100000
+          block_on_overflow: true
+          batch:
+            flush_timeout: 1s
+            min_size: 4000
+            max_size: 8000
+      file:
+        path: /data/export.jsonl
+    service:
+      pipelines:
+        metrics/sink:
+          receivers: [prometheus_remote_write]
+          processors: [memory_limiter]
+          exporters: [otlphttp]
+        metrics/dump:
+          receivers: [prometheus_remote_write]
+          processors: [memory_limiter]
+          exporters: [file]

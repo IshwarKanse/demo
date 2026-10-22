@@ -1,0 +1,6640 @@
+{
+ "w1": {
+  "typed": {
+   "floats": {
+    "series_source": 1737,
+    "series_dump": 655,
+    "series_only_source": 1082,
+    "series_only_dump": 0,
+    "series_exact": 655,
+    "samples_source": 31213,
+    "samples_equal": 31213,
+    "extra_nan_in_dump": 9,
+    "samples_dump_matched_series": 31222
+   },
+   "hists": {
+    "series_source": 106,
+    "series_dump": 106,
+    "series_only_source": 0,
+    "series_only_dump": 0,
+    "points_source": 5002,
+    "exponential_points": 2213,
+    "points_equal": 5002,
+    "explicit_points": 2789
+   },
+   "dump_points_in_window": 36224,
+   "dump_points_total": 178550,
+   "dump_lines": 712,
+   "bad_lines": 0,
+   "norecordedvalue_series": 0,
+   "norecordedvalue_points": 0,
+   "scopes": {
+    "('OpenTelemetry Collector Contrib', '0.163.1')": 1664
+   },
+   "empty_resource_points": 0,
+   "metadata": [
+    [
+     "avalanche_counter_metric_mmmmm_0_0_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Metric avalanche_counter_metric_mmmmm_0_",
+     "0/4740"
+    ],
+    [
+     "avalanche_counter_metric_mmmmm_0_1_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Metric avalanche_counter_metric_mmmmm_0_",
+     "0/4740"
+    ],
+    [
+     "avalanche_counter_metric_mmmmm_0_2_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Metric avalanche_counter_metric_mmmmm_0_",
+     "0/4740"
+    ],
+    [
+     "avalanche_gauge_metric_mmmmm_0_0",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Metric avalanche_gauge_metric_mmmmm_0_0 ",
+     "0/4740"
+    ],
+    [
+     "avalanche_gauge_metric_mmmmm_0_1",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Metric avalanche_gauge_metric_mmmmm_0_1 ",
+     "0/4740"
+    ],
+    [
+     "avalanche_gauge_metric_mmmmm_0_2",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Metric avalanche_gauge_metric_mmmmm_0_2 ",
+     "0/4740"
+    ],
+    [
+     "avalanche_histogram_metric_mmmmm_0_0",
+     "histogram",
+     "",
+     "histogram",
+     null,
+     "histogram",
+     "",
+     "Metric avalanche_histogram_metric_mmmmm_",
+     "0/4740"
+    ],
+    [
+     "avalanche_histogram_metric_mmmmm_0_1",
+     "histogram",
+     "",
+     "histogram",
+     null,
+     "histogram",
+     "",
+     "Metric avalanche_histogram_metric_mmmmm_",
+     "0/4740"
+    ],
+    [
+     "avalanche_native_histogram_metric_mmmmm_0_0",
+     "histogram",
+     "",
+     "exponentialHistogram",
+     null,
+     "histogram",
+     "",
+     "Metric avalanche_native_histogram_metric",
+     "0/4740"
+    ],
+    [
+     "corr_build_info",
+     "?",
+     "",
+     "sum",
+     null,
+     "info",
+     "",
+     "Build information.",
+     "0/277"
+    ],
+    [
+     "corr_escape",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Gauge whose label value needs escaping.",
+     "0/277"
+    ],
+    [
+     "corr_latency_seconds",
+     "histogram",
+     "seconds",
+     "histogram",
+     null,
+     "histogram",
+     "s",
+     "Request latency, with trace exemplars.",
+     "0/227"
+    ],
+    [
+     "corr_requests_total",
+     "counter",
+     "requests",
+     "sum",
+     true,
+     "counter",
+     "requests",
+     "Requests handled, with trace exemplars.",
+     "0/556"
+    ],
+    [
+     "corr_resetting_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Counter that resets every 150 seconds.",
+     "0/305"
+    ],
+    [
+     "corr_temperature_celsius",
+     "gauge",
+     "celsius",
+     "gauge",
+     null,
+     "gauge",
+     "Cel",
+     "Gauge with ordinary, NaN, +Inf and -Inf ",
+     "0/1108"
+    ],
+    [
+     "go_gc_cleanups_executed_cleanups_total",
+     "counter",
+     "cleanups",
+     "sum",
+     true,
+     "counter",
+     "cleanups",
+     "Approximate total count of cleanup funct",
+     "0/238"
+    ],
+    [
+     "go_gc_cleanups_queued_cleanups_total",
+     "counter",
+     "cleanups",
+     "sum",
+     true,
+     "counter",
+     "cleanups",
+     "Approximate total count of cleanup funct",
+     "0/238"
+    ],
+    [
+     "go_gc_cycles_automatic_gc_cycles_total",
+     "counter",
+     "gc_cycles",
+     "sum",
+     true,
+     "counter",
+     "gc_cycles",
+     "Count of completed GC cycles generated b",
+     "0/238"
+    ],
+    [
+     "go_gc_cycles_forced_gc_cycles_total",
+     "counter",
+     "gc_cycles",
+     "sum",
+     true,
+     "counter",
+     "gc_cycles",
+     "Count of completed GC cycles forced by t",
+     "0/238"
+    ],
+    [
+     "go_gc_cycles_total_gc_cycles_total",
+     "counter",
+     "gc_cycles",
+     "sum",
+     true,
+     "counter",
+     "gc_cycles",
+     "Count of all completed GC cycles. Source",
+     "0/238"
+    ],
+    [
+     "go_gc_finalizers_executed_finalizers_total",
+     "counter",
+     "finalizers",
+     "sum",
+     true,
+     "counter",
+     "finalizers",
+     "Total count of finalizer functions (crea",
+     "0/238"
+    ],
+    [
+     "go_gc_finalizers_queued_finalizers_total",
+     "counter",
+     "finalizers",
+     "sum",
+     true,
+     "counter",
+     "finalizers",
+     "Total count of finalizer functions (crea",
+     "0/238"
+    ],
+    [
+     "go_gc_gogc_percent",
+     "gauge",
+     "percent",
+     "gauge",
+     null,
+     "gauge",
+     "%",
+     "Heap size target percentage configured b",
+     "0/238"
+    ],
+    [
+     "go_gc_gomemlimit_bytes",
+     "gauge",
+     "bytes",
+     "gauge",
+     null,
+     "gauge",
+     "By",
+     "Go runtime memory limit configured by th",
+     "0/238"
+    ],
+    [
+     "go_gc_heap_allocs_by_size_bytes",
+     "histogram",
+     "bytes",
+     "histogram",
+     null,
+     "histogram",
+     "By",
+     "Distribution of heap allocations by appr",
+     "0/238"
+    ],
+    [
+     "go_gc_heap_allocs_bytes_total",
+     "counter",
+     "bytes",
+     "sum",
+     true,
+     "counter",
+     "By",
+     "Cumulative sum of memory allocated to th",
+     "0/238"
+    ],
+    [
+     "go_gc_heap_allocs_objects_total",
+     "counter",
+     "objects",
+     "sum",
+     true,
+     "counter",
+     "objects",
+     "Cumulative count of heap allocations tri",
+     "0/238"
+    ],
+    [
+     "go_gc_heap_frees_by_size_bytes",
+     "histogram",
+     "bytes",
+     "histogram",
+     null,
+     "histogram",
+     "By",
+     "Distribution of freed heap allocations b",
+     "0/238"
+    ],
+    [
+     "go_gc_heap_frees_bytes_total",
+     "counter",
+     "bytes",
+     "sum",
+     true,
+     "counter",
+     "By",
+     "Cumulative sum of heap memory freed by t",
+     "0/238"
+    ],
+    [
+     "go_gc_heap_frees_objects_total",
+     "counter",
+     "objects",
+     "sum",
+     true,
+     "counter",
+     "objects",
+     "Cumulative count of heap allocations who",
+     "0/238"
+    ],
+    [
+     "go_gc_heap_goal_bytes",
+     "gauge",
+     "bytes",
+     "gauge",
+     null,
+     "gauge",
+     "By",
+     "Heap size target for the end of the GC c",
+     "0/238"
+    ],
+    [
+     "go_gc_heap_live_bytes",
+     "gauge",
+     "bytes",
+     "gauge",
+     null,
+     "gauge",
+     "By",
+     "Heap memory occupied by live objects tha",
+     "0/238"
+    ],
+    [
+     "go_gc_heap_objects_objects",
+     "gauge",
+     "objects",
+     "gauge",
+     null,
+     "gauge",
+     "objects",
+     "Number of objects, live or unswept, occu",
+     "0/238"
+    ],
+    [
+     "go_gc_heap_tiny_allocs_objects_total",
+     "counter",
+     "objects",
+     "sum",
+     true,
+     "counter",
+     "objects",
+     "Count of small allocations that are pack",
+     "0/238"
+    ],
+    [
+     "go_gc_limiter_last_enabled_gc_cycle",
+     "gauge",
+     "gc_cycle",
+     "gauge",
+     null,
+     "gauge",
+     "gc_cycle",
+     "GC cycle the last time the GC CPU limite",
+     "0/238"
+    ],
+    [
+     "go_gc_pauses_seconds",
+     "histogram",
+     "seconds",
+     "histogram",
+     null,
+     "histogram",
+     "s",
+     "Deprecated. Prefer the identical /sched/",
+     "0/238"
+    ],
+    [
+     "go_gc_scan_globals_bytes",
+     "gauge",
+     "bytes",
+     "gauge",
+     null,
+     "gauge",
+     "By",
+     "The total amount of global variable spac",
+     "0/238"
+    ],
+    [
+     "go_gc_scan_heap_bytes",
+     "gauge",
+     "bytes",
+     "gauge",
+     null,
+     "gauge",
+     "By",
+     "The total amount of heap space that is s",
+     "0/238"
+    ],
+    [
+     "go_gc_scan_stack_bytes",
+     "gauge",
+     "bytes",
+     "gauge",
+     null,
+     "gauge",
+     "By",
+     "The number of bytes of stack that were s",
+     "0/238"
+    ],
+    [
+     "go_gc_scan_total_bytes",
+     "gauge",
+     "bytes",
+     "gauge",
+     null,
+     "gauge",
+     "By",
+     "The total amount space that is scannable",
+     "0/238"
+    ],
+    [
+     "go_gc_stack_starting_size_bytes",
+     "gauge",
+     "bytes",
+     "gauge",
+     null,
+     "gauge",
+     "By",
+     "The stack size of new goroutines. Source",
+     "0/238"
+    ],
+    [
+     "go_goroutines",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of goroutines that currently exis",
+     "0/238"
+    ],
+    [
+     "go_info",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Information about the Go environment.",
+     "0/238"
+    ],
+    [
+     "go_memstats_alloc_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of bytes allocated in heap and cu",
+     "0/238"
+    ],
+    [
+     "go_memstats_alloc_bytes_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of bytes allocated in heap ",
+     "0/238"
+    ],
+    [
+     "go_memstats_buck_hash_sys_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of bytes used by the profiling bu",
+     "0/238"
+    ],
+    [
+     "go_memstats_frees_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of heap objects frees. Equa",
+     "0/238"
+    ],
+    [
+     "go_memstats_gc_sys_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of bytes used for garbage collect",
+     "0/238"
+    ],
+    [
+     "go_memstats_heap_alloc_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of heap bytes allocated and curre",
+     "0/238"
+    ],
+    [
+     "go_memstats_heap_idle_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of heap bytes waiting to be used.",
+     "0/238"
+    ],
+    [
+     "go_memstats_heap_inuse_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of heap bytes that are in use. Eq",
+     "0/238"
+    ],
+    [
+     "go_memstats_heap_objects",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of currently allocated objects. E",
+     "0/238"
+    ],
+    [
+     "go_memstats_heap_released_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of heap bytes released to OS. Equ",
+     "0/238"
+    ],
+    [
+     "go_memstats_heap_sys_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of heap bytes obtained from syste",
+     "0/238"
+    ],
+    [
+     "go_memstats_last_gc_time_seconds",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of seconds since 1970 of last gar",
+     "0/238"
+    ],
+    [
+     "go_memstats_mallocs_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of heap objects allocated, ",
+     "0/238"
+    ],
+    [
+     "go_memstats_mcache_inuse_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of bytes in use by mcache structu",
+     "0/238"
+    ],
+    [
+     "go_memstats_mcache_sys_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of bytes used for mcache structur",
+     "0/238"
+    ],
+    [
+     "go_memstats_mspan_inuse_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of bytes in use by mspan structur",
+     "0/238"
+    ],
+    [
+     "go_memstats_mspan_sys_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of bytes used for mspan structure",
+     "0/238"
+    ],
+    [
+     "go_memstats_next_gc_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of heap bytes when next garbage c",
+     "0/238"
+    ],
+    [
+     "go_memstats_other_sys_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of bytes used for other system al",
+     "0/238"
+    ],
+    [
+     "go_memstats_stack_inuse_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of bytes obtained from system for",
+     "0/238"
+    ],
+    [
+     "go_memstats_stack_sys_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of bytes obtained from system for",
+     "0/238"
+    ],
+    [
+     "go_memstats_sys_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of bytes obtained from system. Eq",
+     "0/238"
+    ],
+    [
+     "go_sched_gomaxprocs_threads",
+     "gauge",
+     "threads",
+     "gauge",
+     null,
+     "gauge",
+     "threads",
+     "The current runtime.GOMAXPROCS setting, ",
+     "0/238"
+    ],
+    [
+     "go_sched_goroutines_created_goroutines_total",
+     "counter",
+     "goroutines",
+     "sum",
+     true,
+     "counter",
+     "goroutines",
+     "Count of goroutines created since progra",
+     "0/238"
+    ],
+    [
+     "go_sched_goroutines_goroutines",
+     "gauge",
+     "goroutines",
+     "gauge",
+     null,
+     "gauge",
+     "goroutines",
+     "Count of live goroutines. Sourced from /",
+     "0/238"
+    ],
+    [
+     "go_sched_goroutines_not_in_go_goroutines",
+     "gauge",
+     "goroutines",
+     "gauge",
+     null,
+     "gauge",
+     "goroutines",
+     "Approximate count of goroutines running ",
+     "0/238"
+    ],
+    [
+     "go_sched_goroutines_runnable_goroutines",
+     "gauge",
+     "goroutines",
+     "gauge",
+     null,
+     "gauge",
+     "goroutines",
+     "Approximate count of goroutines ready to",
+     "0/238"
+    ],
+    [
+     "go_sched_goroutines_running_goroutines",
+     "gauge",
+     "goroutines",
+     "gauge",
+     null,
+     "gauge",
+     "goroutines",
+     "Approximate count of goroutines executin",
+     "0/238"
+    ],
+    [
+     "go_sched_goroutines_waiting_goroutines",
+     "gauge",
+     "goroutines",
+     "gauge",
+     null,
+     "gauge",
+     "goroutines",
+     "Approximate count of goroutines waiting ",
+     "0/238"
+    ],
+    [
+     "go_sched_latencies_seconds",
+     "histogram",
+     "seconds",
+     "histogram",
+     null,
+     "histogram",
+     "s",
+     "Distribution of the time goroutines have",
+     "0/238"
+    ],
+    [
+     "go_sched_pauses_stopping_gc_seconds",
+     "histogram",
+     "seconds",
+     "histogram",
+     null,
+     "histogram",
+     "s",
+     "Distribution of individual GC-related st",
+     "0/238"
+    ],
+    [
+     "go_sched_pauses_stopping_other_seconds",
+     "histogram",
+     "seconds",
+     "histogram",
+     null,
+     "histogram",
+     "s",
+     "Distribution of individual non-GC-relate",
+     "0/238"
+    ],
+    [
+     "go_sched_pauses_total_gc_seconds",
+     "histogram",
+     "seconds",
+     "histogram",
+     null,
+     "histogram",
+     "s",
+     "Distribution of individual GC-related st",
+     "0/238"
+    ],
+    [
+     "go_sched_pauses_total_other_seconds",
+     "histogram",
+     "seconds",
+     "histogram",
+     null,
+     "histogram",
+     "s",
+     "Distribution of individual non-GC-relate",
+     "0/238"
+    ],
+    [
+     "go_sched_threads_total_threads",
+     "gauge",
+     "threads",
+     "gauge",
+     null,
+     "gauge",
+     "threads",
+     "The current count of live threads that a",
+     "0/238"
+    ],
+    [
+     "go_sync_mutex_wait_total_seconds_total",
+     "counter",
+     "seconds",
+     "sum",
+     true,
+     "counter",
+     "s",
+     "Approximate cumulative time goroutines h",
+     "0/238"
+    ],
+    [
+     "go_threads",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of OS threads created.",
+     "0/238"
+    ],
+    [
+     "net_conntrack_dialer_conn_attempted_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of connections attempted by",
+     "0/1671"
+    ],
+    [
+     "net_conntrack_dialer_conn_closed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of connections closed which",
+     "0/1671"
+    ],
+    [
+     "net_conntrack_dialer_conn_established_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of connections successfully",
+     "0/1671"
+    ],
+    [
+     "net_conntrack_dialer_conn_failed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of connections failed to di",
+     "0/6684"
+    ],
+    [
+     "net_conntrack_listener_conn_accepted_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of connections opened to th",
+     "0/238"
+    ],
+    [
+     "net_conntrack_listener_conn_closed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of connections closed that ",
+     "0/238"
+    ],
+    [
+     "otelcol_exporter_enqueue_failed_metric_points",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of metric points failed to be add",
+     "0/144"
+    ],
+    [
+     "otelcol_exporter_in_flight_requests",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of export requests currently in-f",
+     "0/1143"
+    ],
+    [
+     "otelcol_exporter_queue_capacity",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Fixed capacity of the retry queue (in ba",
+     "0/474"
+    ],
+    [
+     "otelcol_exporter_queue_size",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Current size of the retry queue (in batc",
+     "0/474"
+    ],
+    [
+     "otelcol_exporter_sent_metric_points",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of metric points successfully sen",
+     "0/1143"
+    ],
+    [
+     "otelcol_process_cpu_seconds",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total CPU user and system time in second",
+     "0/712"
+    ],
+    [
+     "otelcol_process_memory_rss",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Total physical memory (resident set size",
+     "0/712"
+    ],
+    [
+     "otelcol_process_runtime_heap_alloc_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Bytes of allocated heap objects (see 'go",
+     "0/712"
+    ],
+    [
+     "otelcol_process_runtime_total_alloc_bytes",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Cumulative bytes allocated for heap obje",
+     "0/712"
+    ],
+    [
+     "otelcol_process_runtime_total_sys_memory_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Total bytes of memory obtained from the ",
+     "0/712"
+    ],
+    [
+     "otelcol_process_uptime",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Uptime of the process [Alpha]",
+     "0/712"
+    ],
+    [
+     "otelcol_processor_filter_datapoints_filtered",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of metric data points dropped by ",
+     "0/446"
+    ],
+    [
+     "otelcol_processor_incoming_items",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of items passed to the processor.",
+     "0/1129"
+    ],
+    [
+     "otelcol_processor_memory_limiter_accepted_metric_points",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of metric points successfully pus",
+     "0/683"
+    ],
+    [
+     "otelcol_processor_outgoing_items",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of items emitted from the process",
+     "0/1129"
+    ],
+    [
+     "otelcol_receiver_accepted_metric_points",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of metric points successfully pus",
+     "0/683"
+    ],
+    [
+     "otelcol_receiver_failed_metric_points",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The number of metric points that failed ",
+     "0/683"
+    ],
+    [
+     "otelcol_receiver_refused_metric_points",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of metric points that could not b",
+     "0/683"
+    ],
+    [
+     "process_cpu_seconds_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total user and system CPU time spent in ",
+     "0/238"
+    ],
+    [
+     "process_max_fds",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Maximum number of open file descriptors.",
+     "0/238"
+    ],
+    [
+     "process_network_receive_bytes_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of bytes received by the process ",
+     "0/238"
+    ],
+    [
+     "process_network_transmit_bytes_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of bytes sent by the process over",
+     "0/238"
+    ],
+    [
+     "process_open_fds",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of open file descriptors.",
+     "0/238"
+    ],
+    [
+     "process_resident_memory_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Resident memory size in bytes.",
+     "0/238"
+    ],
+    [
+     "process_start_time_seconds",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Start time of the process since unix epo",
+     "0/238"
+    ],
+    [
+     "process_virtual_memory_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Virtual memory size in bytes.",
+     "0/238"
+    ],
+    [
+     "process_virtual_memory_max_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Maximum amount of virtual memory availab",
+     "0/238"
+    ],
+    [
+     "prometheus_api_notification_active_subscribers",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The current number of active notificatio",
+     "0/238"
+    ],
+    [
+     "prometheus_api_notification_updates_dropped_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of notification updates dro",
+     "0/238"
+    ],
+    [
+     "prometheus_api_notification_updates_sent_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of notification updates sen",
+     "0/238"
+    ],
+    [
+     "prometheus_build_info",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "A metric with a constant '1' value label",
+     "0/238"
+    ],
+    [
+     "prometheus_config_last_reload_success_timestamp_seconds",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Timestamp of the last successful configu",
+     "0/238"
+    ],
+    [
+     "prometheus_config_last_reload_successful",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Whether the last configuration reload at",
+     "0/238"
+    ],
+    [
+     "prometheus_engine_queries",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The current number of queries being exec",
+     "0/238"
+    ],
+    [
+     "prometheus_engine_queries_concurrent_max",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The max number of concurrent queries.",
+     "0/238"
+    ],
+    [
+     "prometheus_engine_query_duration_histogram_seconds",
+     "histogram",
+     "",
+     "exponentialHistogram",
+     null,
+     "histogram",
+     "",
+     "The duration of various parts of PromQL ",
+     "0/952"
+    ],
+    [
+     "prometheus_engine_query_log_enabled",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "State of the query log.",
+     "0/238"
+    ],
+    [
+     "prometheus_engine_query_log_failures_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The number of query log failures.",
+     "0/238"
+    ],
+    [
+     "prometheus_engine_query_samples_read_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The total number of samples read by all ",
+     "0/238"
+    ],
+    [
+     "prometheus_engine_query_samples_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The total number of samples loaded by al",
+     "0/238"
+    ],
+    [
+     "prometheus_http_request_duration_seconds",
+     "histogram",
+     "",
+     "exponentialHistogram",
+     null,
+     "histogram",
+     "",
+     "Histogram of latencies for HTTP requests",
+     "0/1465"
+    ],
+    [
+     "prometheus_http_requests_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Counter of HTTP requests.",
+     "0/15232"
+    ],
+    [
+     "prometheus_http_response_size_bytes",
+     "histogram",
+     "",
+     "histogram",
+     null,
+     "histogram",
+     "",
+     "Histogram of response size for HTTP requ",
+     "0/1465"
+    ],
+    [
+     "prometheus_notifications_alertmanagers_discovered",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The number of alertmanagers discovered a",
+     "0/238"
+    ],
+    [
+     "prometheus_notifications_queue_capacity",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The capacity of the alert notifications ",
+     "0/238"
+    ],
+    [
+     "prometheus_ready",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Whether Prometheus startup was fully com",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_read_handler_gate_wait_duration_seconds",
+     "histogram",
+     "",
+     "exponentialHistogram",
+     null,
+     "histogram",
+     "",
+     "How long a remote read request spent wai",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_read_handler_queries",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The current number of remote read querie",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_bytes_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The total number of bytes of data sent b",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_enqueue_retries_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of times enqueue has failed",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_exemplars_failed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of exemplars which failed o",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_exemplars_in_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Exemplars in to remote storage, compare ",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_exemplars_pending",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The number of exemplars pending in the q",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_exemplars_retried_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of exemplars which failed o",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_exemplars_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of exemplars sent to remote",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_highest_timestamp_in_seconds",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Highest timestamp that has come into the",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_histograms_failed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of histograms which failed ",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_histograms_in_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "HistogramSamples in to remote storage, c",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_histograms_pending",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The number of histograms pending in the ",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_histograms_retried_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of histograms which failed ",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_histograms_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of histograms sent to remot",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_max_samples_per_send",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The maximum number of samples to be sent",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_queue_highest_sent_timestamp_seconds",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Highest timestamp successfully sent by t",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_queue_highest_timestamp_seconds",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Highest timestamp that was enqueued, in ",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_samples_failed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of samples which failed on ",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_samples_in_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Samples in to remote storage, compare to",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_samples_pending",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The number of samples pending in the que",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_samples_retried_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of samples which failed on ",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_samples_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of samples sent to remote s",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_sent_batch_duration_seconds",
+     "histogram",
+     "",
+     "exponentialHistogram",
+     null,
+     "histogram",
+     "",
+     "Duration of send calls to the remote sto",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_shard_capacity",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The capacity of each shard of the queue ",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_shards",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The number of shards used for parallel s",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_shards_desired",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The number of shards that the queues sha",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_shards_max",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The maximum number of shards that the qu",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_shards_min",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The minimum number of shards that the qu",
+     "0/238"
+    ],
+    [
+     "prometheus_remote_storage_string_interner_zero_reference_releases_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The number of times release has been cal",
+     "0/238"
+    ],
+    [
+     "prometheus_rule_evaluation_duration_histogram_seconds",
+     "histogram",
+     "",
+     "exponentialHistogram",
+     null,
+     "histogram",
+     "",
+     "The duration for a rule to execute.",
+     "0/238"
+    ],
+    [
+     "prometheus_rule_group_duration_histogram_seconds",
+     "histogram",
+     "",
+     "exponentialHistogram",
+     null,
+     "histogram",
+     "",
+     "The duration of rule group evaluations.",
+     "0/238"
+    ],
+    [
+     "prometheus_sd_azure_cache_hit_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of cache hit during refresh.",
+     "0/238"
+    ],
+    [
+     "prometheus_sd_azure_failures_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of Azure service discovery refres",
+     "0/238"
+    ],
+    [
+     "prometheus_sd_consul_rpc_failures_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The number of Consul RPC call failures.",
+     "0/238"
+    ],
+    [
+     "prometheus_sd_discovered_targets",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Current number of discovered targets.",
+     "0/1190"
+    ],
+    [
+     "prometheus_sd_dns_lookup_failures_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The number of DNS-SD lookup failures.",
+     "0/238"
+    ],
+    [
+     "prometheus_sd_dns_lookups_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The number of DNS-SD lookups.",
+     "0/238"
+    ],
+    [
+     "prometheus_sd_failed_configs",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Current number of service discovery conf",
+     "0/476"
+    ],
+    [
+     "prometheus_sd_file_read_errors_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The number of File-SD read errors.",
+     "0/238"
+    ],
+    [
+     "prometheus_sd_file_watcher_errors_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The number of File-SD errors caused by f",
+     "0/238"
+    ],
+    [
+     "prometheus_sd_http_failures_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of HTTP service discovery refresh",
+     "0/238"
+    ],
+    [
+     "prometheus_sd_kubernetes_events_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The number of Kubernetes events handled.",
+     "0/4284"
+    ],
+    [
+     "prometheus_sd_kubernetes_failures_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The number of failed WATCH/LIST requests",
+     "0/238"
+    ],
+    [
+     "prometheus_sd_kuma_fetch_failures_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The number of Kuma MADS fetch call failu",
+     "0/238"
+    ],
+    [
+     "prometheus_sd_kuma_fetch_skipped_updates_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The number of Kuma MADS fetch calls that",
+     "0/238"
+    ],
+    [
+     "prometheus_sd_last_update_timestamp_seconds",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Timestamp of the last update sent to the",
+     "0/1190"
+    ],
+    [
+     "prometheus_sd_linode_failures_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of Linode service discovery refre",
+     "0/238"
+    ],
+    [
+     "prometheus_sd_nomad_failures_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of nomad service discovery refres",
+     "0/238"
+    ],
+    [
+     "prometheus_sd_received_updates_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of update events received f",
+     "0/476"
+    ],
+    [
+     "prometheus_sd_updates_delayed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of update events that could",
+     "0/476"
+    ],
+    [
+     "prometheus_sd_updates_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of update events sent to th",
+     "0/476"
+    ],
+    [
+     "prometheus_target_interval_length_histogram_seconds",
+     "histogram",
+     "",
+     "exponentialHistogram",
+     null,
+     "histogram",
+     "",
+     "Actual intervals between scrapes.",
+     "0/238"
+    ],
+    [
+     "prometheus_target_metadata_cache_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The number of bytes that are currently u",
+     "0/1190"
+    ],
+    [
+     "prometheus_target_metadata_cache_entries",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Total number of metric metadata entries ",
+     "0/1190"
+    ],
+    [
+     "prometheus_target_scrape_duration_seconds",
+     "histogram",
+     "",
+     "exponentialHistogram",
+     null,
+     "histogram",
+     "",
+     "Total duration of the scrape from start ",
+     "0/238"
+    ],
+    [
+     "prometheus_target_scrape_pool_exceeded_label_limits_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of times scrape pools hit t",
+     "0/238"
+    ],
+    [
+     "prometheus_target_scrape_pool_exceeded_target_limit_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of times scrape pools hit t",
+     "0/238"
+    ],
+    [
+     "prometheus_target_scrape_pool_reloads_failed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of failed scrape pool reloa",
+     "0/238"
+    ],
+    [
+     "prometheus_target_scrape_pool_reloads_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of scrape pool reloads.",
+     "0/238"
+    ],
+    [
+     "prometheus_target_scrape_pool_symboltable_items",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Current number of symbols in table for t",
+     "0/1190"
+    ],
+    [
+     "prometheus_target_scrape_pool_sync_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of syncs that were executed",
+     "0/1195"
+    ],
+    [
+     "prometheus_target_scrape_pool_target_limit",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Maximum number of targets allowed in thi",
+     "0/1190"
+    ],
+    [
+     "prometheus_target_scrape_pool_targets",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Current number of targets in this scrape",
+     "0/1190"
+    ],
+    [
+     "prometheus_target_scrape_pools_failed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of scrape pool creations th",
+     "0/238"
+    ],
+    [
+     "prometheus_target_scrape_pools_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of scrape pool creation att",
+     "0/238"
+    ],
+    [
+     "prometheus_target_scrapes_cache_flush_forced_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "How many times a scrape cache was flushe",
+     "0/238"
+    ],
+    [
+     "prometheus_target_scrapes_exceeded_body_size_limit_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of scrapes that hit the bod",
+     "0/238"
+    ],
+    [
+     "prometheus_target_scrapes_exceeded_native_histogram_bucket_limit_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of scrapes that hit the nat",
+     "0/238"
+    ],
+    [
+     "prometheus_target_scrapes_exceeded_sample_limit_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of scrapes that hit the sam",
+     "0/238"
+    ],
+    [
+     "prometheus_target_scrapes_exemplar_out_of_order_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of exemplar rejected due to",
+     "0/238"
+    ],
+    [
+     "prometheus_target_scrapes_sample_duplicate_timestamp_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of samples rejected due to ",
+     "0/238"
+    ],
+    [
+     "prometheus_target_scrapes_sample_out_of_bounds_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of samples rejected due to ",
+     "0/238"
+    ],
+    [
+     "prometheus_target_scrapes_sample_out_of_order_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of samples rejected due to ",
+     "0/238"
+    ],
+    [
+     "prometheus_target_sync_failed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of target sync failures.",
+     "0/1195"
+    ],
+    [
+     "prometheus_target_sync_length_histogram_seconds",
+     "histogram",
+     "",
+     "exponentialHistogram",
+     null,
+     "histogram",
+     "",
+     "Actual interval to sync the scrape pool.",
+     "0/1195"
+    ],
+    [
+     "prometheus_template_text_expansion_failures_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The total number of template text expans",
+     "0/238"
+    ],
+    [
+     "prometheus_template_text_expansions_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The total number of template text expans",
+     "0/238"
+    ],
+    [
+     "prometheus_treecache_watcher_goroutines",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The current number of watcher goroutines",
+     "0/238"
+    ],
+    [
+     "prometheus_treecache_zookeeper_failures_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The total number of ZooKeeper failures.",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_blocks_loaded",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of currently loaded data blocks",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_checkpoint_creations_failed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of checkpoint creations tha",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_checkpoint_creations_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of checkpoint creations att",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_checkpoint_deletions_failed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of checkpoint deletions tha",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_checkpoint_deletions_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of checkpoint deletions att",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_clean_start",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "-1: lockfile is disabled. 0: a lockfile ",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_compaction_chunk_range_seconds",
+     "histogram",
+     "",
+     "histogram",
+     null,
+     "histogram",
+     "",
+     "Final time range of chunks on their firs",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_compaction_chunk_samples",
+     "histogram",
+     "",
+     "histogram",
+     null,
+     "histogram",
+     "",
+     "Final number of samples on their first c",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_compaction_chunk_size_bytes",
+     "histogram",
+     "",
+     "histogram",
+     null,
+     "histogram",
+     "",
+     "Final size of chunks on their first comp",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_compaction_duration_seconds",
+     "histogram",
+     "",
+     "exponentialHistogram",
+     null,
+     "histogram",
+     "",
+     "Duration of compaction runs",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_compaction_populating_block",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Set to 1 when a block is currently being",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_compactions_failed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of compactions that failed ",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_compactions_skipped_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of skipped compactions due ",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_compactions_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of compactions that were ex",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_compactions_triggered_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of triggered compactions fo",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_data_replay_duration_seconds",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Time taken to replay the data on disk.",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_exemplar_exemplars_appended_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of appended exemplars.",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_exemplar_exemplars_in_storage",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of exemplars currently in circula",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_exemplar_last_exemplars_timestamp_seconds",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The timestamp of the oldest exemplar sto",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_exemplar_max_exemplars",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Total number of exemplars the exemplar s",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_exemplar_out_of_order_exemplars_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of out of order exemplar in",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_exemplar_series_with_exemplars_in_storage",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of series with exemplars currentl",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_active_appenders",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of currently active appender tran",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_appenders_created_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of appender transactions cr",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_chunks",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Total number of chunks in the head block",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_chunks_created_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of chunks created in the he",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_chunks_removed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of chunks removed in the he",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_chunks_storage_size_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Size of the chunks_head directory.",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_max_time",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Maximum timestamp of the head block. The",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_max_time_seconds",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Maximum timestamp of the head block.",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_min_time",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Minimum time bound of the head block. Th",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_min_time_seconds",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Minimum time bound of the head block.",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_native_histogram_buckets",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of positive and negative bucket e",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_native_histogram_series",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Number of series whose most recent in-or",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_out_of_order_samples_appended_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of appended out of order sa",
+     "0/478"
+    ],
+    [
+     "prometheus_tsdb_head_samples_appended_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of appended samples.",
+     "0/478"
+    ],
+    [
+     "prometheus_tsdb_head_series",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Total number of series in the head block",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_series_created_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of series created in the he",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_series_not_found_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of requests for series that",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_series_pending_commit_underflow_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of attempts to release a pe",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_series_removed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of series removed in the he",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_stale_series",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Total number of stale series in the head",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_truncations_failed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of head truncations that fa",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_head_truncations_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of head truncations attempt",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_isolation_high_watermark",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The highest TSDB append ID that has been",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_isolation_low_watermark",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The lowest TSDB append ID that is still ",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_lowest_timestamp",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Lowest timestamp value stored in the dat",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_lowest_timestamp_seconds",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Lowest timestamp value stored in the dat",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_mmap_chunk_corruptions_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of memory-mapped chunk corr",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_mmap_chunks_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of chunks that were memory-",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_out_of_bound_samples_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of out of bound samples ing",
+     "0/239"
+    ],
+    [
+     "prometheus_tsdb_out_of_order_samples_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of out of order samples ing",
+     "0/478"
+    ],
+    [
+     "prometheus_tsdb_reloads_failures_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of times the database failed to r",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_reloads_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of times the database reloaded bl",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_retention_limit_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Max number of bytes to be retained in th",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_retention_limit_percentage",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Max percentage of total storage space to",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_retention_limit_seconds",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "How long to retain samples in storage.",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_sample_ooo_delta",
+     "histogram",
+     "",
+     "exponentialHistogram",
+     null,
+     "histogram",
+     "",
+     "Delta in seconds by which a sample is co",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_selected_series_compaction_duration_seconds",
+     "histogram",
+     "",
+     "exponentialHistogram",
+     null,
+     "histogram",
+     "",
+     "Duration of compactions triggered for an",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_selected_series_compactions_failed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of compactions triggered fo",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_selected_series_compactions_triggered_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of compactions triggered fo",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_size_retentions_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The number of times that blocks were del",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_snapshot_replay_error_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number snapshot replays that faile",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_stale_series_compaction_duration_seconds",
+     "histogram",
+     "",
+     "exponentialHistogram",
+     null,
+     "histogram",
+     "",
+     "Duration of stale series compaction runs",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_stale_series_compactions_failed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of stale series compactions",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_stale_series_compactions_triggered_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of triggered stale series c",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_storage_blocks_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "The number of bytes that are currently u",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_symbol_table_size_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Size of symbol table in memory for loade",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_time_retentions_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The number of times that blocks were del",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_tombstone_cleanup_seconds",
+     "histogram",
+     "",
+     "exponentialHistogram",
+     null,
+     "histogram",
+     "",
+     "The time taken to recompact blocks to re",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_too_old_samples_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of out of order samples ing",
+     "0/239"
+    ],
+    [
+     "prometheus_tsdb_vertical_compactions_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of compactions done on over",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_wal_completed_pages_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of completed pages.",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_wal_corruptions_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of WAL corruptions.",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_wal_page_flushes_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of page flushes.",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_wal_record_bytes_saved_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of bytes saved by the optio",
+     "0/239"
+    ],
+    [
+     "prometheus_tsdb_wal_record_part_writes_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of record parts written bef",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_wal_record_parts_bytes_written_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of record part bytes writte",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_wal_segment_current",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Write log segment index that TSDB is cur",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_wal_storage_size_bytes",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Size of the write log directory.",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_wal_truncations_failed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of write log truncations th",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_wal_truncations_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of write log truncations at",
+     "0/238"
+    ],
+    [
+     "prometheus_tsdb_wal_writes_failed_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of write log writes that fa",
+     "0/238"
+    ],
+    [
+     "prometheus_wal_watcher_current_segment",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Current segment the WAL watcher is readi",
+     "0/238"
+    ],
+    [
+     "prometheus_wal_watcher_notifications_skipped_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "The number of WAL write notifications th",
+     "0/238"
+    ],
+    [
+     "prometheus_wal_watcher_record_decode_failures_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of records read by the WAL watche",
+     "0/238"
+    ],
+    [
+     "prometheus_wal_watcher_records_read_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of records read by the WAL watche",
+     "0/1420"
+    ],
+    [
+     "prometheus_wal_watcher_samples_sent_pre_tailing_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Number of sample records read by the WAL",
+     "0/238"
+    ],
+    [
+     "prometheus_web_federation_errors_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of errors that occurred whi",
+     "0/238"
+    ],
+    [
+     "prometheus_web_federation_warnings_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of warnings that occurred w",
+     "0/238"
+    ],
+    [
+     "promhttp_metric_handler_errors_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of internal errors encounte",
+     "0/1430"
+    ],
+    [
+     "promhttp_metric_handler_requests_in_flight",
+     "gauge",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "",
+     "Current number of scrapes being served.",
+     "0/238"
+    ],
+    [
+     "promhttp_metric_handler_requests_total",
+     "counter",
+     "",
+     "sum",
+     true,
+     "counter",
+     "",
+     "Total number of scrapes by HTTP status c",
+     "0/714"
+    ],
+    [
+     "scrape_duration_seconds",
+     "?",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "s",
+     "Duration of the last scrape in seconds.",
+     "0/1661"
+    ],
+    [
+     "scrape_samples_post_metric_relabeling",
+     "?",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "samples",
+     "Number of samples remaining after metric",
+     "0/1661"
+    ],
+    [
+     "scrape_samples_scraped",
+     "?",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "samples",
+     "Number of samples last scraped.",
+     "0/1661"
+    ],
+    [
+     "scrape_series_added",
+     "?",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "series",
+     "Number of series in the last scrape.",
+     "0/1661"
+    ],
+    [
+     "up",
+     "?",
+     "",
+     "gauge",
+     null,
+     "gauge",
+     "targets",
+     "Health of the scrape target. 1 means the",
+     "0/1661"
+    ]
+   ],
+   "exemplars": [
+    [
+     "corr_latency_seconds{} instance=exemplar-app.otel-correctness.svc:8080 job=exemplar-app",
+     96,
+     96,
+     96,
+     0,
+     0
+    ],
+    [
+     "corr_latency_seconds_bucket{le=\"0.05\"} instance=stale-app.otel-correctness.svc:8080 job=stale-app",
+     22,
+     0,
+     0,
+     22,
+     0
+    ],
+    [
+     "corr_latency_seconds_bucket{le=\"0.5\"} instance=stale-app.otel-correctness.svc:8080 job=stale-app",
+     22,
+     0,
+     0,
+     22,
+     0
+    ],
+    [
+     "corr_requests_total{path=\"/a\"} instance=exemplar-app.otel-correctness.svc:8080 job=exemplar-app",
+     48,
+     48,
+     48,
+     0,
+     0
+    ],
+    [
+     "corr_requests_total{path=\"/b\"} instance=exemplar-app.otel-correctness.svc:8080 job=exemplar-app",
+     48,
+     48,
+     48,
+     0,
+     0
+    ],
+    [
+     "corr_requests_total{path=\"/a\"} instance=stale-app.otel-correctness.svc:8080 job=stale-app",
+     22,
+     22,
+     22,
+     0,
+     0
+    ],
+    [
+     "corr_requests_total{path=\"/b\"} instance=stale-app.otel-correctness.svc:8080 job=stale-app",
+     22,
+     22,
+     22,
+     0,
+     0
+    ]
+   ]
+  },
+  "prod": {
+   "dump_points_in_window": 155233,
+   "dump_points_total": 583928,
+   "lines": 17362,
+   "bad_lines": 0,
+   "empty_resource_points": 336,
+   "scopes": {
+    "('Red Hat build of OpenTelemetry', '0.158.0')": 63673
+   },
+   "norecordedvalue_points": 0,
+   "replica0": {
+    "series_source": 2986,
+    "series_dump": 2986,
+    "series_only_source": 0,
+    "series_only_dump": 0,
+    "series_exact": 2986,
+    "samples_source": 77609,
+    "samples_equal": 77609,
+    "extra_nan_in_dump": 3,
+    "samples_dump_matched_series": 77612,
+    "points_without_replica_label": 0
+   },
+   "replica1": {
+    "series_source": 2986,
+    "series_dump": 2986,
+    "series_only_source": 0,
+    "series_only_dump": 0,
+    "series_exact": 2986,
+    "samples_source": 77618,
+    "samples_equal": 77618,
+    "extra_nan_in_dump": 3,
+    "samples_dump_matched_series": 77621,
+    "points_without_replica_label": 0
+   },
+   "resource_pairs": 154,
+   "resource_splits": 0
+  },
+  "prod-contrib": {
+   "dump_points_in_window": 155233,
+   "dump_points_total": 643774,
+   "lines": 17384,
+   "bad_lines": 0,
+   "empty_resource_points": 336,
+   "scopes": {
+    "('OpenTelemetry Collector Contrib', '0.163.1')": 48249
+   },
+   "norecordedvalue_points": 0,
+   "replica0": {
+    "series_source": 2986,
+    "series_dump": 2986,
+    "series_only_source": 0,
+    "series_only_dump": 0,
+    "series_exact": 2986,
+    "samples_source": 77609,
+    "samples_equal": 77609,
+    "extra_nan_in_dump": 3,
+    "samples_dump_matched_series": 77612,
+    "points_without_replica_label": 0
+   },
+   "replica1": {
+    "series_source": 2986,
+    "series_dump": 2986,
+    "series_only_source": 0,
+    "series_only_dump": 0,
+    "series_exact": 2986,
+    "samples_source": 77618,
+    "samples_equal": 77618,
+    "extra_nan_in_dump": 3,
+    "samples_dump_matched_series": 77621,
+    "points_without_replica_label": 0
+   },
+   "resource_pairs": 154,
+   "resource_splits": 0
+  },
+  "counters": [
+   [
+    "typed",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "typed",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_exemplars_total",
+    "typed",
+    216.0,
+    500.0,
+    284.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_histograms_failed_total",
+    "typed",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_histograms_pending",
+    "typed",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_histograms_retried_total",
+    "typed",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_histograms_total",
+    "typed",
+    3709.0,
+    8709.0,
+    5000.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_samples_failed_total",
+    "typed",
+    37121.0,
+    87493.0,
+    50372.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_samples_pending",
+    "typed",
+    25.0,
+    25.0,
+    0.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_samples_retried_total",
+    "typed",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_samples_total",
+    "typed",
+    61640.0,
+    143387.0,
+    81747.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "typed",
+    114.0,
+    258.0,
+    144.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_shards",
+    "typed",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "typed",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    62645.0,
+    144392.0,
+    81747.0
+   ],
+   [
+    "typed",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    3786.0,
+    8786.0,
+    5000.0
+   ],
+   [
+    "typed",
+    "prometheus_tsdb_head_series",
+    "",
+    1818.0,
+    1843.0,
+    25.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_exemplars_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_exemplars_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_exemplars_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_exemplars_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_pending",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_pending",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_pending",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_pending",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_retried_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_retried_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_retried_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_retried_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_metadata_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_metadata_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_metadata_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_metadata_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_pending",
+    "prod",
+    1141.0,
+    281.0,
+    -860.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_pending",
+    "prod-contrib",
+    997.0,
+    281.0,
+    -716.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_pending",
+    "prod",
+    1387.0,
+    548.0,
+    -839.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_pending",
+    "prod-contrib",
+    1387.0,
+    548.0,
+    -839.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_retried_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_retried_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_retried_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_retried_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_total",
+    "prod",
+    5012000.0,
+    15498000.0,
+    10486000.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_total",
+    "prod-contrib",
+    5012000.0,
+    15498000.0,
+    10486000.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_total",
+    "prod",
+    4970000.0,
+    15456000.0,
+    10486000.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_total",
+    "prod-contrib",
+    4970000.0,
+    15456000.0,
+    10486000.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prod",
+    2506.0,
+    7749.0,
+    5243.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prod-contrib",
+    2506.0,
+    7749.0,
+    5243.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prod",
+    2485.0,
+    7728.0,
+    5243.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prod-contrib",
+    2485.0,
+    7728.0,
+    5243.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_shards",
+    "prod",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_shards",
+    "prod-contrib",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_shards",
+    "prod",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_shards",
+    "prod-contrib",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    130956334.0,
+    141441618.0,
+    10485284.0
+   ],
+   [
+    "prod0",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    131170548.0,
+    141655709.0,
+    10485161.0
+   ],
+   [
+    "prod0",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_tsdb_head_series",
+    "",
+    498157.0,
+    498588.0,
+    431.0
+   ],
+   [
+    "prod0",
+    "prometheus_tsdb_head_series",
+    "",
+    495357.0,
+    495786.0,
+    429.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_exemplars_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_exemplars_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_exemplars_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_exemplars_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_pending",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_pending",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_pending",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_pending",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_retried_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_retried_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_retried_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_retried_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_metadata_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_metadata_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_metadata_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_metadata_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_pending",
+    "prod",
+    1389.0,
+    580.0,
+    -809.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_pending",
+    "prod-contrib",
+    1389.0,
+    580.0,
+    -809.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_pending",
+    "prod",
+    1336.0,
+    518.0,
+    -818.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_pending",
+    "prod-contrib",
+    1336.0,
+    518.0,
+    -818.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_retried_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_retried_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_retried_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_retried_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_total",
+    "prod",
+    5176000.0,
+    15662000.0,
+    10486000.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_total",
+    "prod-contrib",
+    5176000.0,
+    15662000.0,
+    10486000.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_total",
+    "prod",
+    4980000.0,
+    15466000.0,
+    10486000.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_total",
+    "prod-contrib",
+    4980000.0,
+    15466000.0,
+    10486000.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prod",
+    2588.0,
+    7831.0,
+    5243.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prod-contrib",
+    2588.0,
+    7831.0,
+    5243.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prod",
+    2490.0,
+    7733.0,
+    5243.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prod-contrib",
+    2490.0,
+    7733.0,
+    5243.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_shards",
+    "prod",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_shards",
+    "prod-contrib",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_shards",
+    "prod",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_shards",
+    "prod-contrib",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    131120726.0,
+    141605917.0,
+    10485191.0
+   ],
+   [
+    "prod1",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    131180497.0,
+    141665679.0,
+    10485182.0
+   ],
+   [
+    "prod1",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_tsdb_head_series",
+    "",
+    498213.0,
+    498588.0,
+    375.0
+   ],
+   [
+    "prod1",
+    "prometheus_tsdb_head_series",
+    "",
+    495357.0,
+    495786.0,
+    429.0
+   ],
+   [
+    "otelcol prod",
+    "otelcol_exporter_queue_size",
+    "otlphttp",
+    0.0,
+    2000.0,
+    2000.0
+   ],
+   [
+    "otelcol typed",
+    "otelcol_exporter_queue_size",
+    "otlphttp",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "otelcol prod",
+    "otelcol_exporter_sent_metric_points",
+    "file",
+    78340.0,
+    233585.0,
+    155245.0
+   ],
+   [
+    "otelcol prod-contrib",
+    "otelcol_exporter_sent_metric_points",
+    "file",
+    78512.0,
+    233771.0,
+    155259.0
+   ],
+   [
+    "otelcol typed",
+    "otelcol_exporter_sent_metric_points",
+    "file",
+    28606.0,
+    64839.0,
+    36233.0
+   ],
+   [
+    "otelcol prod",
+    "otelcol_exporter_sent_metric_points",
+    "otlphttp",
+    10600000.0,
+    31568000.0,
+    20968000.0
+   ],
+   [
+    "otelcol typed",
+    "otelcol_exporter_sent_metric_points",
+    "otlphttp",
+    28606.0,
+    64839.0,
+    36233.0
+   ],
+   [
+    "otelcol prod",
+    "otelcol_process_memory_rss",
+    "",
+    150048768.0,
+    154230784.0,
+    4182016.0
+   ],
+   [
+    "otelcol prod-contrib",
+    "otelcol_process_memory_rss",
+    "",
+    248778752.0,
+    251461632.0,
+    2682880.0
+   ],
+   [
+    "otelcol typed",
+    "otelcol_process_memory_rss",
+    "",
+    243855360.0,
+    248528896.0,
+    4673536.0
+   ],
+   [
+    "otelcol prod",
+    "otelcol_process_uptime",
+    "",
+    587.544781855,
+    1307.544863238,
+    720.0000813830001
+   ],
+   [
+    "otelcol prod-contrib",
+    "otelcol_process_uptime",
+    "",
+    590.516826974,
+    1310.51658756,
+    719.9997605860001
+   ],
+   [
+    "otelcol typed",
+    "otelcol_process_uptime",
+    "",
+    581.391542413,
+    1301.391648391,
+    720.000105978
+   ],
+   [
+    "otelcol prod",
+    "otelcol_receiver_accepted_metric_points",
+    "prometheus_remote_write",
+    78340.0,
+    233585.0,
+    155245.0
+   ],
+   [
+    "otelcol prod-contrib",
+    "otelcol_receiver_accepted_metric_points",
+    "prometheus_remote_write",
+    78512.0,
+    233771.0,
+    155259.0
+   ],
+   [
+    "otelcol typed",
+    "otelcol_receiver_accepted_metric_points",
+    "prometheus_remote_write",
+    28606.0,
+    64839.0,
+    36233.0
+   ],
+   [
+    "otelcol prod",
+    "otelcol_receiver_refused_metric_points",
+    "prometheus_remote_write",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "otelcol prod-contrib",
+    "otelcol_receiver_refused_metric_points",
+    "prometheus_remote_write",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "otelcol typed",
+    "otelcol_receiver_refused_metric_points",
+    "prometheus_remote_write",
+    0.0,
+    0.0,
+    0.0
+   ]
+  ],
+  "family_prometheus-k8s-0": {
+   "families_source": 2783,
+   "equal": 2777,
+   "missing_in_sink": {
+    "apiserver_request:burn2h": 0,
+    "csv_abnormal": 0,
+    "kube_job_complete": 0,
+    "kube_job_spec_active_deadline_seconds": 0,
+    "kube_job_status_completion_time": 0,
+    "sum:apiserver_request:burnrate2h": 0
+   },
+   "diff": {},
+   "extra_in_sink": {},
+   "samples_source": 10483618.0,
+   "samples_sink_matched": 10483618.0
+  },
+  "family_prometheus-k8s-1": {
+   "families_source": 2786,
+   "equal": 2778,
+   "missing_in_sink": {
+    "apiserver_request:burn2h": 0,
+    "csv_abnormal": 0,
+    "kube_job_complete": 0,
+    "kube_job_spec_active_deadline_seconds": 0,
+    "kube_job_status_completion_time": 0,
+    "kube_pod_container_status_waiting_reason": 0,
+    "kube_pod_init_container_status_waiting_reason": 0,
+    "sum:apiserver_request:burnrate2h": 0
+   },
+   "diff": {},
+   "extra_in_sink": {},
+   "samples_source": 10485534.0,
+   "samples_sink_matched": 10485534.0
+  },
+  "family_typed job=prometheus": {
+   "families_source": 379,
+   "equal": 300,
+   "missing_in_sink": {
+    "go_gc_duration_seconds": 240.0,
+    "go_gc_duration_seconds_count": 48.0,
+    "go_gc_duration_seconds_sum": 48.0,
+    "go_gc_heap_allocs_by_size_bytes": 48.0,
+    "go_gc_heap_frees_by_size_bytes": 48.0,
+    "go_gc_pauses_seconds": 48.0,
+    "go_sched_latencies_seconds": 48.0,
+    "go_sched_pauses_stopping_gc_seconds": 48.0,
+    "go_sched_pauses_stopping_other_seconds": 48.0,
+    "go_sched_pauses_total_gc_seconds": 48.0,
+    "go_sched_pauses_total_other_seconds": 48.0,
+    "prometheus_engine_query_duration_histogram_seconds_bucket": 960.0,
+    "prometheus_engine_query_duration_histogram_seconds_count": 192.0,
+    "prometheus_engine_query_duration_histogram_seconds_sum": 192.0,
+    "prometheus_engine_query_duration_seconds": 576.0,
+    "prometheus_engine_query_duration_seconds_count": 192.0,
+    "prometheus_engine_query_duration_seconds_sum": 192.0,
+    "prometheus_http_request_duration_seconds_bucket": 2930.0,
+    "prometheus_http_request_duration_seconds_count": 293.0,
+    "prometheus_http_request_duration_seconds_sum": 293.0,
+    "prometheus_http_response_size_bytes": 293.0,
+    "prometheus_remote_storage_sent_batch_duration_seconds_bucket": 768.0,
+    "prometheus_remote_storage_sent_batch_duration_seconds_count": 48.0,
+    "prometheus_remote_storage_sent_batch_duration_seconds_sum": 48.0,
+    "prometheus_rule_evaluation_duration_histogram_seconds_bucket": 240.0,
+    "prometheus_rule_evaluation_duration_histogram_seconds_count": 48.0,
+    "prometheus_rule_evaluation_duration_histogram_seconds_sum": 48.0,
+    "prometheus_rule_evaluation_duration_seconds": 144.0,
+    "prometheus_rule_evaluation_duration_seconds_count": 48.0,
+    "prometheus_rule_evaluation_duration_seconds_sum": 48.0,
+    "prometheus_rule_group_duration_histogram_seconds_bucket": 240.0,
+    "prometheus_rule_group_duration_histogram_seconds_count": 48.0,
+    "prometheus_rule_group_duration_histogram_seconds_sum": 48.0,
+    "prometheus_rule_group_duration_seconds": 240.0,
+    "prometheus_rule_group_duration_seconds_count": 48.0,
+    "prometheus_rule_group_duration_seconds_sum": 48.0,
+    "prometheus_sd_consul_rpc_duration_seconds": 288.0,
+    "prometheus_sd_consul_rpc_duration_seconds_count": 96.0,
+    "prometheus_sd_consul_rpc_duration_seconds_sum": 96.0,
+    "prometheus_sd_file_scan_duration_seconds": 144.0,
+    "prometheus_sd_file_scan_duration_seconds_count": 48.0,
+    "prometheus_sd_file_scan_duration_seconds_sum": 48.0,
+    "prometheus_sd_kuma_fetch_duration_seconds": 144.0,
+    "prometheus_sd_kuma_fetch_duration_seconds_count": 48.0,
+    "prometheus_sd_kuma_fetch_duration_seconds_sum": 48.0,
+    "prometheus_target_interval_length_histogram_seconds_bucket": 240.0,
+    "prometheus_target_interval_length_histogram_seconds_count": 48.0,
+    "prometheus_target_interval_length_histogram_seconds_sum": 48.0,
+    "prometheus_target_interval_length_seconds": 240.0,
+    "prometheus_target_interval_length_seconds_count": 48.0,
+    "prometheus_target_interval_length_seconds_sum": 48.0,
+    "prometheus_target_sync_length_histogram_seconds_bucket": 1200.0,
+    "prometheus_target_sync_length_histogram_seconds_count": 240.0,
+    "prometheus_target_sync_length_histogram_seconds_sum": 240.0,
+    "prometheus_target_sync_length_seconds": 1200.0,
+    "prometheus_target_sync_length_seconds_count": 240.0,
+    "prometheus_target_sync_length_seconds_sum": 240.0,
+    "prometheus_tsdb_compaction_chunk_range_seconds": 48.0,
+    "prometheus_tsdb_compaction_chunk_samples": 48.0,
+    "prometheus_tsdb_compaction_chunk_size_bytes": 48.0,
+    "prometheus_tsdb_compaction_duration_seconds_bucket": 720.0,
+    "prometheus_tsdb_compaction_duration_seconds_count": 48.0,
+    "prometheus_tsdb_compaction_duration_seconds_sum": 48.0,
+    "prometheus_tsdb_head_gc_duration_seconds_count": 48.0,
+    "prometheus_tsdb_head_gc_duration_seconds_sum": 48.0,
+    "prometheus_tsdb_sample_ooo_delta_bucket": 384.0,
+    "prometheus_tsdb_sample_ooo_delta_count": 48.0,
+    "prometheus_tsdb_sample_ooo_delta_sum": 48.0,
+    "prometheus_tsdb_selected_series_compaction_duration_seconds_bucket": 720.0,
+    "prometheus_tsdb_selected_series_compaction_duration_seconds_count": 48.0,
+    "prometheus_tsdb_selected_series_compaction_duration_seconds_sum": 48.0,
+    "prometheus_tsdb_stale_series_compaction_duration_seconds_bucket": 720.0,
+    "prometheus_tsdb_stale_series_compaction_duration_seconds_count": 48.0,
+    "prometheus_tsdb_stale_series_compaction_duration_seconds_sum": 48.0,
+    "prometheus_tsdb_wal_fsync_duration_seconds": 144.0,
+    "prometheus_tsdb_wal_fsync_duration_seconds_count": 48.0,
+    "prometheus_tsdb_wal_fsync_duration_seconds_sum": 48.0,
+    "prometheus_tsdb_wal_truncate_duration_seconds_count": 48.0,
+    "prometheus_tsdb_wal_truncate_duration_seconds_sum": 48.0
+   },
+   "diff": {},
+   "extra_in_sink": {},
+   "samples_source": 48605.0,
+   "samples_sink_matched": 31164.0
+  },
+  "family_typed job=avalanche": {
+   "families_source": 23,
+   "equal": 18,
+   "missing_in_sink": {
+    "avalanche_histogram_metric_mmmmm_0_0": 960.0,
+    "avalanche_histogram_metric_mmmmm_0_1": 960.0,
+    "avalanche_summary_metric_mmmmm_0_0": 1920.0,
+    "avalanche_summary_metric_mmmmm_0_0_count": 960.0,
+    "avalanche_summary_metric_mmmmm_0_0_sum": 960.0
+   },
+   "diff": {},
+   "extra_in_sink": {},
+   "samples_source": 31920.0,
+   "samples_sink_matched": 26160.0
+  },
+  "family_typed job=exemplar-app": {
+   "families_source": 17,
+   "equal": 13,
+   "missing_in_sink": {
+    "corr_latency_seconds": 48.0,
+    "corr_summary_seconds": 144.0,
+    "corr_summary_seconds_count": 48.0,
+    "corr_summary_seconds_sum": 48.0
+   },
+   "diff": {},
+   "extra_in_sink": {},
+   "samples_source": 1541.0,
+   "samples_sink_matched": 1253.0
+  },
+  "family_typed job=stale-app": {
+   "families_source": 16,
+   "equal": 10,
+   "missing_in_sink": {
+    "corr_latency_seconds_bucket": 220.0,
+    "corr_latency_seconds_count": 22.0,
+    "corr_latency_seconds_sum": 22.0,
+    "corr_summary_seconds": 66.0,
+    "corr_summary_seconds_count": 22.0,
+    "corr_summary_seconds_sum": 22.0
+   },
+   "diff": {},
+   "extra_in_sink": {},
+   "samples_source": 814.0,
+   "samples_sink_matched": 440.0
+  },
+  "family_typed job=otelcol": {
+   "families_source": 24,
+   "equal": 24,
+   "missing_in_sink": {},
+   "diff": {},
+   "extra_in_sink": {},
+   "samples_source": 3840.0,
+   "samples_sink_matched": 3840.0
+  },
+  "typed_missing_in_sink_classes": {
+   "not emitted by the collector": [
+    "avalanche_summary_metric_mmmmm_0_0",
+    "avalanche_summary_metric_mmmmm_0_0_count",
+    "avalanche_summary_metric_mmmmm_0_0_sum",
+    "corr_latency_seconds_bucket",
+    "corr_latency_seconds_count",
+    "corr_latency_seconds_sum",
+    "corr_summary_seconds",
+    "corr_summary_seconds_count",
+    "corr_summary_seconds_sum",
+    "go_gc_duration_seconds",
+    "go_gc_duration_seconds_count",
+    "go_gc_duration_seconds_sum",
+    "prometheus_engine_query_duration_histogram_seconds_bucket",
+    "prometheus_engine_query_duration_histogram_seconds_count",
+    "prometheus_engine_query_duration_histogram_seconds_sum",
+    "prometheus_engine_query_duration_seconds",
+    "prometheus_engine_query_duration_seconds_count",
+    "prometheus_engine_query_duration_seconds_sum",
+    "prometheus_http_request_duration_seconds_bucket",
+    "prometheus_http_request_duration_seconds_count",
+    "prometheus_http_request_duration_seconds_sum",
+    "prometheus_remote_storage_sent_batch_duration_seconds_bucket",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prometheus_remote_storage_sent_batch_duration_seconds_sum",
+    "prometheus_rule_evaluation_duration_histogram_seconds_bucket",
+    "prometheus_rule_evaluation_duration_histogram_seconds_count",
+    "prometheus_rule_evaluation_duration_histogram_seconds_sum",
+    "prometheus_rule_evaluation_duration_seconds",
+    "prometheus_rule_evaluation_duration_seconds_count",
+    "prometheus_rule_evaluation_duration_seconds_sum",
+    "prometheus_rule_group_duration_histogram_seconds_bucket",
+    "prometheus_rule_group_duration_histogram_seconds_count",
+    "prometheus_rule_group_duration_histogram_seconds_sum",
+    "prometheus_rule_group_duration_seconds",
+    "prometheus_rule_group_duration_seconds_count",
+    "prometheus_rule_group_duration_seconds_sum",
+    "prometheus_sd_consul_rpc_duration_seconds",
+    "prometheus_sd_consul_rpc_duration_seconds_count",
+    "prometheus_sd_consul_rpc_duration_seconds_sum",
+    "prometheus_sd_file_scan_duration_seconds",
+    "prometheus_sd_file_scan_duration_seconds_count",
+    "prometheus_sd_file_scan_duration_seconds_sum",
+    "prometheus_sd_kuma_fetch_duration_seconds",
+    "prometheus_sd_kuma_fetch_duration_seconds_count",
+    "prometheus_sd_kuma_fetch_duration_seconds_sum",
+    "prometheus_target_interval_length_histogram_seconds_bucket",
+    "prometheus_target_interval_length_histogram_seconds_count",
+    "prometheus_target_interval_length_histogram_seconds_sum",
+    "prometheus_target_interval_length_seconds",
+    "prometheus_target_interval_length_seconds_count",
+    "prometheus_target_interval_length_seconds_sum",
+    "prometheus_target_sync_length_histogram_seconds_bucket",
+    "prometheus_target_sync_length_histogram_seconds_count",
+    "prometheus_target_sync_length_histogram_seconds_sum",
+    "prometheus_target_sync_length_seconds",
+    "prometheus_target_sync_length_seconds_count",
+    "prometheus_target_sync_length_seconds_sum",
+    "prometheus_tsdb_compaction_duration_seconds_bucket",
+    "prometheus_tsdb_compaction_duration_seconds_count",
+    "prometheus_tsdb_compaction_duration_seconds_sum",
+    "prometheus_tsdb_head_gc_duration_seconds_count",
+    "prometheus_tsdb_head_gc_duration_seconds_sum",
+    "prometheus_tsdb_sample_ooo_delta_bucket",
+    "prometheus_tsdb_sample_ooo_delta_count",
+    "prometheus_tsdb_sample_ooo_delta_sum",
+    "prometheus_tsdb_selected_series_compaction_duration_seconds_bucket",
+    "prometheus_tsdb_selected_series_compaction_duration_seconds_count",
+    "prometheus_tsdb_selected_series_compaction_duration_seconds_sum",
+    "prometheus_tsdb_stale_series_compaction_duration_seconds_bucket",
+    "prometheus_tsdb_stale_series_compaction_duration_seconds_count",
+    "prometheus_tsdb_stale_series_compaction_duration_seconds_sum",
+    "prometheus_tsdb_wal_fsync_duration_seconds",
+    "prometheus_tsdb_wal_fsync_duration_seconds_count",
+    "prometheus_tsdb_wal_fsync_duration_seconds_sum",
+    "prometheus_tsdb_wal_truncate_duration_seconds_count",
+    "prometheus_tsdb_wal_truncate_duration_seconds_sum"
+   ],
+   "emitted by the collector as a histogram, stored by the sink as classic series": [
+    "avalanche_histogram_metric_mmmmm_0_0",
+    "avalanche_histogram_metric_mmmmm_0_1",
+    "corr_latency_seconds",
+    "go_gc_heap_allocs_by_size_bytes",
+    "go_gc_heap_frees_by_size_bytes",
+    "go_gc_pauses_seconds",
+    "go_sched_latencies_seconds",
+    "go_sched_pauses_stopping_gc_seconds",
+    "go_sched_pauses_stopping_other_seconds",
+    "go_sched_pauses_total_gc_seconds",
+    "go_sched_pauses_total_other_seconds",
+    "prometheus_http_response_size_bytes",
+    "prometheus_tsdb_compaction_chunk_range_seconds",
+    "prometheus_tsdb_compaction_chunk_samples",
+    "prometheus_tsdb_compaction_chunk_size_bytes"
+   ]
+  }
+ },
+ "w2": {
+  "typed": {
+   "floats": {
+    "series_source": 1712,
+    "series_dump": 647,
+    "series_only_source": 1065,
+    "series_only_dump": 0,
+    "series_exact": 647,
+    "samples_source": 23290,
+    "samples_equal": 23290,
+    "samples_dump_matched_series": 23290
+   },
+   "hists": {
+    "series_source": 106,
+    "series_dump": 106,
+    "series_only_source": 0,
+    "series_only_dump": 0,
+    "points_source": 3816,
+    "exponential_points": 1692,
+    "points_equal": 3816,
+    "explicit_points": 2124
+   },
+   "dump_points_in_window": 27106,
+   "dump_points_total": 178550,
+   "dump_lines": 712,
+   "bad_lines": 0,
+   "norecordedvalue_series": 0,
+   "norecordedvalue_points": 0,
+   "scopes": {
+    "('OpenTelemetry Collector Contrib', '0.163.1')": 1664
+   },
+   "empty_resource_points": 0
+  },
+  "prod": {
+   "dump_points_in_window": 116402,
+   "dump_points_total": 583928,
+   "lines": 17362,
+   "bad_lines": 0,
+   "empty_resource_points": 252,
+   "scopes": {
+    "('Red Hat build of OpenTelemetry', '0.158.0')": 63673
+   },
+   "norecordedvalue_points": 0,
+   "replica0": {
+    "series_source": 2986,
+    "series_dump": 2986,
+    "series_only_source": 0,
+    "series_only_dump": 0,
+    "series_exact": 2986,
+    "samples_source": 58201,
+    "samples_equal": 58201,
+    "extra_nan_in_dump": 3,
+    "samples_dump_matched_series": 58204,
+    "points_without_replica_label": 0
+   },
+   "replica1": {
+    "series_source": 2986,
+    "series_dump": 2986,
+    "series_only_source": 0,
+    "series_only_dump": 0,
+    "series_exact": 2986,
+    "samples_source": 58195,
+    "samples_equal": 58195,
+    "extra_nan_in_dump": 3,
+    "samples_dump_matched_series": 58198,
+    "points_without_replica_label": 0
+   },
+   "resource_pairs": 154,
+   "resource_splits": 0
+  },
+  "prod-contrib": {
+   "dump_points_in_window": 116402,
+   "dump_points_total": 643774,
+   "lines": 17384,
+   "bad_lines": 0,
+   "empty_resource_points": 252,
+   "scopes": {
+    "('OpenTelemetry Collector Contrib', '0.163.1')": 48249
+   },
+   "norecordedvalue_points": 0,
+   "replica0": {
+    "series_source": 2986,
+    "series_dump": 2986,
+    "series_only_source": 0,
+    "series_only_dump": 0,
+    "series_exact": 2986,
+    "samples_source": 58201,
+    "samples_equal": 58201,
+    "extra_nan_in_dump": 3,
+    "samples_dump_matched_series": 58204,
+    "points_without_replica_label": 0
+   },
+   "replica1": {
+    "series_source": 2986,
+    "series_dump": 2986,
+    "series_only_source": 0,
+    "series_only_dump": 0,
+    "series_exact": 2986,
+    "samples_source": 58195,
+    "samples_equal": 58195,
+    "extra_nan_in_dump": 3,
+    "samples_dump_matched_series": 58198,
+    "points_without_replica_label": 0
+   },
+   "resource_pairs": 154,
+   "resource_splits": 0
+  },
+  "counters": [
+   [
+    "typed",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "typed",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_exemplars_total",
+    "typed",
+    500.0,
+    644.0,
+    144.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_histograms_failed_total",
+    "typed",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_histograms_pending",
+    "typed",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_histograms_retried_total",
+    "typed",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_histograms_total",
+    "typed",
+    8709.0,
+    12525.0,
+    3816.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_samples_failed_total",
+    "typed",
+    87493.0,
+    125725.0,
+    38232.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_samples_pending",
+    "typed",
+    25.0,
+    0.0,
+    -25.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_samples_retried_total",
+    "typed",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_samples_total",
+    "typed",
+    143387.0,
+    205041.0,
+    61654.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "typed",
+    258.0,
+    366.0,
+    108.0
+   ],
+   [
+    "typed",
+    "prometheus_remote_storage_shards",
+    "typed",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "typed",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    144392.0,
+    206021.0,
+    61629.0
+   ],
+   [
+    "typed",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    8786.0,
+    12602.0,
+    3816.0
+   ],
+   [
+    "typed",
+    "prometheus_tsdb_head_series",
+    "",
+    1843.0,
+    1844.0,
+    1.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_exemplars_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_exemplars_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_exemplars_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_exemplars_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_pending",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_pending",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_pending",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_pending",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_retried_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_retried_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_retried_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_retried_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_histograms_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_metadata_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_metadata_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_metadata_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_metadata_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_pending",
+    "prod",
+    281.0,
+    1557.0,
+    1276.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_pending",
+    "prod-contrib",
+    281.0,
+    377.0,
+    96.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_pending",
+    "prod",
+    548.0,
+    357.0,
+    -191.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_pending",
+    "prod-contrib",
+    548.0,
+    906.0,
+    358.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_retried_total",
+    "prod",
+    0.0,
+    8000.0,
+    8000.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_retried_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_retried_total",
+    "prod",
+    0.0,
+    8000.0,
+    8000.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_retried_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_total",
+    "prod",
+    15498000.0,
+    23378811.0,
+    7880811.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_total",
+    "prod-contrib",
+    15498000.0,
+    23372000.0,
+    7874000.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_total",
+    "prod",
+    15456000.0,
+    23336549.0,
+    7880549.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_samples_total",
+    "prod-contrib",
+    15456000.0,
+    23328000.0,
+    7872000.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prod",
+    7749.0,
+    11730.0,
+    3981.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prod-contrib",
+    7749.0,
+    11686.0,
+    3937.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prod",
+    7728.0,
+    11686.0,
+    3958.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prod-contrib",
+    7728.0,
+    11664.0,
+    3936.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_shards",
+    "prod",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_shards",
+    "prod-contrib",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_shards",
+    "prod",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_remote_storage_shards",
+    "prod-contrib",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    141441618.0,
+    149315714.0,
+    7874096.0
+   ],
+   [
+    "prod0",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    141655709.0,
+    149528067.0,
+    7872358.0
+   ],
+   [
+    "prod0",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod0",
+    "prometheus_tsdb_head_series",
+    "",
+    498588.0,
+    443902.0,
+    -54686.0
+   ],
+   [
+    "prod0",
+    "prometheus_tsdb_head_series",
+    "",
+    495786.0,
+    444018.0,
+    -51768.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_exemplars_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_exemplars_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_exemplars_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_exemplars_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_exemplars_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_pending",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_pending",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_pending",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_pending",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_retried_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_retried_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_retried_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_retried_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_histograms_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_metadata_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_metadata_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_metadata_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_metadata_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_failed_total",
+    "prod",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_failed_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_pending",
+    "prod",
+    580.0,
+    262.0,
+    -318.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_pending",
+    "prod-contrib",
+    580.0,
+    1073.0,
+    493.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_pending",
+    "prod",
+    518.0,
+    327.0,
+    -191.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_pending",
+    "prod-contrib",
+    518.0,
+    876.0,
+    358.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_retried_total",
+    "prod",
+    0.0,
+    8000.0,
+    8000.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_retried_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_retried_total",
+    "prod",
+    0.0,
+    8000.0,
+    8000.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_retried_total",
+    "prod-contrib",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_total",
+    "prod",
+    15662000.0,
+    23542811.0,
+    7880811.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_total",
+    "prod-contrib",
+    15662000.0,
+    23534000.0,
+    7872000.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_total",
+    "prod",
+    15466000.0,
+    23346549.0,
+    7880549.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_samples_total",
+    "prod-contrib",
+    15466000.0,
+    23338000.0,
+    7872000.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prod",
+    7831.0,
+    11812.0,
+    3981.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prod-contrib",
+    7831.0,
+    11767.0,
+    3936.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prod",
+    7733.0,
+    11691.0,
+    3958.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prod-contrib",
+    7733.0,
+    11669.0,
+    3936.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_shards",
+    "prod",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_shards",
+    "prod-contrib",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_shards",
+    "prod",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_remote_storage_shards",
+    "prod-contrib",
+    1.0,
+    1.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    141605917.0,
+    149478410.0,
+    7872493.0
+   ],
+   [
+    "prod1",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    141665679.0,
+    149538037.0,
+    7872358.0
+   ],
+   [
+    "prod1",
+    "prometheus_tsdb_head_samples_appended_total",
+    "",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "prod1",
+    "prometheus_tsdb_head_series",
+    "",
+    498588.0,
+    443903.0,
+    -54685.0
+   ],
+   [
+    "prod1",
+    "prometheus_tsdb_head_series",
+    "",
+    495786.0,
+    444018.0,
+    -51768.0
+   ],
+   [
+    "otelcol prod",
+    "otelcol_exporter_enqueue_failed_metric_points",
+    "otlphttp",
+    null,
+    16000.0,
+    null
+   ],
+   [
+    "otelcol prod",
+    "otelcol_exporter_queue_size",
+    "otlphttp",
+    2000.0,
+    2000.0,
+    0.0
+   ],
+   [
+    "otelcol typed",
+    "otelcol_exporter_queue_size",
+    "otlphttp",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "otelcol prod",
+    "otelcol_exporter_sent_metric_points",
+    "file",
+    233585.0,
+    349943.0,
+    116358.0
+   ],
+   [
+    "otelcol prod-contrib",
+    "otelcol_exporter_sent_metric_points",
+    "file",
+    233771.0,
+    350116.0,
+    116345.0
+   ],
+   [
+    "otelcol typed",
+    "otelcol_exporter_sent_metric_points",
+    "file",
+    64839.0,
+    91944.0,
+    27105.0
+   ],
+   [
+    "otelcol prod",
+    "otelcol_exporter_sent_metric_points",
+    "otlphttp",
+    31568000.0,
+    47313360.0,
+    15745360.0
+   ],
+   [
+    "otelcol typed",
+    "otelcol_exporter_sent_metric_points",
+    "otlphttp",
+    64839.0,
+    91944.0,
+    27105.0
+   ],
+   [
+    "otelcol prod",
+    "otelcol_process_memory_rss",
+    "",
+    154230784.0,
+    175636480.0,
+    21405696.0
+   ],
+   [
+    "otelcol prod-contrib",
+    "otelcol_process_memory_rss",
+    "",
+    251461632.0,
+    251604992.0,
+    143360.0
+   ],
+   [
+    "otelcol typed",
+    "otelcol_process_memory_rss",
+    "",
+    248528896.0,
+    248938496.0,
+    409600.0
+   ],
+   [
+    "otelcol prod",
+    "otelcol_process_uptime",
+    "",
+    1307.544863238,
+    1847.544240295,
+    539.999377057
+   ],
+   [
+    "otelcol prod-contrib",
+    "otelcol_process_uptime",
+    "",
+    1310.51658756,
+    1850.516708561,
+    540.000121001
+   ],
+   [
+    "otelcol typed",
+    "otelcol_process_uptime",
+    "",
+    1301.391648391,
+    1841.391806487,
+    540.000158096
+   ],
+   [
+    "otelcol prod",
+    "otelcol_receiver_accepted_metric_points",
+    "prometheus_remote_write",
+    233585.0,
+    349943.0,
+    116358.0
+   ],
+   [
+    "otelcol prod-contrib",
+    "otelcol_receiver_accepted_metric_points",
+    "prometheus_remote_write",
+    233771.0,
+    350116.0,
+    116345.0
+   ],
+   [
+    "otelcol typed",
+    "otelcol_receiver_accepted_metric_points",
+    "prometheus_remote_write",
+    64839.0,
+    91944.0,
+    27105.0
+   ],
+   [
+    "otelcol prod",
+    "otelcol_receiver_refused_metric_points",
+    "prometheus_remote_write",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "otelcol prod-contrib",
+    "otelcol_receiver_refused_metric_points",
+    "prometheus_remote_write",
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    "otelcol typed",
+    "otelcol_receiver_refused_metric_points",
+    "prometheus_remote_write",
+    0.0,
+    0.0,
+    0.0
+   ]
+  ],
+  "family_prometheus-k8s-0": {
+   "families_source": 2783,
+   "equal": 2777,
+   "missing_in_sink": {
+    "apiserver_request:burn2h": 0,
+    "csv_abnormal": 0,
+    "kube_job_complete": 0,
+    "kube_job_spec_active_deadline_seconds": 0,
+    "kube_job_status_completion_time": 0,
+    "sum:apiserver_request:burnrate2h": 0
+   },
+   "diff": {},
+   "extra_in_sink": {},
+   "samples_source": 7872449.0,
+   "samples_sink_matched": 7872449.0
+  },
+  "family_prometheus-k8s-1": {
+   "families_source": 2786,
+   "equal": 2777,
+   "missing_in_sink": {
+    "apiserver_request:burn2h": 0,
+    "csv_abnormal": 0,
+    "kube_job_complete": 0,
+    "kube_job_spec_active_deadline_seconds": 0,
+    "kube_job_status_completion_time": 0,
+    "kube_pod_container_status_waiting_reason": 0,
+    "kube_pod_deletion_timestamp": 0,
+    "kube_pod_init_container_status_waiting_reason": 0,
+    "sum:apiserver_request:burnrate2h": 0
+   },
+   "diff": {},
+   "extra_in_sink": {},
+   "samples_source": 7873078.0,
+   "samples_sink_matched": 7873078.0
+  },
+  "family_typed job=prometheus": {
+   "families_source": 379,
+   "equal": 300,
+   "missing_in_sink": {
+    "go_gc_duration_seconds": 180.0,
+    "go_gc_duration_seconds_count": 36.0,
+    "go_gc_duration_seconds_sum": 36.0,
+    "go_gc_heap_allocs_by_size_bytes": 36.0,
+    "go_gc_heap_frees_by_size_bytes": 36.0,
+    "go_gc_pauses_seconds": 36.0,
+    "go_sched_latencies_seconds": 36.0,
+    "go_sched_pauses_stopping_gc_seconds": 36.0,
+    "go_sched_pauses_stopping_other_seconds": 36.0,
+    "go_sched_pauses_total_gc_seconds": 36.0,
+    "go_sched_pauses_total_other_seconds": 36.0,
+    "prometheus_engine_query_duration_histogram_seconds_bucket": 720.0,
+    "prometheus_engine_query_duration_histogram_seconds_count": 144.0,
+    "prometheus_engine_query_duration_histogram_seconds_sum": 144.0,
+    "prometheus_engine_query_duration_seconds": 432.0,
+    "prometheus_engine_query_duration_seconds_count": 144.0,
+    "prometheus_engine_query_duration_seconds_sum": 144.0,
+    "prometheus_http_request_duration_seconds_bucket": 2520.0,
+    "prometheus_http_request_duration_seconds_count": 252.0,
+    "prometheus_http_request_duration_seconds_sum": 252.0,
+    "prometheus_http_response_size_bytes": 252.0,
+    "prometheus_remote_storage_sent_batch_duration_seconds_bucket": 576.0,
+    "prometheus_remote_storage_sent_batch_duration_seconds_count": 36.0,
+    "prometheus_remote_storage_sent_batch_duration_seconds_sum": 36.0,
+    "prometheus_rule_evaluation_duration_histogram_seconds_bucket": 180.0,
+    "prometheus_rule_evaluation_duration_histogram_seconds_count": 36.0,
+    "prometheus_rule_evaluation_duration_histogram_seconds_sum": 36.0,
+    "prometheus_rule_evaluation_duration_seconds": 108.0,
+    "prometheus_rule_evaluation_duration_seconds_count": 36.0,
+    "prometheus_rule_evaluation_duration_seconds_sum": 36.0,
+    "prometheus_rule_group_duration_histogram_seconds_bucket": 180.0,
+    "prometheus_rule_group_duration_histogram_seconds_count": 36.0,
+    "prometheus_rule_group_duration_histogram_seconds_sum": 36.0,
+    "prometheus_rule_group_duration_seconds": 180.0,
+    "prometheus_rule_group_duration_seconds_count": 36.0,
+    "prometheus_rule_group_duration_seconds_sum": 36.0,
+    "prometheus_sd_consul_rpc_duration_seconds": 216.0,
+    "prometheus_sd_consul_rpc_duration_seconds_count": 72.0,
+    "prometheus_sd_consul_rpc_duration_seconds_sum": 72.0,
+    "prometheus_sd_file_scan_duration_seconds": 108.0,
+    "prometheus_sd_file_scan_duration_seconds_count": 36.0,
+    "prometheus_sd_file_scan_duration_seconds_sum": 36.0,
+    "prometheus_sd_kuma_fetch_duration_seconds": 108.0,
+    "prometheus_sd_kuma_fetch_duration_seconds_count": 36.0,
+    "prometheus_sd_kuma_fetch_duration_seconds_sum": 36.0,
+    "prometheus_target_interval_length_histogram_seconds_bucket": 180.0,
+    "prometheus_target_interval_length_histogram_seconds_count": 36.0,
+    "prometheus_target_interval_length_histogram_seconds_sum": 36.0,
+    "prometheus_target_interval_length_seconds": 180.0,
+    "prometheus_target_interval_length_seconds_count": 36.0,
+    "prometheus_target_interval_length_seconds_sum": 36.0,
+    "prometheus_target_sync_length_histogram_seconds_bucket": 900.0,
+    "prometheus_target_sync_length_histogram_seconds_count": 180.0,
+    "prometheus_target_sync_length_histogram_seconds_sum": 180.0,
+    "prometheus_target_sync_length_seconds": 900.0,
+    "prometheus_target_sync_length_seconds_count": 180.0,
+    "prometheus_target_sync_length_seconds_sum": 180.0,
+    "prometheus_tsdb_compaction_chunk_range_seconds": 36.0,
+    "prometheus_tsdb_compaction_chunk_samples": 36.0,
+    "prometheus_tsdb_compaction_chunk_size_bytes": 36.0,
+    "prometheus_tsdb_compaction_duration_seconds_bucket": 540.0,
+    "prometheus_tsdb_compaction_duration_seconds_count": 36.0,
+    "prometheus_tsdb_compaction_duration_seconds_sum": 36.0,
+    "prometheus_tsdb_head_gc_duration_seconds_count": 36.0,
+    "prometheus_tsdb_head_gc_duration_seconds_sum": 36.0,
+    "prometheus_tsdb_sample_ooo_delta_bucket": 288.0,
+    "prometheus_tsdb_sample_ooo_delta_count": 36.0,
+    "prometheus_tsdb_sample_ooo_delta_sum": 36.0,
+    "prometheus_tsdb_selected_series_compaction_duration_seconds_bucket": 540.0,
+    "prometheus_tsdb_selected_series_compaction_duration_seconds_count": 36.0,
+    "prometheus_tsdb_selected_series_compaction_duration_seconds_sum": 36.0,
+    "prometheus_tsdb_stale_series_compaction_duration_seconds_bucket": 540.0,
+    "prometheus_tsdb_stale_series_compaction_duration_seconds_count": 36.0,
+    "prometheus_tsdb_stale_series_compaction_duration_seconds_sum": 36.0,
+    "prometheus_tsdb_wal_fsync_duration_seconds": 108.0,
+    "prometheus_tsdb_wal_fsync_duration_seconds_count": 36.0,
+    "prometheus_tsdb_wal_fsync_duration_seconds_sum": 36.0,
+    "prometheus_tsdb_wal_truncate_duration_seconds_count": 36.0,
+    "prometheus_tsdb_wal_truncate_duration_seconds_sum": 36.0
+   },
+   "diff": {},
+   "extra_in_sink": {},
+   "samples_source": 37260.0,
+   "samples_sink_matched": 23760.0
+  },
+  "family_typed job=avalanche": {
+   "families_source": 23,
+   "equal": 18,
+   "missing_in_sink": {
+    "avalanche_histogram_metric_mmmmm_0_0": 720.0,
+    "avalanche_histogram_metric_mmmmm_0_1": 720.0,
+    "avalanche_summary_metric_mmmmm_0_0": 1440.0,
+    "avalanche_summary_metric_mmmmm_0_0_count": 720.0,
+    "avalanche_summary_metric_mmmmm_0_0_sum": 720.0
+   },
+   "diff": {},
+   "extra_in_sink": {},
+   "samples_source": 23940.0,
+   "samples_sink_matched": 19620.0
+  },
+  "family_typed job=exemplar-app": {
+   "families_source": 17,
+   "equal": 13,
+   "missing_in_sink": {
+    "corr_latency_seconds": 36.0,
+    "corr_summary_seconds": 108.0,
+    "corr_summary_seconds_count": 36.0,
+    "corr_summary_seconds_sum": 36.0
+   },
+   "diff": {},
+   "extra_in_sink": {},
+   "samples_source": 1156.0,
+   "samples_sink_matched": 940.0
+  },
+  "family_typed job=stale-app": {
+   "families_source": 5,
+   "equal": 5,
+   "missing_in_sink": {},
+   "diff": {},
+   "extra_in_sink": {},
+   "samples_source": 180.0,
+   "samples_sink_matched": 180.0
+  },
+  "family_typed job=otelcol": {
+   "families_source": 25,
+   "equal": 25,
+   "missing_in_sink": {},
+   "diff": {},
+   "extra_in_sink": {},
+   "samples_source": 2910.0,
+   "samples_sink_matched": 2910.0
+  },
+  "typed_missing_in_sink_classes": {
+   "not emitted by the collector": [
+    "avalanche_summary_metric_mmmmm_0_0",
+    "avalanche_summary_metric_mmmmm_0_0_count",
+    "avalanche_summary_metric_mmmmm_0_0_sum",
+    "corr_summary_seconds",
+    "corr_summary_seconds_count",
+    "corr_summary_seconds_sum",
+    "go_gc_duration_seconds",
+    "go_gc_duration_seconds_count",
+    "go_gc_duration_seconds_sum",
+    "prometheus_engine_query_duration_histogram_seconds_bucket",
+    "prometheus_engine_query_duration_histogram_seconds_count",
+    "prometheus_engine_query_duration_histogram_seconds_sum",
+    "prometheus_engine_query_duration_seconds",
+    "prometheus_engine_query_duration_seconds_count",
+    "prometheus_engine_query_duration_seconds_sum",
+    "prometheus_http_request_duration_seconds_bucket",
+    "prometheus_http_request_duration_seconds_count",
+    "prometheus_http_request_duration_seconds_sum",
+    "prometheus_remote_storage_sent_batch_duration_seconds_bucket",
+    "prometheus_remote_storage_sent_batch_duration_seconds_count",
+    "prometheus_remote_storage_sent_batch_duration_seconds_sum",
+    "prometheus_rule_evaluation_duration_histogram_seconds_bucket",
+    "prometheus_rule_evaluation_duration_histogram_seconds_count",
+    "prometheus_rule_evaluation_duration_histogram_seconds_sum",
+    "prometheus_rule_evaluation_duration_seconds",
+    "prometheus_rule_evaluation_duration_seconds_count",
+    "prometheus_rule_evaluation_duration_seconds_sum",
+    "prometheus_rule_group_duration_histogram_seconds_bucket",
+    "prometheus_rule_group_duration_histogram_seconds_count",
+    "prometheus_rule_group_duration_histogram_seconds_sum",
+    "prometheus_rule_group_duration_seconds",
+    "prometheus_rule_group_duration_seconds_count",
+    "prometheus_rule_group_duration_seconds_sum",
+    "prometheus_sd_consul_rpc_duration_seconds",
+    "prometheus_sd_consul_rpc_duration_seconds_count",
+    "prometheus_sd_consul_rpc_duration_seconds_sum",
+    "prometheus_sd_file_scan_duration_seconds",
+    "prometheus_sd_file_scan_duration_seconds_count",
+    "prometheus_sd_file_scan_duration_seconds_sum",
+    "prometheus_sd_kuma_fetch_duration_seconds",
+    "prometheus_sd_kuma_fetch_duration_seconds_count",
+    "prometheus_sd_kuma_fetch_duration_seconds_sum",
+    "prometheus_target_interval_length_histogram_seconds_bucket",
+    "prometheus_target_interval_length_histogram_seconds_count",
+    "prometheus_target_interval_length_histogram_seconds_sum",
+    "prometheus_target_interval_length_seconds",
+    "prometheus_target_interval_length_seconds_count",
+    "prometheus_target_interval_length_seconds_sum",
+    "prometheus_target_sync_length_histogram_seconds_bucket",
+    "prometheus_target_sync_length_histogram_seconds_count",
+    "prometheus_target_sync_length_histogram_seconds_sum",
+    "prometheus_target_sync_length_seconds",
+    "prometheus_target_sync_length_seconds_count",
+    "prometheus_target_sync_length_seconds_sum",
+    "prometheus_tsdb_compaction_duration_seconds_bucket",
+    "prometheus_tsdb_compaction_duration_seconds_count",
+    "prometheus_tsdb_compaction_duration_seconds_sum",
+    "prometheus_tsdb_head_gc_duration_seconds_count",
+    "prometheus_tsdb_head_gc_duration_seconds_sum",
+    "prometheus_tsdb_sample_ooo_delta_bucket",
+    "prometheus_tsdb_sample_ooo_delta_count",
+    "prometheus_tsdb_sample_ooo_delta_sum",
+    "prometheus_tsdb_selected_series_compaction_duration_seconds_bucket",
+    "prometheus_tsdb_selected_series_compaction_duration_seconds_count",
+    "prometheus_tsdb_selected_series_compaction_duration_seconds_sum",
+    "prometheus_tsdb_stale_series_compaction_duration_seconds_bucket",
+    "prometheus_tsdb_stale_series_compaction_duration_seconds_count",
+    "prometheus_tsdb_stale_series_compaction_duration_seconds_sum",
+    "prometheus_tsdb_wal_fsync_duration_seconds",
+    "prometheus_tsdb_wal_fsync_duration_seconds_count",
+    "prometheus_tsdb_wal_fsync_duration_seconds_sum",
+    "prometheus_tsdb_wal_truncate_duration_seconds_count",
+    "prometheus_tsdb_wal_truncate_duration_seconds_sum"
+   ],
+   "emitted by the collector as a histogram, stored by the sink as classic series": [
+    "avalanche_histogram_metric_mmmmm_0_0",
+    "avalanche_histogram_metric_mmmmm_0_1",
+    "corr_latency_seconds",
+    "go_gc_heap_allocs_by_size_bytes",
+    "go_gc_heap_frees_by_size_bytes",
+    "go_gc_pauses_seconds",
+    "go_sched_latencies_seconds",
+    "go_sched_pauses_stopping_gc_seconds",
+    "go_sched_pauses_stopping_other_seconds",
+    "go_sched_pauses_total_gc_seconds",
+    "go_sched_pauses_total_other_seconds",
+    "prometheus_http_response_size_bytes",
+    "prometheus_tsdb_compaction_chunk_range_seconds",
+    "prometheus_tsdb_compaction_chunk_samples",
+    "prometheus_tsdb_compaction_chunk_size_bytes"
+   ]
+  }
+ }
+}

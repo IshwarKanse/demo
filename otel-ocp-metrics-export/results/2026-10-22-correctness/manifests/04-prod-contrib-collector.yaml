@@ -1,0 +1,62 @@
+# Same production stream into the newest upstream receiver (contrib nightly, the image of
+# opentelemetry-collector-contrib issue 52224) to see whether 0.158.0 and the current receiver
+# differ on the production path. Dump only (the sink keeps a single copy of the stream).
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: prod-contrib
+  namespace: otel-correctness
+spec:
+  image: docker.io/otel/opentelemetry-collector-contrib:0.164.0-nightly.29f43fe
+  mode: deployment
+  replicas: 1
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+  ports:
+    - name: prw
+      port: 9090
+      targetPort: 9090
+      protocol: TCP
+  volumes:
+    - name: dump
+      emptyDir:
+        sizeLimit: 20Gi
+  volumeMounts:
+    - name: dump
+      mountPath: /data
+  additionalContainers:
+    - name: dumper
+      image: registry.access.redhat.com/ubi9/ubi-minimal:latest
+      command: ["sleep", "infinity"]
+      volumeMounts:
+        - name: dump
+          mountPath: /data
+  config:
+    receivers:
+      prometheus_remote_write:
+        endpoint: 0.0.0.0:9090
+    processors:
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 80
+        spike_limit_percentage: 20
+      filter/dump:
+        metrics:
+          include:
+            match_type: regexp
+            metric_names:
+              - '^(up|scrape_samples_scraped|node_cpu_seconds(_total)?|node_memory_MemAvailable_bytes|node_network_receive_bytes(_total)?|etcd_disk_wal_fsync_duration_seconds(_bucket|_sum|_count)?|prometheus_tsdb_head_series|prometheus_remote_storage_(samples|histograms|exemplars)_.*|kube_node_status_condition|kubelet_running_pods|go_gc_duration_seconds(_sum|_count)?|container_cpu_usage_seconds(_total)?|ALERTS|target_info)$'
+    exporters:
+      file:
+        path: /data/export.jsonl
+    service:
+      pipelines:
+        metrics/dump:
+          receivers: [prometheus_remote_write]
+          processors: [memory_limiter, filter/dump]
+          exporters: [file]

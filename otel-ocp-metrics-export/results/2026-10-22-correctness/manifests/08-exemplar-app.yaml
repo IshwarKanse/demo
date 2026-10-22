@@ -1,0 +1,237 @@
+# Hand-written OpenMetrics 1.0 exposition (no library) with the cases avalanche cannot produce:
+# a counter and a classic histogram with trace_id/span_id exemplars (one exemplar with a
+# non-trace label), a counter that resets every 150 s with a moving created timestamp, a
+# gauge with NaN, +Inf and -Inf values, a label value with a quote, a backslash, a newline, a
+# tab and non-ASCII characters, a summary, an info metric and UNIT/HELP lines on every family.
+# The same program also runs as "stale-app", the target that is scaled to 0 inside the window
+# to make Prometheus write staleness markers.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: exemplar-app
+  namespace: otel-correctness
+data:
+  app.py: |
+    import http.server, math, os, random, time
+    START = time.time()
+    RESET_PERIOD = 150.0
+    BUCKETS = [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5]
+    INSTANCE = os.environ.get("APP_NAME", "exemplar-app")
+    rnd = random.Random(42)
+    state = {"req": {"/a": 0.0, "/b": 0.0}, "hb": [0] * (len(BUCKETS) + 1), "hsum": 0.0, "hn": 0,
+             "obs": [], "scrapes": 0}
+
+    def hexid(n):
+        return "".join(rnd.choice("0123456789abcdef") for _ in range(n))
+
+    def advance():
+        state["scrapes"] += 1
+        for p in state["req"]:
+            state["req"][p] += rnd.randint(1, 20)
+        for _ in range(rnd.randint(1, 10)):
+            v = rnd.expovariate(4.0)
+            state["hsum"] += v
+            state["hn"] += 1
+            for i, b in enumerate(BUCKETS):
+                if v <= b:
+                    state["hb"][i] += 1
+            state["hb"][-1] += 1
+            state["obs"].append(v)
+        state["obs"] = state["obs"][-500:]
+
+    def fmt(v):
+        if math.isnan(v):
+            return "NaN"
+        if math.isinf(v):
+            return "+Inf" if v > 0 else "-Inf"
+        return repr(float(v))
+
+    def render():
+        now = time.time()
+        ex_ts = fmt(now)
+        out = []
+        # counter with exemplars
+        out.append("# HELP corr_requests Requests handled, with trace exemplars.")
+        out.append("# TYPE corr_requests counter")
+        out.append("# UNIT corr_requests requests")
+        out.append('corr_requests_total{path="/a"} %s # {trace_id="%s",span_id="%s"} 1.0 %s' % (fmt(state["req"]["/a"]), hexid(32), hexid(16), ex_ts))
+        out.append('corr_requests_total{path="/b"} %s # {trace_id="%s",span_id="%s",user_id="42"} 1.0 %s' % (fmt(state["req"]["/b"]), hexid(32), hexid(16), ex_ts))
+        out.append('corr_requests_created{path="/a"} %s' % fmt(START))
+        out.append('corr_requests_created{path="/b"} %s' % fmt(START))
+        # classic histogram with exemplars on two buckets
+        out.append("# HELP corr_latency_seconds Request latency, with trace exemplars.")
+        out.append("# TYPE corr_latency_seconds histogram")
+        out.append("# UNIT corr_latency_seconds seconds")
+        cum = 0
+        for i, b in enumerate(BUCKETS):
+            ex = ""
+            if i in (3, 6):
+                ex = ' # {trace_id="%s",span_id="%s"} %s %s' % (hexid(32), hexid(16), fmt(b * 0.9), ex_ts)
+            out.append('corr_latency_seconds_bucket{le="%s"} %d%s' % (fmt(b), state["hb"][i], ex))
+        out.append('corr_latency_seconds_bucket{le="+Inf"} %d' % state["hb"][-1])
+        out.append("corr_latency_seconds_sum %s" % fmt(state["hsum"]))
+        out.append("corr_latency_seconds_count %d" % state["hn"])
+        out.append("corr_latency_seconds_created %s" % fmt(START))
+        # counter that resets every RESET_PERIOD seconds
+        elapsed = now - START
+        period_start = START + math.floor(elapsed / RESET_PERIOD) * RESET_PERIOD
+        out.append("# HELP corr_resetting Counter that resets every 150 seconds.")
+        out.append("# TYPE corr_resetting counter")
+        out.append("corr_resetting_total %s" % fmt((now - period_start) * 7.0))
+        out.append("corr_resetting_created %s" % fmt(period_start))
+        # gauge with special values
+        out.append("# HELP corr_temperature_celsius Gauge with ordinary, NaN, +Inf and -Inf values.")
+        out.append("# TYPE corr_temperature_celsius gauge")
+        out.append("# UNIT corr_temperature_celsius celsius")
+        out.append('corr_temperature_celsius{sensor="normal"} %s' % fmt(20.0 + 5.0 * math.sin(now / 60.0)))
+        out.append('corr_temperature_celsius{sensor="nan"} NaN')
+        out.append('corr_temperature_celsius{sensor="posinf"} +Inf')
+        out.append('corr_temperature_celsius{sensor="neginf"} -Inf')
+        # label value escaping
+        weird = 'quote\\" backslash\\\\ newline\\n tab\t unicode ü 日本'
+        out.append("# HELP corr_escape Gauge whose label value needs escaping.")
+        out.append("# TYPE corr_escape gauge")
+        out.append('corr_escape{weird="%s"} %d' % (weird, state["scrapes"]))
+        # summary
+        obs = sorted(state["obs"]) or [0.0]
+        out.append("# HELP corr_summary_seconds Summary with three quantiles.")
+        out.append("# TYPE corr_summary_seconds summary")
+        out.append("# UNIT corr_summary_seconds seconds")
+        for q in (0.5, 0.9, 0.99):
+            out.append('corr_summary_seconds{quantile="%s"} %s' % (q, fmt(obs[min(len(obs) - 1, int(q * len(obs)))])))
+        out.append("corr_summary_seconds_sum %s" % fmt(state["hsum"]))
+        out.append("corr_summary_seconds_count %d" % state["hn"])
+        out.append("corr_summary_seconds_created %s" % fmt(START))
+        # info
+        out.append("# HELP corr_build Build information.")
+        out.append("# TYPE corr_build info")
+        out.append('corr_build_info{version="1.2.3",commit="abcdef0"} 1')
+        out.append("# EOF")
+        return "\n".join(out) + "\n"
+
+    class H(http.server.BaseHTTPRequestHandler):
+        def do_GET(self):
+            if self.path.split("?")[0] != "/metrics":
+                self.send_response(404); self.end_headers(); return
+            advance()
+            body = render().encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/openmetrics-text; version=1.0.0; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+        def log_message(self, *a):
+            pass
+
+    http.server.ThreadingHTTPServer(("0.0.0.0", 8080), H).serve_forever()
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exemplar-app
+  namespace: otel-correctness
+  labels:
+    app: exemplar-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exemplar-app
+  template:
+    metadata:
+      labels:
+        app: exemplar-app
+    spec:
+      containers:
+        - name: app
+          image: registry.access.redhat.com/ubi9/python-312:latest
+          command: ["python3", "/app/app.py"]
+          env:
+            - name: APP_NAME
+              value: exemplar-app
+          ports:
+            - name: web
+              containerPort: 8080
+          volumeMounts:
+            - name: app
+              mountPath: /app
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+      volumes:
+        - name: app
+          configMap:
+            name: exemplar-app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: exemplar-app
+  namespace: otel-correctness
+spec:
+  selector:
+    app: exemplar-app
+  ports:
+    - name: web
+      port: 8080
+      targetPort: 8080
+---
+# the target that disappears inside the window (scaled to 0) to produce staleness markers
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stale-app
+  namespace: otel-correctness
+  labels:
+    app: stale-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stale-app
+  template:
+    metadata:
+      labels:
+        app: stale-app
+    spec:
+      containers:
+        - name: app
+          image: registry.access.redhat.com/ubi9/python-312:latest
+          command: ["python3", "/app/app.py"]
+          env:
+            - name: APP_NAME
+              value: stale-app
+          ports:
+            - name: web
+              containerPort: 8080
+          volumeMounts:
+            - name: app
+              mountPath: /app
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+      volumes:
+        - name: app
+          configMap:
+            name: exemplar-app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stale-app
+  namespace: otel-correctness
+spec:
+  selector:
+    app: stale-app
+  ports:
+    - name: web
+      port: 8080
+      targetPort: 8080
