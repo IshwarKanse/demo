@@ -11,9 +11,33 @@ A complete, small LLM stack observed with OpenTelemetry on OpenShift, using the 
 - A new **"OpenTelemetry GenAI" dashboard** in **Observe > Dashboards** shows requests, tokens, latency, errors, the Llama Stack server and the vLLM engine.
   The dashboard is shipped by the OpenTelemetry operator itself, the same way the existing "OpenTelemetry Collector" dashboard is.
 
-Contents: [Architecture](#architecture) · [Repository layout](#repository-layout) · [Prerequisites and sizing](#prerequisites-and-sizing) ·
+Contents: [Replicate in short](#replicate-in-short) · [Glossary](#glossary) · [Architecture](#architecture) · [GenAI semantic conventions](#genai-semantic-conventions) · [Repository layout](#repository-layout) · [Prerequisites and sizing](#prerequisites-and-sizing) ·
 [Install](#install) · [What each piece does](#what-each-piece-does) · [The dashboard](#the-dashboard) · [Verify](#verify) ·
-[Demo script](#demo-script) · [Troubleshooting](#troubleshooting) · [Variations](#variations) · [Cleanup](#cleanup) · [Status and limitations](#status-and-limitations)
+[Demo script](#demo-script) · [Troubleshooting](#troubleshooting) · [Variations](#variations) · [Cleanup](#cleanup) · [Status and limitations](#status-and-limitations) · [Versions used](#versions-used) · [References](#references)
+
+## Replicate in short
+
+1. Get an OpenShift 4.20+ cluster with a worker of at least 16 vCPU and 32 GiB (no GPU), and cluster-admin access. See [Prerequisites and sizing](#prerequisites-and-sizing).
+2. Install an OpenTelemetry operator build that contains the GenAI dashboard (the branch `genai-dashboard` of the fork linked in [Install](#install)), or any OpenTelemetry operator plus `dashboard/load-dashboard.sh`.
+3. Run `chainsaw test --skip-delete genai-observability`, or apply the numbered directories `00-cluster` to `06-load` in order (commands in [Install](#install)). Plan 30 to 40 minutes, most of it model download and start.
+4. Send one request and wait for it (the first request on CPU takes minutes, see [Troubleshooting](#troubleshooting)), then run the three checks in `07-verify/` ([Verify](#verify)).
+5. Open **Observe > Dashboards > OpenTelemetry GenAI** and **Observe > Traces**.
+
+Read [GenAI semantic conventions](#genai-semantic-conventions) to understand which names the telemetry uses and why, and [References](#references) for the upstream documentation.
+
+## Glossary
+
+| Term | Meaning |
+|---|---|
+| **GenAI semantic conventions** | The OpenTelemetry standard names for spans, attributes, metrics and events of generative AI calls (`gen_ai.*`). See [below](#genai-semantic-conventions). |
+| **vLLM** | An open-source LLM inference server with an OpenAI-compatible API, its own Prometheus metrics and OpenTelemetry tracing. |
+| **OGX** | Open GenAI Stack, the upstream project formerly called Llama Stack: a server that exposes one API (chat, responses, vector stores, tools) in front of inference providers such as vLLM. |
+| **OpenInference, OpenLLMetry** | Third-party OpenTelemetry-based instrumentation libraries for LLM apps with their own attribute names; see [below](#instrumentation-that-does-not-use-the-conventions). |
+| **TTFT** | Time to first token: the delay between the request and the first generated token. |
+| **KV cache** | The attention key/value memory vLLM keeps per running request; when it is full, requests queue. |
+| **Span metrics** | Request rate, errors and duration derived from traces by the collector's `span_metrics` connector. |
+| **Tenant** | In Tempo's multi-tenant mode, an isolated trace namespace with its own access rules; this demo has one, `genai`. |
+| **UIPlugin** | A resource of the Cluster Observability Operator that adds a page to the OpenShift console (here Observe > Traces). |
 
 ## Architecture
 
@@ -58,6 +82,105 @@ adds the W3C `traceparent` header, so the client, OGX and vLLM spans end up in *
 | vLLM engine metrics | vLLM `/metrics`: tokens, TTFT, inter-token latency, KV cache, queue | scraped by the collector (`prometheus/vllm` receiver) |
 | Collector health | the collector's own telemetry (`otelcol_*`) | ServiceMonitor created by the OpenTelemetry operator |
 | Logs | prompt and completion log events (`gen_ai.user.message`, `gen_ai.choice`) | collector logs pipeline, `debug` exporter only (no log store in this demo) |
+
+## GenAI semantic conventions
+
+OpenTelemetry defines an open standard for describing generative AI operations: the **GenAI semantic conventions**. They give spans, attributes, metrics and events the same names whichever
+library produced them and whichever backend consumes them, so one dashboard or alert works across providers and frameworks (`gen_ai.request.model` instead of a different name per vendor).
+The conventions are developed by the OpenTelemetry GenAI special interest group in the repository [semantic-conventions-genai](https://github.com/open-telemetry/semantic-conventions-genai)
+and published on [opentelemetry.io](https://opentelemetry.io/docs/specs/semconv/gen-ai/).
+
+**Status: Development.** The conventions are not stable yet. Names and structure still change between versions (this demo already shows two generations of the token metric, see below),
+and instrumentation packages are pre-1.0 or beta. Pin versions and expect to adapt queries and dashboards when you upgrade.
+
+### What the specification covers
+
+| Area | What it defines | Specification |
+|---|---|---|
+| Overview and status | scope and stability | [README](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/README.md) |
+| Client inference | spans, events and metrics of a chat or completion call | [client-inference](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/client-inference.md) |
+| Embeddings | spans and metrics of embedding calls | [client-embeddings](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/client-embeddings.md) |
+| Model spans | span name, kind and attributes of model operations | [gen-ai-spans](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-spans.md) |
+| Agent spans | `invoke_agent`, `create_agent`, tool execution, workflows | [gen-ai-agent-spans](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-agent-spans.md) |
+| Metrics | client and server metrics, for example operation duration, time to first token | [gen-ai-metrics](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-metrics.md) |
+| Token metrics | input and output token counters, cache and reasoning tokens | [gen-ai-token-metrics](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-token-metrics.md) |
+| Events | prompts, completions and other inputs and outputs | [gen-ai-events](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-events.md) |
+| Exceptions | errors of GenAI operations | [gen-ai-exceptions](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-exceptions.md) |
+| Provider specifics | OpenAI, Anthropic, Azure AI Inference, AWS Bedrock | [openai](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/openai.md), [anthropic](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/anthropic.md), [azure-ai-inference](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/azure-ai-inference.md), [aws-bedrock](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/aws-bedrock.md) |
+| Protocols | Model Context Protocol and Agent2Agent | [mcp](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/mcp.md), [a2a](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/a2a.md) |
+
+The attribute registry (all `gen_ai.*` keys with types and examples) is on [opentelemetry.io](https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/).
+To get started read the overview, then client inference, spans and metrics.
+
+### The names this demo relies on
+
+| Name | Kind | Meaning |
+|---|---|---|
+| `gen_ai.operation.name` | span and metric attribute | Operation type: `chat`, `embeddings`, `generate_content`, `retrieval`, `execute_tool`, `invoke_agent`, `create_agent`, `invoke_workflow` |
+| `gen_ai.provider.name` | attribute | Provider of the model API, for example `openai` or `vllm` |
+| `gen_ai.request.model`, `gen_ai.response.model` | attribute | Model asked for and model that answered |
+| `gen_ai.usage.input_tokens`, `gen_ai.usage.output_tokens` | span attribute | Tokens in the prompt and in the completion |
+| `gen_ai.client.operation.duration` | histogram, seconds | Duration of a client call |
+| `gen_ai.client.token.usage` | histogram, with `gen_ai.token.type` = `input` or `output` | Token usage as emitted by the installed instrumentation (schema 1.37) |
+| `gen_ai.client.inference.usage.input_tokens`, `...output_tokens` | counters | The newer replacement of the token histogram in the current specification |
+| `gen_ai.client.operation.time_to_first_chunk`, `...time_per_output_chunk` | histograms, seconds | Streaming latency as emitted by the installed instrumentation |
+| `gen_ai.server.request.duration`, `gen_ai.server.time_to_first_token`, `gen_ai.server.time_per_output_token` | histograms, seconds | Server-side metrics defined by the specification; the servers in this demo expose their own metric names instead |
+
+In Prometheus the dots become underscores and units are appended, for example `gen_ai_client_operation_duration_seconds_bucket`, and attributes become labels (`gen_ai_request_model`).
+The dashboard queries in `dashboard/genai-dashboard.json` use these Prometheus names.
+
+### Which part of the demo follows the conventions
+
+| Component | Follows the conventions? | Details |
+|---|---|---|
+| Chat client | Yes | `opentelemetry-instrumentation-genai-openai` 1.3b0 emits GenAI spans and the `gen_ai.client.*` metrics, with schema URL 1.37.0 on the instrumentation scope |
+| OGX server | Not for its metrics | Emits HTTP server spans and its own metrics (`ogx_inference_*`, `ogx_concurrent_requests`, `ogx_requests_total`); no GenAI attributes were observed on its spans in this setup |
+| vLLM | Partly | Spans use older names, which the collector fixes (below); its metrics are its own `vllm:*` Prometheus metrics, not `gen_ai.server.*` |
+| Collector | Adds the missing pieces | `transform/vllm-semconv` renames vLLM span attributes; `span_metrics` turns every span with GenAI attributes into request, error and latency metrics per model |
+
+**vLLM span attributes rewritten by the collector** (`transform/vllm-semconv` in `02-collector/otel-collector.yaml`):
+
+| vLLM emits | Collector writes |
+|---|---|
+| `gen_ai.usage.prompt_tokens` | `gen_ai.usage.input_tokens` |
+| `gen_ai.usage.completion_tokens` | `gen_ai.usage.output_tokens` |
+| `gen_ai.response.model` (no request model) | also `gen_ai.request.model` |
+| nothing | `gen_ai.operation.name` = `chat` and `gen_ai.provider.name` = `vllm` |
+
+### Instrumentation settings that matter
+
+| Setting | Effect |
+|---|---|
+| `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` | Whether prompts and completions are recorded. For `opentelemetry-instrumentation-genai-openai` the values are `no_content` (default), `span_only`, `event_only` and `span_and_event`; verify against the changelog of the version you use. The demo sets `span_and_event` on the client and `true` on OGX. **Prompts and completions can contain personal or confidential data; turn this off or filter it in production.** |
+| `OTEL_SEMCONV_STABILITY_OPT_IN=gen_ai_latest_experimental` | Needed by the older, now deprecated `opentelemetry-instrumentation-openai-v2` package to emit the newer attribute shapes. The demo uses the newer package, which does not need it. |
+| `OTEL_METRIC_EXPORT_INTERVAL` | Metric export period in milliseconds; the demo uses 5000 so that dashboards react quickly (default 60000). |
+
+### Instrumentation that does not use the conventions
+
+Two popular open-source projects instrument LLM applications with OpenTelemetry but predate the standard and use their own attribute names:
+[OpenInference](https://github.com/Arize-ai/openinference) (Arize AI, for example `llm.token_count.prompt`, `llm.model_name`, `openinference.span.kind`) and
+[OpenLLMetry](https://github.com/traceloop/openllmetry) (Traceloop, for example `llm.usage.prompt_tokens`, `llm.request.model`, `traceloop.span.kind`).
+A dashboard written for the GenAI conventions cannot read their data directly.
+
+The upstream collector-contrib component [`gen_ai_normalizer`](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/genainormalizerprocessor)
+(alpha, traces only) rewrites their attributes to the GenAI conventions, and lets you define mappings for other sources:
+
+```yaml
+processors:
+  gen_ai_normalizer:
+    sources:
+      - name: openinference
+        remove_originals: true
+      - name: openllmetry
+        remove_originals: true
+service:
+  pipelines:
+    traces:
+      processors: [memory_limiter, k8sattributes, gen_ai_normalizer, batch]
+```
+
+It is **not used in this demo** (the demo's clients already emit the conventions) and it is not in the Red Hat build of OpenTelemetry collector today; it is part of the upstream contrib image the demo runs.
+Adding an OpenInference-instrumented client plus this processor is a natural extension, see [Variations](#variations).
 
 ## Repository layout
 
@@ -383,3 +506,41 @@ The operator removes the two dashboard ConfigMaps by itself when it stops. User 
 - Not tested: a non-admin user in Observe > Traces (only cluster admin and the `view`-scoped service account were used), a GPU node, OpenShift versions other than 5.0.
 - The Cluster Observability Operator is used only for the tracing UI plugin; the telemetry pipeline and the GenAI dashboard do not depend on it.
 - Security shortcuts of a demo: the S3 traffic between Tempo and SeaweedFS is cleartext HTTP inside the cluster (no TLS on SeaweedFS), and there is no NetworkPolicy restricting who can reach SeaweedFS. For more than a demo, terminate TLS with a service-serving certificate (`spec.storage.tls` of the TempoStack) and add a NetworkPolicy that admits port 8333 only from the Tempo pods.
+
+## Versions used
+
+| Component | Version |
+|---|---|
+| OpenShift | 5.0 nightly (AWS, `m5.4xlarge` workers) |
+| OpenTelemetry operator | 0.162.0, built from upstream `main` plus the dashboard change (fork branch `genai-dashboard`) |
+| OpenTelemetry collector image | contrib 0.162.0 |
+| Tempo operator / Tempo | 0.22.0-4 / 2.10 (Red Hat build of Tempo from the Red Hat Operators catalog) |
+| Cluster Observability Operator | 1.5.3 |
+| OGX operator / OGX image | v0.17.0 / `ogxai/distribution-starter:1.4.1` |
+| vLLM | `vllm/vllm-openai-cpu:v0.32.0-x86_64` |
+| Model | Qwen/Qwen2.5-1.5B-Instruct |
+| Client instrumentation | `opentelemetry-instrumentation-genai-openai` 1.3b0, `opentelemetry-instrumentation-httpx` |
+| Object storage | SeaweedFS 4.48 (multi-arch QE build) |
+| Chainsaw | v0.2.15 (>= v0.2.12 required) |
+
+## References
+
+**GenAI semantic conventions and instrumentation**
+- [Semantic conventions for generative AI](https://opentelemetry.io/docs/specs/semconv/gen-ai/) on opentelemetry.io, and the specification repository [open-telemetry/semantic-conventions-genai](https://github.com/open-telemetry/semantic-conventions-genai) (documents: [overview](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/README.md), [client inference](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/client-inference.md), [spans](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-spans.md), [metrics](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-metrics.md), [token metrics](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-token-metrics.md), [events](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-events.md))
+- [GenAI attribute registry](https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/)
+- [opentelemetry-python-genai](https://github.com/open-telemetry/opentelemetry-python-genai): the GenAI instrumentations for Python, and the package [opentelemetry-instrumentation-genai-openai](https://pypi.org/project/opentelemetry-instrumentation-genai-openai/) used by the client
+- [opentelemetry-instrumentation-openai-v2](https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/instrumentation-genai/opentelemetry-instrumentation-openai-v2): the older, deprecated package
+- Third-party instrumentation: [OpenInference](https://github.com/Arize-ai/openinference), [OpenLLMetry](https://github.com/traceloop/openllmetry); collector component that maps them: [gen_ai_normalizer](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/genainormalizerprocessor)
+
+**Serving stack**
+- vLLM: [OpenTelemetry tracing](https://docs.vllm.ai/en/stable/examples/observability/opentelemetry/), [production metrics](https://docs.vllm.ai/en/latest/usage/metrics.html), [CPU installation](https://docs.vllm.ai/en/latest/getting_started/installation/cpu/), [example dashboards](https://docs.vllm.ai/en/stable/examples/observability/dashboards/)
+- OGX: [project](https://github.com/ogx-ai/ogx), [telemetry documentation](https://github.com/ogx-ai/ogx/blob/main/docs/docs/building_applications/telemetry.mdx), [Kubernetes operator](https://github.com/ogx-ai/ogx-k8s-operator)
+- Model: [Qwen/Qwen2.5-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct)
+
+**OpenTelemetry, tracing and the console on OpenShift**
+- [OpenTelemetry operator](https://github.com/open-telemetry/opentelemetry-operator) and the fork branch with the dashboard: [IshwarKanse/opentelemetry-operator, branch genai-dashboard](https://github.com/IshwarKanse/opentelemetry-operator/tree/genai-dashboard)
+- Collector components used: [span_metrics connector](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/connector/spanmetricsconnector), [transform processor](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/processor/transformprocessor)
+- [Tempo operator](https://github.com/grafana/tempo-operator) and [Tempo documentation](https://grafana.com/docs/tempo/latest/operations/)
+- [Cluster Observability Operator](https://github.com/rhobs/observability-operator) (tracing UI plugin)
+- [OpenShift monitoring plugin](https://github.com/openshift/monitoring-plugin): the console code that renders the legacy dashboards (supported panel types and variable handling)
+- [Chainsaw](https://kyverno.github.io/chainsaw/latest/): the test tool used for `chainsaw-test.yaml`
