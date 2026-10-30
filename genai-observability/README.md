@@ -83,7 +83,7 @@ If another OpenTelemetry operator is already installed, remove it first (two ope
 
 ### 2. Deploy the demo
 
-With Chainsaw (allow 30 to 40 minutes, mostly model download and start):
+With Chainsaw (allow 20 to 40 minutes: about 7 minutes to a serving stack when the images are cached, plus the first-request warm-up, plus image and model downloads on a new cluster):
 
 ```bash
 chainsaw test --skip-delete genai-observability
@@ -185,7 +185,7 @@ The operator removes its dashboard ConfigMaps when it stops. User workload monit
 
 ## Status and limitations
 
-- Verified manually step by step on OCP 5.0 (AWS): one trace across the three services, all dashboard panels with data, and the three checks passing. The whole Chainsaw test passes against that cluster (about 80 seconds, with everything already deployed); a run from scratch on an empty cluster was not done.
+- Verified manually step by step on OCP 5.0 (AWS): one trace across the three services, all dashboard panels with data, and the three checks passing. Setup from this README was tested on that cluster after removing every demo component, operator and CRD from it: operator option A and every deployment step of the Chainsaw test passed (a serving stack in about 7 minutes with the images cached on the nodes). The first trace check failed because it ran during the first-request warm-up; the check now waits for a complete trace, and the whole test passed afterwards, with the dashboard and Observe > Traces confirmed in the console. One single uninterrupted run from scratch with the final check was not repeated, and a brand-new cluster (nothing cached on the nodes) was not used.
 - The operator is unreleased upstream `main` (0.162.0) plus our change; the collector is the upstream contrib image. Neither is a product release.
 - The GenAI conventions and the GenAI instrumentation libraries are in development; names and packages can change.
 - Demo shortcuts: S3 traffic between Tempo and SeaweedFS is cleartext inside the cluster, there is no NetworkPolicy for it, and prompts and completions are recorded.

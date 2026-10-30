@@ -32,10 +32,18 @@ spec:
                 done
                 [ "$ok" = 1 ] || { echo "FAIL: no traces for $svc"; exit 1; }
               done
-              id=$(search chat-client | jq -r '.traces[0].traceID')
-              trace=$(curl -s --cacert "$ca" -H "Authorization: Bearer $token" -H 'Accept: application/json' "$base/api/traces/$id")
+              # The first request after a vLLM start takes several minutes on CPU, so early chat-client traces are
+              # incomplete. Keep looking until a trace with token counts shows up (about 15 minutes at most).
+              found=""
+              for attempt in $(seq 1 45); do
+                for id in $(search chat-client | jq -r '.traces[].traceID' 2>/dev/null); do
+                  trace=$(curl -s --cacert "$ca" -H "Authorization: Bearer $token" -H 'Accept: application/json' "$base/api/traces/$id")
+                  if echo "$trace" | grep -q 'gen_ai.usage.input_tokens'; then found=$id; break 2; fi
+                done
+                echo "no complete chat-client trace yet ($attempt/45)"; sleep 20
+              done
+              [ -n "$found" ] || { echo "FAIL: no chat-client trace with gen_ai.usage.input_tokens"; exit 1; }
               services=$(echo "$trace" | jq -r '[.. | objects | select(.key? == "service.name") | .value.stringValue] | unique | join(",")')
-              echo "trace $id services: $services"
-              echo "$trace" | grep -q 'gen_ai.usage.input_tokens' || { echo "FAIL: no gen_ai.usage.input_tokens in the trace"; exit 1; }
+              echo "trace $found services: $services"
               case "$services" in *ogx-server*) ;; *) echo "FAIL: ogx-server span missing in the chat-client trace"; exit 1;; esac
               case "$services" in *vllm*) echo "OK: chat-client -> ogx-server -> vllm in one trace";; *) echo "NOTE: vllm span is in a separate trace";; esac
