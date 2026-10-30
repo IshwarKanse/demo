@@ -162,6 +162,7 @@ oc apply -f $D/00-cluster/namespace.yaml -f $D/00-cluster/user-workload-monitori
 oc apply -f https://raw.githubusercontent.com/ogx-ai/ogx-k8s-operator/v0.17.0/release/operator-openshift.yaml
 
 # tracing: object storage, multi-tenant TempoStack with gateway RBAC, then Observe > Traces
+$D/01-tracing/create-storage-secret.sh        # random S3 secret key, nothing is committed
 oc apply -f $D/01-tracing/seaweedfs.yaml
 oc rollout status deploy/seaweedfs -n genai-demo
 oc apply -f $D/01-tracing/tempostack.yaml -f $D/01-tracing/rbac.yaml
@@ -209,10 +210,10 @@ The collector image is the upstream contrib one (`opentelemetry-collector-contri
 
 Tempo runs as a **multi-tenant TempoStack** (`tenants.mode: openshift`) behind its gateway, which is what the console's tracing page needs.
 
-- **Storage:** SeaweedFS (`seaweedfs.yaml`), an S3 gateway in one pod with the bucket `tempo` and demo credentials. The upstream MinIO community image on quay.io is no longer public; the SeaweedFS image is the multi-arch build the operator e2e tests use.
+- **Storage:** SeaweedFS (`seaweedfs.yaml`), an S3 gateway in one pod with the bucket `tempo`. The S3 secret key is generated when you deploy (`create-storage-secret.sh` creates the Secret `tempo-storage`, which SeaweedFS and the TempoStack both read); no credentials are in the repository. The upstream MinIO community image on quay.io is no longer public; the SeaweedFS image is the multi-arch build the operator e2e tests use.
 - **Tenant:** one tenant, `genai` (`tempostack.yaml`). Its name appears in the gateway URL (`/api/traces/v1/genai`), in the `X-Scope-OrgID` header and in the RBAC rules.
 - **Writers** (`rbac.yaml`): the collector ServiceAccount `genai-collector` has the verb `create` on resource `genai`, resource name `traces`, in API group `tempo.grafana.com`.
-- **Readers:** the verb `get` on the same resource. The demo binds it to `system:authenticated`; use a narrower group in a real cluster. With gateway RBAC enabled, readers see only the traces of the namespaces they can access
+- **Readers:** the verb `get` on the same resource, bound to the group `genai-trace-readers` (add users with `oc adm groups new genai-trace-readers <user>`; cluster admins need no binding). With gateway RBAC enabled, readers see only the traces of the namespaces they can access
   (matched on the span attribute `k8s.namespace.name`, which the collector's `k8sattributes` processor adds); cluster admins see all traces.
   The service account `trace-reader` used by the check Job gets the `view` role in `genai-demo` for that reason.
 - **UI:** `traces-ui-plugin.yaml` creates a `UIPlugin` of type `DistributedTracing`; the Cluster Observability Operator (installed by `00-cluster/coo-operator.yaml`) adds **Observe > Traces**, discovers the TempoStack and queries it as the logged in user.
@@ -381,4 +382,4 @@ The operator removes the two dashboard ConfigMaps by itself when it stops. User 
 - CPU inference is slow by design. The demo is about the telemetry, not about serving performance.
 - Not tested: a non-admin user in Observe > Traces (only cluster admin and the `view`-scoped service account were used), a GPU node, OpenShift versions other than 5.0.
 - The Cluster Observability Operator is used only for the tracing UI plugin; the telemetry pipeline and the GenAI dashboard do not depend on it.
-- The demo credentials of SeaweedFS and the `system:authenticated` read binding are shortcuts for a demo cluster.
+- Security shortcuts of a demo: the S3 traffic between Tempo and SeaweedFS is cleartext HTTP inside the cluster (no TLS on SeaweedFS), and there is no NetworkPolicy restricting who can reach SeaweedFS. For more than a demo, terminate TLS with a service-serving certificate (`spec.storage.tls` of the TempoStack) and add a NetworkPolicy that admits port 8333 only from the Tempo pods.

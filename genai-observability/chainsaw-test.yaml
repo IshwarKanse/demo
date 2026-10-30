@@ -46,6 +46,8 @@ spec:
               oc wait --for=condition=Available deploy --all -n ogx-k8s-operator-system --timeout=8m
     - name: Deploy object storage
       try:
+        - script:
+            content: ./01-tracing/create-storage-secret.sh
         - apply:
             file: 01-tracing/seaweedfs.yaml
         - assert:

@@ -43,10 +43,11 @@ roleRef:
   kind: ClusterRole
   name: genai-demo-traces-reader
 subjects:
-  # Demo shortcut: every logged in user can read the traces. Bind a narrower group in a real cluster.
+  # Members of this group can read the traces of the namespaces they have access to (gateway RBAC is namespace
+  # scoped). Add users with: oc adm groups new genai-trace-readers <user> ; cluster admins need no binding.
   - kind: Group
     apiGroup: rbac.authorization.k8s.io
-    name: system:authenticated
+    name: genai-trace-readers
   # used by the trace check Job in 07-verify
   - kind: ServiceAccount
     name: trace-reader
