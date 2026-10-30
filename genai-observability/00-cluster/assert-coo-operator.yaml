@@ -1,8 +1,0 @@
-apiVersion: operators.coreos.com/v1alpha1
-kind: ClusterServiceVersion
-metadata:
-  namespace: openshift-cluster-observability-operator
-  labels:
-    operators.coreos.com/cluster-observability-operator.openshift-cluster-observability-operator: ""
-status:
-  phase: Succeeded

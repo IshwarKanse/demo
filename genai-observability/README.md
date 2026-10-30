@@ -83,11 +83,15 @@ If another OpenTelemetry operator is already installed, remove it first (two ope
 
 ### 2. Deploy the demo
 
-With Chainsaw (applies every directory in order and waits; allow 30 to 40 minutes, mostly model download and start):
+With Chainsaw (allow 30 to 40 minutes, mostly model download and start):
 
 ```bash
 chainsaw test --skip-delete genai-observability
 ```
+
+It runs these steps in order, each one waiting until its part is ready: check the OpenTelemetry operator, enable user workload monitoring, install the **Tempo operator**,
+install the **Cluster Observability Operator**, install the OGX operator, deploy the storage and the multi-tenant TempoStack, create the **tracing UI plugin** (Observe > Traces),
+deploy the collector, vLLM, OGX and the chat client, start the load, then verify traces, metrics and the dashboard ConfigMap.
 
 Or by hand, from the repository root:
 
@@ -181,7 +185,7 @@ The operator removes its dashboard ConfigMaps when it stops. User workload monit
 
 ## Status and limitations
 
-- Verified manually step by step on OCP 5.0 (AWS): one trace across the three services, all dashboard panels with data, and the three checks passing. The complete Chainsaw run was not executed as one piece (it passes `chainsaw lint`).
+- Verified manually step by step on OCP 5.0 (AWS): one trace across the three services, all dashboard panels with data, and the three checks passing. The whole Chainsaw test passes against that cluster (about 80 seconds, with everything already deployed); a run from scratch on an empty cluster was not done.
 - The operator is unreleased upstream `main` (0.162.0) plus our change; the collector is the upstream contrib image. Neither is a product release.
 - The GenAI conventions and the GenAI instrumentation libraries are in development; names and packages can change.
 - Demo shortcuts: S3 traffic between Tempo and SeaweedFS is cleartext inside the cluster, there is no NetworkPolicy for it, and prompts and completions are recorded.
