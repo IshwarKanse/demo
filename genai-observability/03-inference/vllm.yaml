@@ -1,0 +1,135 @@
+# vLLM on CPU serving Qwen2.5-1.5B-Instruct (not gated, no HF token needed).
+#  - traces: --otlp-traces-endpoint (OTLP gRPC) to the collector
+#  - metrics: /metrics, scraped by the collector (prometheus/vllm receiver)
+# Sizing: 12 vCPU, 20Gi request. Needs a worker with >= 16 vCPU / 32 GiB (m5.4xlarge or larger) and AVX-512.
+# dtype: bfloat16 is fast only on CPUs with AVX512_BF16/AMX (m7i and newer). On older CPUs (m5, m6i)
+# check `lscpu | grep -o avx512_bf16` on the node and switch --dtype to float32 if it is missing.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vllm
+  namespace: genai-demo
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vllm-cache
+  namespace: genai-demo
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm
+  namespace: genai-demo
+  labels:
+    app: vllm
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: vllm
+  template:
+    metadata:
+      labels:
+        app: vllm
+    spec:
+      serviceAccountName: vllm
+      # A Service named vllm makes Kubernetes inject VLLM_PORT=tcp://..., which vLLM rejects as its own setting.
+      enableServiceLinks: false
+      containers:
+        - name: vllm
+          image: docker.io/vllm/vllm-openai-cpu:v0.32.0-x86_64
+          args:
+            - Qwen/Qwen2.5-1.5B-Instruct
+            - --served-model-name=qwen2.5-1.5b
+            - --dtype=float32
+            - --max-model-len=4096
+            - --enable-auto-tool-choice
+            - --tool-call-parser=hermes
+            - --otlp-traces-endpoint=http://genai-collector.genai-demo.svc:4317
+            - --collect-detailed-traces=all
+          env:
+            - name: VLLM_CPU_KVCACHE_SPACE
+              value: "8"
+            - name: VLLM_CPU_OMP_THREADS_BIND
+              value: "0-10"
+            - name: HF_HOME
+              value: /cache/hf
+            # The pod runs with a random UID under the restricted SCC and has no writable home directory.
+            - name: HOME
+              value: /tmp
+            - name: VLLM_CACHE_ROOT
+              value: /cache/vllm
+            - name: VLLM_CONFIG_ROOT
+              value: /cache/vllm-config
+            - name: XDG_CACHE_HOME
+              value: /cache/xdg
+            - name: OTEL_SERVICE_NAME
+              value: vllm
+            - name: OTEL_EXPORTER_OTLP_TRACES_PROTOCOL
+              value: grpc
+            - name: OTEL_EXPORTER_OTLP_TRACES_INSECURE
+              value: "true"
+          ports:
+            - name: http
+              containerPort: 8000
+          resources:
+            requests:
+              cpu: "12"
+              memory: 20Gi
+            limits:
+              cpu: "12"
+              memory: 28Gi
+          # The first start downloads the model (~3 GB) and warms up; allow up to 15 minutes.
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+            failureThreshold: 90
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 20
+            failureThreshold: 6
+          volumeMounts:
+            - name: cache
+              mountPath: /cache
+            - name: shm
+              mountPath: /dev/shm
+      volumes:
+        - name: cache
+          persistentVolumeClaim:
+            claimName: vllm-cache
+        - name: shm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 4Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vllm
+  namespace: genai-demo
+  labels:
+    app: vllm
+spec:
+  selector:
+    app: vllm
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http

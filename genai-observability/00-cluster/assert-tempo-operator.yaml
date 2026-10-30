@@ -1,0 +1,8 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  namespace: openshift-tempo-operator
+  labels:
+    operators.coreos.com/tempo-product.openshift-tempo-operator: ""
+status:
+  phase: Succeeded

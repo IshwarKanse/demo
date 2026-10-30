@@ -1,0 +1,46 @@
+# Llama Stack, now called OGX (Open GenAI Stack). The ogx-k8s-operator reconciles this CR.
+# The starter distribution enables the remote vLLM provider purely because VLLM_URL is set.
+# Telemetry is plain OTEL_* environment variables; the old `telemetry:` provider and TELEMETRY_SINKS are gone.
+# The operator creates Service genai-service on port 8321 and a ServiceMonitor for /metrics.
+apiVersion: ogx.io/v1beta1
+kind: OGXServer
+metadata:
+  name: genai
+  namespace: genai-demo
+spec:
+  distribution:
+    name: starter
+  workload:
+    replicas: 1
+    storage:
+      size: 5Gi
+      mountPath: /.ogx
+    resources:
+      requests:
+        cpu: "1"
+        memory: 2Gi
+      limits:
+        cpu: "2"
+        memory: 4Gi
+    overrides:
+      env:
+        - name: VLLM_URL
+          value: http://vllm.genai-demo.svc:8000/v1
+        - name: VLLM_TLS_VERIFY
+          value: "false"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://genai-collector.genai-demo.svc:4318
+        - name: OTEL_EXPORTER_OTLP_PROTOCOL
+          value: http/protobuf
+        - name: OTEL_SERVICE_NAME
+          value: ogx-server
+        - name: OTEL_METRIC_EXPORT_INTERVAL
+          value: "5000"
+        - name: OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT
+          value: "true"
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+  monitoring:
+    enabled: true

@@ -19,6 +19,7 @@ Demo resources and Chainsaw end-to-end tests for OpenShift observability and AI 
 | `online-boutique/` | Kustomize overlay for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) — 11-microservice demo app for trace generation |
 | `apm-dashboard/` | UIPlugin manifest enabling Perses-based monitoring dashboards |
 | `otel-ocp-metrics-export/` | Proof of concept resources (`poc/`), sizing benchmark manifests and scripts, measured results and the resource recommendation for exporting the OpenShift monitoring metrics through the OpenTelemetry Collector with Prometheus remote write v2 |
+| `genai-observability/` | GenAI observability on OpenShift: vLLM on CPU behind OGX (Llama Stack), traced and measured with the OpenTelemetry operator and collector, Tempo and a console dashboard; manifests, a Chainsaw test and verification scripts |
 
 ## Online Boutique Demo App
 

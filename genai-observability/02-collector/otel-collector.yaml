@@ -1,0 +1,97 @@
+# One collector for the whole demo:
+#  - OTLP in from the chat client and the OGX server (traces, metrics, logs)
+#  - vLLM traces arrive over OTLP gRPC (--otlp-traces-endpoint), vLLM metrics are scraped from /metrics
+#  - span_metrics derives RED metrics per gen_ai.request.model from the traces
+#  - traces go to TempoMonolithic, metrics are exposed on :8889 and scraped by User Workload Monitoring
+#    (the operator creates the ServiceMonitor because observability.metrics.enableMetrics is true)
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: genai
+  namespace: genai-demo
+spec:
+  mode: deployment
+  image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.162.0
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  observability:
+    metrics:
+      enableMetrics: true
+  config:
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+      prometheus/vllm:
+        config:
+          scrape_configs:
+            - job_name: vllm
+              scrape_interval: 10s
+              static_configs:
+                - targets: ["vllm.genai-demo.svc:8000"]
+    processors:
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 75
+        spike_limit_percentage: 25
+      k8sattributes:
+        extract:
+          metadata:
+            - k8s.namespace.name
+            - k8s.pod.name
+            - k8s.deployment.name
+      batch: {}
+      # vLLM spans use the pre-stable GenAI attribute names and lack gen_ai.request.model and
+      # gen_ai.operation.name. Rewrite them to the GenAI semantic conventions.
+      transform/vllm-semconv:
+        error_mode: ignore
+        trace_statements:
+          - set(span.attributes["gen_ai.usage.input_tokens"], span.attributes["gen_ai.usage.prompt_tokens"]) where span.attributes["gen_ai.usage.prompt_tokens"] != nil
+          - set(span.attributes["gen_ai.usage.output_tokens"], span.attributes["gen_ai.usage.completion_tokens"]) where span.attributes["gen_ai.usage.completion_tokens"] != nil
+          - set(span.attributes["gen_ai.request.model"], span.attributes["gen_ai.response.model"]) where span.attributes["gen_ai.request.model"] == nil and span.attributes["gen_ai.response.model"] != nil
+          - set(span.attributes["gen_ai.operation.name"], "chat") where resource.attributes["service.name"] == "vllm" and span.attributes["gen_ai.request.id"] != nil and span.attributes["gen_ai.operation.name"] == nil
+          - set(span.attributes["gen_ai.provider.name"], "vllm") where resource.attributes["service.name"] == "vllm" and span.attributes["gen_ai.request.id"] != nil
+    connectors:
+      span_metrics:
+        metrics_flush_interval: 10s
+        histogram:
+          unit: s
+          explicit:
+            buckets: [100ms, 250ms, 500ms, 1s, 2s, 5s, 10s, 30s, 60s]
+        dimensions:
+          - name: gen_ai.request.model
+          - name: gen_ai.operation.name
+          - name: gen_ai.provider.name
+    exporters:
+      otlp/tempo:
+        endpoint: tempo-genai.genai-demo.svc:4317
+        tls:
+          insecure: true
+      prometheus:
+        endpoint: 0.0.0.0:8889
+        resource_to_telemetry_conversion:
+          enabled: true
+      debug:
+        verbosity: basic
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [memory_limiter, k8sattributes, transform/vllm-semconv, batch]
+          exporters: [otlp/tempo, span_metrics]
+        metrics:
+          receivers: [otlp, prometheus/vllm, span_metrics]
+          processors: [memory_limiter, k8sattributes, batch]
+          exporters: [prometheus]
+        logs:
+          receivers: [otlp]
+          processors: [memory_limiter, batch]
+          exporters: [debug]

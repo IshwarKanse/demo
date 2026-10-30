@@ -1,0 +1,11 @@
+# Enables user workload monitoring so the console dashboard can query the demo metrics.
+# WARNING: this ConfigMap is cluster-wide; on a cluster that already has a
+# cluster-monitoring-config, merge `enableUserWorkload: true` instead of applying this file.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-monitoring-config
+  namespace: openshift-monitoring
+data:
+  config.yaml: |
+    enableUserWorkload: true

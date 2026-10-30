@@ -1,0 +1,100 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/kyverno/chainsaw/main/.schemas/json/test-chainsaw-v1alpha1.json
+# GenAI observability demo: vLLM (CPU) + OGX (Llama Stack) + OpenTelemetry collector + Tempo + console dashboard.
+# Prerequisites: OpenShift 4.20+, a worker with >= 16 vCPU / 32 GiB, the OpenTelemetry operator installed
+# (a build that ships the "OpenTelemetry GenAI" dashboard, see README), cluster-admin.
+# Run: chainsaw test --skip-delete genai-observability
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: genai-observability
+spec:
+  namespace: genai-demo
+  concurrent: false
+  steps:
+    - name: Check the OpenTelemetry operator is installed
+      try:
+        - script:
+            content: |
+              oc get crd opentelemetrycollectors.opentelemetry.io
+              oc get deploy -A | grep -i opentelemetry-operator-controller-manager
+    - name: Enable user workload monitoring
+      try:
+        - apply:
+            file: 00-cluster/user-workload-monitoring.yaml
+        - assert:
+            file: 00-cluster/assert-user-workload-monitoring.yaml
+    - name: Install the Tempo operator
+      try:
+        - apply:
+            file: 00-cluster/tempo-operator.yaml
+        - assert:
+            timeout: 10m
+            file: 00-cluster/assert-tempo-operator.yaml
+    - name: Install the OGX operator
+      try:
+        - script:
+            timeout: 10m
+            content: |
+              oc apply -f https://raw.githubusercontent.com/ogx-ai/ogx-k8s-operator/v0.17.0/release/operator-openshift.yaml
+              oc wait --for=condition=Available deploy --all -n ogx-k8s-operator-system --timeout=8m
+    - name: Deploy Tempo
+      try:
+        - apply:
+            file: 01-tracing/tempo-monolithic.yaml
+        - assert:
+            file: 01-tracing/assert-tempo.yaml
+    - name: Deploy the OpenTelemetry collector
+      try:
+        - apply:
+            file: 02-collector/rbac.yaml
+        - apply:
+            file: 02-collector/otel-collector.yaml
+        - assert:
+            file: 02-collector/assert-otel-collector.yaml
+    - name: Deploy vLLM
+      try:
+        - apply:
+            file: 03-inference/vllm.yaml
+        - assert:
+            timeout: 25m
+            file: 03-inference/assert-vllm.yaml
+    - name: Deploy OGX
+      try:
+        - apply:
+            file: 04-ogx/ogxserver.yaml
+        - assert:
+            timeout: 10m
+            file: 04-ogx/assert-ogx.yaml
+        - script:
+            timeout: 15m
+            content: |
+              # the OGX operator creates a Deployment named after the OGXServer
+              until oc get deploy genai -n genai-demo >/dev/null 2>&1; do sleep 5; done
+              oc wait deploy/genai -n genai-demo --for=condition=Available --timeout=14m
+    - name: Deploy the chat client
+      try:
+        - apply:
+            file: 05-app/chat-client.yaml
+        - assert:
+            timeout: 10m
+            file: 05-app/assert-chat-client.yaml
+    - name: Generate load
+      try:
+        - apply:
+            file: 06-load/loadgen.yaml
+    - name: Verify traces in Tempo
+      try:
+        - apply:
+            file: 07-verify/verify-traces.yaml
+        - assert:
+            timeout: 15m
+            file: 07-verify/assert-verify-traces.yaml
+    - name: Verify metrics in Thanos
+      try:
+        - script:
+            timeout: 15m
+            content: ./07-verify/check_metrics.sh
+    - name: Verify the dashboard ConfigMap
+      try:
+        - script:
+            content: ./07-verify/check_dashboard.sh

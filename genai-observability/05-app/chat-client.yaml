@@ -1,0 +1,143 @@
+# Chat client instrumented with the OpenTelemetry GenAI instrumentation for the OpenAI SDK
+# (opentelemetry-instrumentation-genai-openai; the older opentelemetry-instrumentation-openai-v2 is deprecated).
+# It talks to OGX through the OpenAI-compatible endpoint, so the trace is chat-client -> ogx-server -> vllm.
+# The httpx instrumentation sends the trace context (traceparent) with every request; without it the traces are not linked.
+# Packages are installed when the pod starts, no image build needed.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chat-client-app
+  namespace: genai-demo
+data:
+  app.py: |
+    import json, os, random, sys, time
+    from openai import OpenAI
+
+    base_url = os.environ.get("OPENAI_BASE_URL", "http://genai-service.genai-demo.svc:8321/v1/")
+    interval = float(os.environ.get("INTERVAL_SECONDS", "6"))
+    client = OpenAI(base_url=base_url, api_key="fake", timeout=300, max_retries=0)
+
+    PROMPTS = [
+        "Explain OpenTelemetry in two sentences.",
+        "Give three tips to debug a slow microservice.",
+        "What is the difference between a trace and a metric?",
+        "Write a haiku about Kubernetes.",
+        "Summarize what a service mesh does.",
+        "Why does tail latency matter more than the average?",
+    ]
+    TOOLS = [{
+        "type": "function",
+        "function": {
+            "name": "get_cluster_status",
+            "description": "Get the health of an OpenShift cluster by name.",
+            "parameters": {"type": "object",
+                           "properties": {"cluster": {"type": "string"}},
+                           "required": ["cluster"]},
+        },
+    }]
+
+    def pick_model():
+        override = os.environ.get("MODEL")
+        if override:
+            return override
+        while True:
+            try:
+                ids = [m.id for m in client.models.list().data]
+                # OGX also lists models of providers without credentials; use the one served by vLLM
+                prefix = os.environ.get("MODEL_PREFIX", "vllm/")
+                llms = [m for m in ids if m.startswith(prefix) and not any(x in m.lower() for x in ("embed", "rerank"))]
+                chosen = llms[0] if llms else None
+                if chosen:
+                    print("models:", ids, "using:", chosen, flush=True)
+                    return chosen
+            except Exception as exc:
+                print("waiting for the model list:", exc, flush=True)
+            time.sleep(10)
+
+    model = pick_model()
+    n = 0
+    while True:
+        n += 1
+        prompt = random.choice(PROMPTS)
+        mode = n % 3
+        try:
+            if mode == 0:
+                stream = client.chat.completions.create(
+                    model=model, max_tokens=96, stream=True,
+                    messages=[{"role": "user", "content": prompt}])
+                text = "".join(c.choices[0].delta.content or "" for c in stream if c.choices)
+                print("stream:", text[:80].replace("\n", " "), flush=True)
+            elif mode == 1:
+                r = client.chat.completions.create(
+                    model=model, max_tokens=96,
+                    messages=[{"role": "user", "content": prompt}])
+                print("chat:", (r.choices[0].message.content or "")[:80].replace("\n", " "), flush=True)
+            else:
+                r = client.chat.completions.create(
+                    model=model, max_tokens=96, tools=TOOLS,
+                    messages=[{"role": "user", "content": "Is the cluster prod-east healthy? Use the tool."}])
+                print("tool:", r.choices[0].finish_reason, flush=True)
+        except Exception as exc:
+            print("request failed:", exc, flush=True)
+        time.sleep(interval)
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-client
+  namespace: genai-demo
+  labels:
+    app: chat-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chat-client
+  template:
+    metadata:
+      labels:
+        app: chat-client
+    spec:
+      containers:
+        - name: chat-client
+          image: registry.access.redhat.com/ubi9/python-312:latest
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              pip install --quiet --no-cache-dir openai opentelemetry-distro \
+                opentelemetry-exporter-otlp-proto-http \
+                opentelemetry-instrumentation-genai-openai==1.3b0 opentelemetry-util-genai \
+                opentelemetry-instrumentation-httpx \
+              && exec opentelemetry-instrument python /app/app.py
+          env:
+            - name: OTEL_SERVICE_NAME
+              value: chat-client
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://genai-collector.genai-demo.svc:4318
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: http/protobuf
+            - name: OTEL_TRACES_EXPORTER
+              value: otlp
+            - name: OTEL_METRICS_EXPORTER
+              value: otlp
+            - name: OTEL_LOGS_EXPORTER
+              value: otlp
+            - name: OTEL_METRIC_EXPORT_INTERVAL
+              value: "5000"
+            # span_and_event: prompt and completion on the span and as log events (see the debug logs of the collector)
+            - name: OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT
+              value: span_and_event
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: app
+              mountPath: /app
+      volumes:
+        - name: app
+          configMap:
+            name: chat-client-app

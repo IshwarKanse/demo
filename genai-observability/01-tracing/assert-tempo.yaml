@@ -1,0 +1,7 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tempo-genai
+  namespace: genai-demo
+status:
+  readyReplicas: 1

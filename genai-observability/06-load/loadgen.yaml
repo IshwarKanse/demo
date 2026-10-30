@@ -1,0 +1,96 @@
+# Extra traffic so every dashboard row moves: two workers through OGX (chat completions) and
+# one worker straight against vLLM (completions). Runs for DURATION_SECONDS then exits.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: loadgen-script
+  namespace: genai-demo
+data:
+  load.py: |
+    import json, os, random, threading, time, urllib.request
+
+    OGX = os.environ.get("OGX_URL", "http://genai-service.genai-demo.svc:8321/v1")
+    VLLM = os.environ.get("VLLM_URL", "http://vllm.genai-demo.svc:8000/v1")
+    DURATION = int(os.environ.get("DURATION_SECONDS", "600"))
+    PROMPTS = ["Name three observability signals.", "Explain exemplars in metrics.",
+               "What is head based sampling?", "Describe a RED dashboard.", "What does TTFT mean for an LLM?"]
+
+    def post(url, body):
+        req = urllib.request.Request(url, json.dumps(body).encode(), {"Content-Type": "application/json"})
+        with urllib.request.urlopen(req, timeout=300) as r:
+            return json.load(r)
+
+    def get(url):
+        with urllib.request.urlopen(url, timeout=30) as r:
+            return json.load(r)
+
+    def model_id():
+        while True:
+            try:
+                prefix = os.environ.get("MODEL_PREFIX", "vllm/")
+                ids = [m["id"] for m in get(OGX + "/models")["data"]
+                       if m["id"].startswith(prefix) and not any(x in m["id"].lower() for x in ("embed", "rerank"))]
+                if ids:
+                    return ids[0]
+                raise RuntimeError("no chat model registered yet")
+            except Exception as exc:
+                print("waiting for OGX models:", exc, flush=True)
+                time.sleep(10)
+
+    stop = time.time() + DURATION
+
+    def ogx_worker(model):
+        while time.time() < stop:
+            try:
+                post(OGX + "/chat/completions", {"model": model, "max_tokens": 64,
+                     "messages": [{"role": "user", "content": random.choice(PROMPTS)}]})
+            except Exception as exc:
+                print("ogx request failed:", exc, flush=True)
+
+    def vllm_worker():
+        while time.time() < stop:
+            try:
+                post(VLLM + "/completions", {"model": "qwen2.5-1.5b", "max_tokens": 64,
+                     "prompt": random.choice(PROMPTS)})
+            except Exception as exc:
+                print("vllm request failed:", exc, flush=True)
+
+    m = model_id()
+    print("load against", m, "for", DURATION, "s", flush=True)
+    threads = [threading.Thread(target=ogx_worker, args=(m,)) for _ in range(2)]
+    threads.append(threading.Thread(target=vllm_worker))
+    [t.start() for t in threads]
+    [t.join() for t in threads]
+    print("done", flush=True)
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: loadgen
+  namespace: genai-demo
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: loadgen
+          image: registry.access.redhat.com/ubi9/python-312:latest
+          command: ["python", "/scripts/load.py"]
+          env:
+            - name: DURATION_SECONDS
+              value: "600"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          volumeMounts:
+            - name: script
+              mountPath: /scripts
+      volumes:
+        - name: script
+          configMap:
+            name: loadgen-script

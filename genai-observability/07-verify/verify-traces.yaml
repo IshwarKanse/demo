@@ -1,0 +1,37 @@
+# Queries Tempo directly: all three services must have traces, and a chat-client trace must contain
+# the ogx-server span. Prints whether the vLLM span is part of the same trace (needs trace context
+# propagation through OGX; reported, not required).
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: verify-traces
+  namespace: genai-demo
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: verify-traces
+          image: ghcr.io/grafana/tempo-operator/test-utils:main
+          command: ["/bin/bash", "-eu", "-c"]
+          args:
+            - |
+              base=http://tempo-genai.genai-demo.svc:3200
+              search() { curl -s -G --data-urlencode "q={ resource.service.name=\"$1\" }" "$base/api/search"; }
+              for svc in chat-client ogx-server vllm; do
+                ok=0
+                for i in $(seq 1 30); do
+                  n=$(search "$svc" | jq '.traces | length' 2>/dev/null || echo 0)
+                  if [ "${n:-0}" -ge 1 ]; then echo "$svc: $n traces"; ok=1; break; fi
+                  echo "$svc: no traces yet ($i/30)"; sleep 20
+                done
+                [ "$ok" = 1 ] || { echo "FAIL: no traces for $svc"; exit 1; }
+              done
+              id=$(search chat-client | jq -r '.traces[0].traceID')
+              trace=$(curl -s -H 'Accept: application/json' "$base/api/traces/$id")
+              services=$(echo "$trace" | jq -r '[.. | objects | select(.key? == "service.name") | .value.stringValue] | unique | join(",")')
+              echo "trace $id services: $services"
+              echo "$trace" | grep -q 'gen_ai.usage.input_tokens' || { echo "FAIL: no gen_ai.usage.input_tokens in the trace"; exit 1; }
+              case "$services" in *ogx-server*) ;; *) echo "FAIL: ogx-server span missing in the chat-client trace"; exit 1;; esac
+              case "$services" in *vllm*) echo "OK: chat-client -> ogx-server -> vllm in one trace";; *) echo "NOTE: vllm span is in a separate trace";; esac

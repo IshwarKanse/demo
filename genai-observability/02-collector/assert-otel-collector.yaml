@@ -1,0 +1,7 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: genai-collector
+  namespace: genai-demo
+status:
+  readyReplicas: 1

@@ -1,0 +1,26 @@
+# ONLY if the vLLM pod is rejected or crashes under the default restricted-v2 SCC
+# (the upstream CPU image recommends seccomp=unconfined and SYS_NICE for NUMA binding).
+# Apply this file, then patch the Deployment:
+#   oc -n genai-demo patch deploy vllm --type=json -p='[
+#     {"op":"add","path":"/spec/template/spec/containers/0/securityContext","value":{
+#        "capabilities":{"add":["SYS_NICE"]},"seccompProfile":{"type":"Unconfined"}}}]'
+apiVersion: security.openshift.io/v1
+kind: SecurityContextConstraints
+metadata:
+  name: vllm-cpu
+allowPrivilegedContainer: false
+allowedCapabilities: [SYS_NICE]
+defaultAddCapabilities: null
+requiredDropCapabilities: [KILL, MKNOD, SETUID, SETGID]
+seccompProfiles: ["*"]
+runAsUser:
+  type: RunAsAny
+seLinuxContext:
+  type: MustRunAs
+fsGroup:
+  type: RunAsAny
+supplementalGroups:
+  type: RunAsAny
+volumes: [configMap, downwardAPI, emptyDir, persistentVolumeClaim, projected, secret]
+users:
+  - system:serviceaccount:genai-demo:vllm
