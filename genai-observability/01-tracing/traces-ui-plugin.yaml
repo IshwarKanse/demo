@@ -1,7 +1,5 @@
-# OPTIONAL: Observe > Traces page in the console. This needs the Cluster Observability
-# Operator (only for its distributed-tracing console plugin; the telemetry pipeline and the
-# GenAI dashboard do not use COO). Install COO first: ../../operators/coo-install.yaml
-# Without it, use the Jaeger UI route of the TempoMonolithic (oc get route -n genai-demo).
+# Observe > Traces in the console. The Cluster Observability Operator (00-cluster/coo-operator.yaml)
+# discovers the TempoStack and queries it through the gateway as the logged in user.
 apiVersion: observability.openshift.io/v1alpha1
 kind: UIPlugin
 metadata:

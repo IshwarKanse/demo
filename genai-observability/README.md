@@ -6,7 +6,8 @@ A complete, small LLM stack observed with OpenTelemetry on OpenShift, using the 
 - **vLLM** serves `Qwen2.5-1.5B-Instruct` on CPU, so no GPU is needed.
 - **OGX** (the upstream project formerly called Llama Stack) sits in front of vLLM and exposes the OpenAI-compatible API.
 - A **chat client** instrumented with the OpenTelemetry GenAI instrumentation calls OGX.
-- One **OpenTelemetryCollector** receives traces, metrics and logs from all three, derives request metrics from the spans and exports traces to **Tempo** and metrics to **user workload monitoring**.
+- One **OpenTelemetryCollector** receives traces, metrics and logs from all three, derives request metrics from the spans and exports traces to a multi-tenant **TempoStack** and metrics to **user workload monitoring**.
+- The traces are browsed in the console under **Observe > Traces**, using the tracing UI plugin of the **Cluster Observability Operator**.
 - A new **"OpenTelemetry GenAI" dashboard** in **Observe > Dashboards** shows requests, tokens, latency, errors, the Llama Stack server and the vLLM engine.
   The dashboard is shipped by the OpenTelemetry operator itself, the same way the existing "OpenTelemetry Collector" dashboard is.
 
@@ -24,7 +25,8 @@ flowchart LR
     O["OGX server<br/>starter distribution"]
     V["vLLM on CPU<br/>Qwen2.5-1.5B-Instruct"]
     COL["OpenTelemetryCollector genai"]
-    T[("TempoMonolithic genai")]
+    GW["Tempo gateway<br/>tenant genai, RBAC"]
+    T[("TempoStack genai<br/>+ SeaweedFS")]
     C -->|"chat completions /v1"| O
     L --> O
     L --> V
@@ -33,13 +35,14 @@ flowchart LR
     O -->|"OTLP http 4318"| COL
     V -->|"OTLP grpc 4317 (traces)"| COL
     COL -->|"scrape /metrics every 10s"| V
-    COL -->|"OTLP 4317"| T
+    COL -->|"OTLP/HTTP + ServiceAccount token"| GW
+    GW --> T
   end
   COL -->|"prometheus exporter :8889<br/>ServiceMonitor"| UWM["User workload Prometheus"]
   O -->|"/metrics :9464<br/>ServiceMonitor"| UWM
   UWM --> TQ["Thanos Querier"]
   TQ --> D["Console dashboard<br/>OpenTelemetry GenAI"]
-  T --> J["Jaeger UI route"]
+  GW -->|"queries as the logged in user"| TU["Console Observe > Traces<br/>COO tracing UI plugin"]
   OP["OpenTelemetry operator"] -.->|"publishes ConfigMap<br/>opentelemetry-genai"| D
 ```
 
@@ -48,7 +51,7 @@ adds the W3C `traceparent` header, so the client, OGX and vLLM spans end up in *
 
 | Signal | Produced by | Path to the dashboard |
 |---|---|---|
-| Traces | client (GenAI spans), OGX (FastAPI and provider spans), vLLM (`llm_request` span with latency breakdown) | collector, then Tempo (Jaeger UI) |
+| Traces | client (GenAI spans), OGX (FastAPI and provider spans), vLLM (`llm_request` span with latency breakdown) | collector, then the Tempo gateway (Observe > Traces) |
 | Request metrics (RED) | derived in the collector from the spans by the `span_metrics` connector, with `gen_ai.request.model`, `gen_ai.operation.name` and `gen_ai.provider.name` as extra dimensions | collector Prometheus exporter, then user workload monitoring |
 | GenAI client metrics | the client instrumentation: `gen_ai.client.token.usage`, `gen_ai.client.operation.duration`, time to first chunk, time per output chunk | OTLP, collector, Prometheus exporter |
 | Llama Stack server metrics | OGX: `ogx_inference_*`, `ogx_concurrent_requests`, `ogx_requests_total` | scraped from OGX `/metrics` through the ServiceMonitor the OGX operator creates |
@@ -65,8 +68,8 @@ genai-observability/
   dashboard/
     genai-dashboard.json      the console dashboard (copy of the file embedded in the operator branch)
     load-dashboard.sh         publishes the dashboard without the custom operator build
-  00-cluster/                 namespace, user workload monitoring, Tempo operator subscription
-  01-tracing/                 TempoMonolithic (+ optional Observe > Traces console plugin)
+  00-cluster/                 namespace, user workload monitoring, Tempo operator and Cluster Observability Operator subscriptions
+  01-tracing/                 SeaweedFS object storage, multi-tenant TempoStack, gateway RBAC, Observe > Traces UIPlugin
   02-collector/               OpenTelemetryCollector and the RBAC for k8sattributes
   03-inference/               vLLM Deployment, Service, PVC (+ optional SCC)
   04-ogx/                     OGXServer custom resource
@@ -81,17 +84,19 @@ Every directory has `assert-*.yaml` files that Chainsaw uses to wait for readine
 
 - OpenShift 4.20 or newer (verified on 5.0), cluster-admin, `oc`, optionally [chainsaw](https://kyverno.github.io/chainsaw/latest/quick-start/install/) >= v0.2.12 and `jq`.
 - A worker with **at least 16 vCPU and 32 GiB** for vLLM, with AVX-512 (any `m5`, `m6i`, `m7i` or newer instance). No GPU.
-- Internet access from the cluster: Docker Hub (vLLM, OGX), Hugging Face (model, about 3 GB, not gated), PyPI (client packages), ghcr.io (collector image).
+- Internet access from the cluster: Docker Hub (vLLM, OGX), Hugging Face (model, about 3 GB, not gated), PyPI (client packages), ghcr.io (collector image), quay.io (SeaweedFS image).
+- The Red Hat Operators catalog for the Tempo operator and the Cluster Observability Operator.
 
 | Component | CPU request / limit | Memory request / limit | Storage |
 |---|---|---|---|
 | vLLM (`vllm/vllm-openai-cpu:v0.32.0-x86_64`) | 12 / 12 | 20Gi / 28Gi (about 21.6 GiB used in float32) | 20Gi PVC for the model cache, 4Gi memory-backed `/dev/shm` |
 | OGX server (`ogxai/distribution-starter`, pinned by the OGX operator) | 1 / 2 | 2Gi / 4Gi | 5Gi PVC |
 | OpenTelemetry collector (contrib 0.162.0) | 500m / 1 | 512Mi / 1Gi | none |
-| Tempo monolithic | operator defaults | operator defaults | 10Gi PVC |
+| TempoStack (gateway, distributor, ingester, querier, query frontend, compactor), `resources.total` limits | up to 2 | up to 4Gi | 10Gi PVC (ingester) |
+| SeaweedFS (S3 storage for Tempo) | 100m / 1 | 256Mi / 1Gi | 10Gi PVC |
 | chat client | 100m / 500m | 256Mi / 512Mi | none |
 | load generator | 100m / 500m | 128Mi / 256Mi | none |
-| **Total** | **about 14 vCPU** | **about 24 GiB** | **35 GiB** |
+| **Total** | **about 15 vCPU** | **about 25 GiB** | **45 GiB** |
 
 The demo was built and verified on OCP 5.0 on AWS with 3 control plane nodes (`m6i.xlarge`) and 4 workers (`m5.4xlarge`, 16 vCPU and 64 GiB each).
 Only one worker is really needed for vLLM; the others host everything else.
@@ -151,12 +156,18 @@ Or by hand:
 ```bash
 D=genai-observability
 
-# cluster prerequisites: namespace, user workload monitoring, Tempo operator, OGX operator
-oc apply -f $D/00-cluster/namespace.yaml -f $D/00-cluster/user-workload-monitoring.yaml -f $D/00-cluster/tempo-operator.yaml
+# cluster prerequisites: namespace, user workload monitoring, Tempo operator, Cluster Observability Operator, OGX operator
+oc apply -f $D/00-cluster/namespace.yaml -f $D/00-cluster/user-workload-monitoring.yaml \
+  -f $D/00-cluster/tempo-operator.yaml -f $D/00-cluster/coo-operator.yaml
 oc apply -f https://raw.githubusercontent.com/ogx-ai/ogx-k8s-operator/v0.17.0/release/operator-openshift.yaml
 
-# tracing and the collector
-oc apply -f $D/01-tracing/tempo-monolithic.yaml
+# tracing: object storage, multi-tenant TempoStack with gateway RBAC, then Observe > Traces
+oc apply -f $D/01-tracing/seaweedfs.yaml
+oc rollout status deploy/seaweedfs -n genai-demo
+oc apply -f $D/01-tracing/tempostack.yaml -f $D/01-tracing/rbac.yaml
+oc apply -f $D/01-tracing/traces-ui-plugin.yaml
+
+# the collector
 oc apply -f $D/02-collector/rbac.yaml -f $D/02-collector/otel-collector.yaml
 
 # inference: start vLLM first and wait until it is ready (model download and load, 3 to 10 minutes)
@@ -182,8 +193,9 @@ oc apply -f $D/06-load/loadgen.yaml
 | receivers | `otlp` (gRPC 4317, HTTP 4318); `prometheus/vllm` scraping `vllm.genai-demo.svc:8000` every 10 s | client, OGX and vLLM push OTLP; vLLM metrics are only available as a Prometheus endpoint |
 | processors | `memory_limiter`, `k8sattributes`, `batch`, `transform/vllm-semconv` | see below |
 | connector | `span_metrics` with histogram unit `s`, buckets 100 ms to 60 s, extra dimensions `gen_ai.request.model`, `gen_ai.operation.name`, `gen_ai.provider.name` | derives request rate, errors and latency per model from the traces |
-| exporters | `otlp/tempo`, `prometheus` on `:8889` with `resource_to_telemetry_conversion`, `debug` | traces to Tempo, metrics to user workload monitoring |
-| pipelines | traces: `otlp` to Tempo and `span_metrics`; metrics: `otlp`, `prometheus/vllm`, `span_metrics` to Prometheus; logs: `otlp` to `debug` | |
+| extension | `bearertokenauth` reading the ServiceAccount token | authenticates the export to the Tempo gateway |
+| exporters | `otlphttp/tempo` (gateway URL for tenant `genai`, TLS with the service CA, bearer token, `X-Scope-OrgID: genai`), `prometheus` on `:8889` with `resource_to_telemetry_conversion`, `debug` | traces to Tempo, metrics to user workload monitoring |
+| pipelines | traces: `otlphttp/tempo` and `span_metrics`; metrics: `otlp`, `prometheus/vllm`, `span_metrics` to Prometheus; logs: `otlp` to `debug` | |
 
 `transform/vllm-semconv` exists because vLLM spans use the pre-stable GenAI attribute names (`gen_ai.usage.prompt_tokens`, `gen_ai.usage.completion_tokens`)
 and lack `gen_ai.request.model`, `gen_ai.operation.name` and `gen_ai.provider.name`. The processor copies them to the current semantic convention names
@@ -192,6 +204,18 @@ for spans that carry vLLM's `gen_ai.request.id`, so vLLM spans line up with the 
 `observability.metrics.enableMetrics: true` makes the operator create the ServiceMonitors for the collector's own metrics and for the Prometheus exporter.
 The collector image is the upstream contrib one (`opentelemetry-collector-contrib:0.162.0`) because the community operator injects the core image by default, which lacks several of these components.
 `resource_to_telemetry_conversion` is deprecated in contrib 0.162 and still works.
+
+### Tracing (`01-tracing/`)
+
+Tempo runs as a **multi-tenant TempoStack** (`tenants.mode: openshift`) behind its gateway, which is what the console's tracing page needs.
+
+- **Storage:** SeaweedFS (`seaweedfs.yaml`), an S3 gateway in one pod with the bucket `tempo` and demo credentials. The upstream MinIO community image on quay.io is no longer public; the SeaweedFS image is the multi-arch build the operator e2e tests use.
+- **Tenant:** one tenant, `genai` (`tempostack.yaml`). Its name appears in the gateway URL (`/api/traces/v1/genai`), in the `X-Scope-OrgID` header and in the RBAC rules.
+- **Writers** (`rbac.yaml`): the collector ServiceAccount `genai-collector` has the verb `create` on resource `genai`, resource name `traces`, in API group `tempo.grafana.com`.
+- **Readers:** the verb `get` on the same resource. The demo binds it to `system:authenticated`; use a narrower group in a real cluster. With gateway RBAC enabled, readers see only the traces of the namespaces they can access
+  (matched on the span attribute `k8s.namespace.name`, which the collector's `k8sattributes` processor adds); cluster admins see all traces.
+  The service account `trace-reader` used by the check Job gets the `view` role in `genai-demo` for that reason.
+- **UI:** `traces-ui-plugin.yaml` creates a `UIPlugin` of type `DistributedTracing`; the Cluster Observability Operator (installed by `00-cluster/coo-operator.yaml`) adds **Observe > Traces**, discovers the TempoStack and queries it as the logged in user.
 
 ### vLLM (`03-inference/vllm.yaml`)
 
@@ -263,7 +287,7 @@ and deletes them when it stops. To iterate on the JSON without rebuilding, edit 
 ## Verify
 
 ```bash
-# traces: all three services have traces and one chat-client trace contains ogx-server and vllm spans
+# traces: through the multi-tenant gateway, all three services have traces and one chat-client trace contains ogx-server and vllm spans
 oc apply -f 07-verify/verify-traces.yaml && oc logs -f job/verify-traces -n genai-demo
 
 # metrics: every metric family used by the dashboard has series in Thanos (needs cluster-admin; creates a reader service account)
@@ -277,9 +301,9 @@ Expected result of the trace check: `trace <id> services: chat-client,ogx-server
 
 Look at it yourself:
 
-- **Traces:** open the Jaeger UI route (`oc get route tempo-genai-jaegerui -n genai-demo`), pick service `chat-client` and open a trace.
+- **Traces:** console, **Observe > Traces**, Tempo instance `genai-demo / genai`, tenant `genai`. The list shows traces such as `chat-client: chat vllm/qwen2.5-1.5b` with the number of spans per service;
+  open one to see the waterfall: the client call, the OGX request handling and the vLLM `llm_request` span. Streaming requests produce traces with about 100 spans (one per chunk).
   The span attributes include `gen_ai.request.model`, `gen_ai.usage.input_tokens` and `gen_ai.usage.output_tokens`.
-  For **Observe > Traces** in the console install the Cluster Observability Operator (`../operators/coo-install.yaml`) and apply `01-tracing/traces-ui-plugin.yaml`; this was not tested here.
 - **Metrics:** Observe > Metrics, for example `sum(rate(vllm:generation_tokens_total[5m]))` or
   `histogram_quantile(0.95, sum by (le, gen_ai_request_model) (rate(traces_span_metrics_duration_seconds_bucket{gen_ai_operation_name!=""}[5m])))`.
 - **Prompts and completions:** `oc logs -n genai-demo deploy/genai-collector` (log events from the `debug` exporter).
@@ -291,9 +315,10 @@ time to first token around 0.4 to 0.6 s for streaming requests, P95 request late
 
 About 10 minutes.
 
-1. **The stack** (2 min): `oc get pods,otelcol,tempomonolithic,ogxserver -n genai-demo`. Explain: vLLM on CPU, OGX in front, one collector, Tempo.
+1. **The stack** (2 min): `oc get pods,otelcol,tempostack,ogxserver -n genai-demo`. Explain: vLLM on CPU, OGX in front, one collector, Tempo.
 2. **The collector** (2 min): show the pipelines in `02-collector/otel-collector.yaml`. Point at `transform/vllm-semconv` (aligning a non-conformant source) and `span_metrics` (metrics from traces).
-3. **A trace** (2 min): Jaeger UI, service `chat-client`: the waterfall shows the client call, the OGX handling and the vLLM request with queue, prefill and decode time, plus the token counts.
+3. **A trace** (2 min): **Observe > Traces**, instance `genai-demo / genai`: open a `chat-client` trace. The waterfall shows the client call, the OGX handling and the vLLM request, plus the token counts in the span attributes.
+   Mention that Tempo is multi-tenant: the console reads through the gateway with your own token.
 4. **The dashboard** (3 min): Observe > Dashboards > OpenTelemetry GenAI. Walk the rows from overview to the vLLM engine. Start the load generator
    (`oc delete job loadgen -n genai-demo; oc apply -f 06-load/loadgen.yaml`) and watch requests running, KV cache usage and latency react.
 5. **Where it comes from** (1 min): `oc get cm opentelemetry-genai -n openshift-config-managed -o yaml | head` and the operator file `internal/openshift/dashboards/dashboards.go`.
@@ -312,7 +337,12 @@ Prepare before the audience arrives: let vLLM finish its first request (kernel c
 | Client traces contain no OGX span | The httpx instrumentation is missing from the client. |
 | Dashboard panels show `-` or "No datapoints found" | Open it with Project: All Projects. Check that the variable is not named `namespace` (console quirk above). Check the data with `07-verify/check_metrics.sh`. |
 | Dashboard does not exist | The operator was not built from the fork or `OPENSHIFT_CREATE_DASHBOARD` is false. Run `dashboard/load-dashboard.sh`. |
-| `Tempo ... not supported on OpenShift` warning when applying TempoMonolithic | TempoMonolithic without multi-tenancy has no authentication on the ingest and query paths. Fine for a demo, not for production. |
+| Tempo pods in `CrashLoopBackOff` right after the TempoStack is created | The object storage is not ready or not reachable. Check `oc get deploy seaweedfs -n genai-demo`; the pods recover by themselves (delete them to skip the back-off). |
+| `ErrImagePull` for `quay.io/minio/minio` | The upstream MinIO community image is no longer public. This demo uses SeaweedFS (`01-tracing/seaweedfs.yaml`). |
+| Reading traces through the gateway returns `403 You don't have permission to access this tenant` | With gateway RBAC the reader needs the `get` rule for the tenant (`rbac.yaml`) and access to a namespace (for example the `view` role in `genai-demo`). Cluster admins see everything. |
+| Observe > Traces lists no Tempo instance, or the menu entry is missing | The Cluster Observability Operator or the `UIPlugin` is missing (`oc get uiplugin`), or the console has not reloaded the plugin yet (refresh the page, it can take a minute). |
+| Traces exist but a non-admin user sees none of them | The spans have no `k8s.namespace.name` attribute (the `k8sattributes` processor failed, check the collector RBAC in `02-collector/rbac.yaml`), or the user has no access to the namespace. |
+| Collector log shows `401` or `403` when exporting | The collector ServiceAccount lacks the writer rule in `01-tracing/rbac.yaml`, or the tenant name in the URL and the header differs from `tempostack.yaml`. |
 | vLLM pod is rejected by the SCC or crashes on seccomp | Apply `03-inference/vllm-scc.yaml` and follow the patch in its header. Not needed on the verified cluster. |
 | Pod `Pending` with insufficient CPU | vLLM requests 12 CPU; it needs a worker with at least 16 vCPU. |
 | Image pull rate limits from Docker Hub | Mirror `vllm/vllm-openai-cpu`, `ogxai/distribution-starter` and `ubi9/python-312` to a registry you control. |
@@ -331,6 +361,8 @@ Prepare before the audience arrives: let vLLM finish its first request (kernel c
 
 ```bash
 oc delete namespace genai-demo
+oc delete -f 01-tracing/traces-ui-plugin.yaml
+oc delete -f 00-cluster/coo-operator.yaml
 oc delete -f 00-cluster/tempo-operator.yaml
 oc delete -f https://raw.githubusercontent.com/ogx-ai/ogx-k8s-operator/v0.17.0/release/operator-openshift.yaml
 oc delete configmap opentelemetry-genai -n openshift-config-managed   # only if you loaded it with the script
@@ -340,11 +372,13 @@ The operator removes the two dashboard ConfigMaps by itself when it stops. User 
 
 ## Status and limitations
 
-- Verified manually, step by step, on OCP 5.0 (AWS): one trace across the three services, all 25 dashboard panels returning data and rendering in the console, and the three scripts in `07-verify/` passing.
+- Verified manually, step by step, on OCP 5.0 (AWS) with Tempo operator 0.22 (Tempo 2.10) and Cluster Observability Operator 1.5.3: one trace across the three services in **Observe > Traces**, all 25 dashboard panels returning data and rendering in the console, and the three scripts in `07-verify/` passing.
   The complete `chainsaw test` run was not executed as one piece; the test definition passes `chainsaw lint` and every manifest in it was applied on the cluster.
 - The dashboard and the collector use components from upstream OpenTelemetry. The operator branch is based on unreleased upstream `main` (operator 0.162.0) and is not part of any product release.
   The collector image is the upstream contrib image; with the Red Hat build of OpenTelemetry collector, check the component and connector names of that version (`span_metrics` was previously called `spanmetrics`).
 - The GenAI semantic conventions are in development. Metric and attribute names, and the instrumentation packages, can change between releases (`opentelemetry-instrumentation-genai-openai` is a 1.3 beta).
 - Upstream Llama Stack was renamed OGX in 2026. This demo pins OGX operator v0.17.0, which deploys image `ogxai/distribution-starter:1.4.1`.
 - CPU inference is slow by design. The demo is about the telemetry, not about serving performance.
-- Not tested: the Observe > Traces console page, a GPU node, OpenShift versions other than 5.0.
+- Not tested: a non-admin user in Observe > Traces (only cluster admin and the `view`-scoped service account were used), a GPU node, OpenShift versions other than 5.0.
+- The Cluster Observability Operator is used only for the tracing UI plugin; the telemetry pipeline and the GenAI dashboard do not depend on it.
+- The demo credentials of SeaweedFS and the `system:authenticated` read binding are shortcuts for a demo cluster.

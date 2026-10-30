@@ -1,4 +1,5 @@
-# Queries Tempo directly: all three services must have traces, and a chat-client trace must contain
+# Queries Tempo through the multi-tenant gateway (tenant "genai") with the token of the ServiceAccount
+# trace-reader: all three services must have traces, and a chat-client trace must contain
 # the ogx-server span. Prints whether the vLLM span is part of the same trace (needs trace context
 # propagation through OGX; reported, not required).
 apiVersion: batch/v1
@@ -10,6 +11,7 @@ spec:
   backoffLimit: 0
   template:
     spec:
+      serviceAccountName: trace-reader
       restartPolicy: Never
       containers:
         - name: verify-traces
@@ -17,8 +19,10 @@ spec:
           command: ["/bin/bash", "-eu", "-c"]
           args:
             - |
-              base=http://tempo-genai.genai-demo.svc:3200
-              search() { curl -s -G --data-urlencode "q={ resource.service.name=\"$1\" }" "$base/api/search"; }
+              base=https://tempo-genai-gateway.genai-demo.svc.cluster.local:8080/api/traces/v1/genai/tempo
+              token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+              ca=/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+              search() { curl -s -G --cacert "$ca" -H "Authorization: Bearer $token" --data-urlencode "q={ resource.service.name=\"$1\" }" "$base/api/search"; }
               for svc in chat-client ogx-server vllm; do
                 ok=0
                 for i in $(seq 1 30); do
@@ -29,7 +33,7 @@ spec:
                 [ "$ok" = 1 ] || { echo "FAIL: no traces for $svc"; exit 1; }
               done
               id=$(search chat-client | jq -r '.traces[0].traceID')
-              trace=$(curl -s -H 'Accept: application/json' "$base/api/traces/$id")
+              trace=$(curl -s --cacert "$ca" -H "Authorization: Bearer $token" -H 'Accept: application/json' "$base/api/traces/$id")
               services=$(echo "$trace" | jq -r '[.. | objects | select(.key? == "service.name") | .value.stringValue] | unique | join(",")')
               echo "trace $id services: $services"
               echo "$trace" | grep -q 'gen_ai.usage.input_tokens' || { echo "FAIL: no gen_ai.usage.input_tokens in the trace"; exit 1; }

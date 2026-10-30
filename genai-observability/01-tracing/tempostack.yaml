@@ -1,0 +1,29 @@
+# Multi-tenant Tempo: tenant mode "openshift" with the gateway and its RBAC. Observe > Traces in the console
+# (Cluster Observability Operator) reads traces through the gateway with the token of the logged in user.
+# One tenant, "genai"; the name is used in the gateway URL, in the X-Scope-OrgID header and in the RBAC rules.
+apiVersion: tempo.grafana.com/v1alpha1
+kind: TempoStack
+metadata:
+  name: genai
+  namespace: genai-demo
+spec:
+  storage:
+    secret:
+      name: tempo-storage
+      type: s3
+  storageSize: 10Gi
+  resources:
+    total:
+      limits:
+        cpu: "2"
+        memory: 4Gi
+  tenants:
+    mode: openshift
+    authentication:
+      - tenantName: genai
+        tenantId: "e43216bc-bef8-431d-a545-1cb646256d8c"
+  template:
+    gateway:
+      enabled: true
+      rbac:
+        enabled: true

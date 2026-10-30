@@ -30,6 +30,13 @@ spec:
         - assert:
             timeout: 10m
             file: 00-cluster/assert-tempo-operator.yaml
+    - name: Install the Cluster Observability Operator
+      try:
+        - apply:
+            file: 00-cluster/coo-operator.yaml
+        - assert:
+            timeout: 10m
+            file: 00-cluster/assert-coo-operator.yaml
     - name: Install the OGX operator
       try:
         - script:
@@ -37,12 +44,29 @@ spec:
             content: |
               oc apply -f https://raw.githubusercontent.com/ogx-ai/ogx-k8s-operator/v0.17.0/release/operator-openshift.yaml
               oc wait --for=condition=Available deploy --all -n ogx-k8s-operator-system --timeout=8m
-    - name: Deploy Tempo
+    - name: Deploy object storage
       try:
         - apply:
-            file: 01-tracing/tempo-monolithic.yaml
+            file: 01-tracing/seaweedfs.yaml
         - assert:
-            file: 01-tracing/assert-tempo.yaml
+            file: 01-tracing/assert-seaweedfs.yaml
+    - name: Deploy the multi-tenant TempoStack
+      try:
+        - apply:
+            file: 01-tracing/tempostack.yaml
+        - apply:
+            file: 01-tracing/rbac.yaml
+        - assert:
+            timeout: 10m
+            file: 01-tracing/assert-tempostack.yaml
+    - name: Enable Observe > Traces in the console
+      try:
+        - apply:
+            file: 01-tracing/traces-ui-plugin.yaml
+        - script:
+            timeout: 5m
+            content: |
+              oc wait uiplugin/distributed-tracing --for=condition=Available --timeout=4m
     - name: Deploy the OpenTelemetry collector
       try:
         - apply:

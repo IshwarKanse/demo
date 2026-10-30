@@ -2,7 +2,8 @@
 #  - OTLP in from the chat client and the OGX server (traces, metrics, logs)
 #  - vLLM traces arrive over OTLP gRPC (--otlp-traces-endpoint), vLLM metrics are scraped from /metrics
 #  - span_metrics derives RED metrics per gen_ai.request.model from the traces
-#  - traces go to TempoMonolithic, metrics are exposed on :8889 and scraped by User Workload Monitoring
+#  - traces go to the multi-tenant TempoStack through its gateway (tenant "genai", authenticated with the
+#    ServiceAccount token), metrics are exposed on :8889 and scraped by User Workload Monitoring
 #    (the operator creates the ServiceMonitor because observability.metrics.enableMetrics is true)
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
@@ -23,6 +24,10 @@ spec:
     metrics:
       enableMetrics: true
   config:
+    extensions:
+      # token of the collector ServiceAccount, accepted by the Tempo gateway (see 01-tracing/rbac.yaml)
+      bearertokenauth:
+        filename: /var/run/secrets/kubernetes.io/serviceaccount/token
     receivers:
       otlp:
         protocols:
@@ -71,10 +76,15 @@ spec:
           - name: gen_ai.operation.name
           - name: gen_ai.provider.name
     exporters:
-      otlp/tempo:
-        endpoint: tempo-genai.genai-demo.svc:4317
+      otlphttp/tempo:
+        endpoint: https://tempo-genai-gateway.genai-demo.svc.cluster.local:8080/api/traces/v1/genai
         tls:
-          insecure: true
+          insecure: false
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+        auth:
+          authenticator: bearertokenauth
+        headers:
+          X-Scope-OrgID: genai
       prometheus:
         endpoint: 0.0.0.0:8889
         resource_to_telemetry_conversion:
@@ -82,11 +92,12 @@ spec:
       debug:
         verbosity: basic
     service:
+      extensions: [bearertokenauth]
       pipelines:
         traces:
           receivers: [otlp]
           processors: [memory_limiter, k8sattributes, transform/vllm-semconv, batch]
-          exporters: [otlp/tempo, span_metrics]
+          exporters: [otlphttp/tempo, span_metrics]
         metrics:
           receivers: [otlp, prometheus/vllm, span_metrics]
           processors: [memory_limiter, k8sattributes, batch]

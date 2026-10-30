@@ -1,0 +1,75 @@
+# Gateway RBAC for the tenant "genai": the resource is the tenant name, the resource name is "traces".
+# Writers need the verb create, readers the verb get.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: genai-demo-traces-writer
+rules:
+  - apiGroups: ["tempo.grafana.com"]
+    resources: ["genai"]
+    resourceNames: ["traces"]
+    verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: genai-demo-traces-writer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: genai-demo-traces-writer
+subjects:
+  # the ServiceAccount of the OpenTelemetryCollector "genai" (created by the operator)
+  - kind: ServiceAccount
+    name: genai-collector
+    namespace: genai-demo
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: genai-demo-traces-reader
+rules:
+  - apiGroups: ["tempo.grafana.com"]
+    resources: ["genai"]
+    resourceNames: ["traces"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: genai-demo-traces-reader
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: genai-demo-traces-reader
+subjects:
+  # Demo shortcut: every logged in user can read the traces. Bind a narrower group in a real cluster.
+  - kind: Group
+    apiGroup: rbac.authorization.k8s.io
+    name: system:authenticated
+  # used by the trace check Job in 07-verify
+  - kind: ServiceAccount
+    name: trace-reader
+    namespace: genai-demo
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: trace-reader
+  namespace: genai-demo
+---
+# With gateway RBAC enabled, readers only see the traces of namespaces they can access (the spans carry
+# k8s.namespace.name from the k8sattributes processor). Cluster admins see everything.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: trace-reader-view
+  namespace: genai-demo
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view
+subjects:
+  - kind: ServiceAccount
+    name: trace-reader
+    namespace: genai-demo

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: tempo-genai
+  name: seaweedfs
   namespace: genai-demo
 status:
   readyReplicas: 1
